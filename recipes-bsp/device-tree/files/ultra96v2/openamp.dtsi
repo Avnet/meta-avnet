@@ -46,7 +46,7 @@
 			reg = <0x0 0xff9a0100 0x0 0x100>, <0x0 0xff340000 0x0 0x100>, <0x0 0xff9a0000 0x0 0x100>;
 			reg-names = "rpu_base", "ipi", "rpu_glbl_base";
 			dma-ranges;
-			core_conf = "split0";
+			core_conf = "split";
 			srams = <&r5_0_tcm_a &r5_0_tcm_b &elf_ddr_0>;
 			pd-handle = <&pd_r5_0>;
 			interrupt-parent = <&gic>;
