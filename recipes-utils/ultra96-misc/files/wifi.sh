@@ -1,22 +1,20 @@
-#Add the wi-fi driver module to the kernel:
-cp -rf /home/root/wpa_supplicant.conf /etc/.
+# Stop Connman
+/etc/init.d/connman stop
 
-# Load ATWILC3000 driver
-#modprobe wilc
-modprobe wilc-sdio
+# Stop running wifi-related processes
+ifdown wlan0
+ifconfig p2p0 down
+pkill wpa
+pkill udhcp
 
-# bring up interface
-ifconfig wlan0 up
+sleep 1
 
-#Run wpa_supplicant for secure networking:
-wpa_supplicant -Dnl80211 -iwlan0 -c/etc/wpa_supplicant.conf -B
+# Copy configuration file
+cp /home/root/wpa_supplicant.conf /etc/
 
-#To add DHCP:
+# Restart wlan0
+ifup wlan0
+
+# Get IP address
+sleep 1
 udhcpc -i wlan0
-
-#To run iperf3:  (2.0.5 without the "b")
-#server mode:
-#comment this to simplify production testing:
-#iperf3 -s
-
-
