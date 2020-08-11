@@ -1,63 +1,97 @@
 require recipes-core/images/petalinux-image-common.inc
 
-IMAGE_INSTALL_ultra96v2 += "\
-		kernel-modules \
+# append what's already defined by petalinux (build/conf/plnxtool.conf)
+IMAGE_INSTALL_append_zynqmp = "\
 		bc \
-		haveged \
-		i2c-tools \
-		mtd-utils \
-		usbutils \
+		bonnie++ \
+		bridge-utils \
+		can-utils \
+		coreutils \
 		ethtool \
+		fpga-manager-script \
+		haveged \
+		hellopm \
+		i2c-tools \
+		iperf3 \
+		json-c \
+		kernel-modules \
+		lmsensors-sensorsdetect \
+		mtd-utils \
+		nano \
 		openssh-sftp-server \
-		git \
+		packagegroup-core-boot \
+		packagegroup-core-ssh-dropbear \
+		packagegroup-petalinux-gstreamer \
+		packagegroup-petalinux-matchbox \
+		packagegroup-petalinux-opencv \
+		packagegroup-petalinux-v4lutils \
+		packagegroup-petalinux-x11 \
 		pciutils \
+		pmic-prog \
 		run-postinsts \
-		bluez5 \
+		sds-lib \
+		tcf-agent \
+		udev-extraconf \
+		usbutils \
+		watchdog-init \
 		xrt \
 		xrt-dev \
 		zocl \
-		coreutils \
-		udev-extraconf \
-		json-c \
+"
+
+IMAGE_INSTALL_append_ultra96v2 = "\
+		bluez5 \
+		cmake \
+		git \
+		iw \
+		libftdi \
 		openamp-fw-echo-testd \
 		openamp-fw-mat-muld \
 		openamp-fw-rpc-demo \
-		packagegroup-core-boot \
-		packagegroup-core-ssh-dropbear \
-		tcf-agent \
-		watchdog-init \
-		bridge-utils \
-		hellopm \
-		packagegroup-petalinux \
-		packagegroup-petalinux-benchmarks \
-		packagegroup-petalinux-gstreamer \
-		packagegroup-petalinux-matchbox \
-		packagegroup-petalinux-openamp \
-		packagegroup-petalinux-opencv \
-		packagegroup-petalinux-self-hosted \
-		packagegroup-petalinux-utils \
-		packagegroup-petalinux-v4lutils \
-		packagegroup-petalinux-x11 \
-		pmic-prog \
-		sds-lib \
-		ultra96-radio-leds \
-		ultra96-wpa \
-		wilc \
-		libftdi \
-		bonnie++ \
-		cmake \
-		iperf3 \
-		iw \
-		lmsensors-sensorsdetect \
-		nano \
 		opencl-clhpp-dev \
 		opencl-headers-dev \
 		packagegroup-base-extended \
+		packagegroup-petalinux \
 		packagegroup-petalinux-96boards-sensors \
+		packagegroup-petalinux-benchmarks \
+		packagegroup-petalinux-openamp \
+		packagegroup-petalinux-self-hosted \
 		packagegroup-petalinux-ultra96-webapp \
-		python-pyserial \
+		packagegroup-petalinux-utils \
 		python3-pip \
+		python-pyserial \
 		ultra96-ap-setup \
 		ultra96-misc \
+		ultra96-radio-leds \
+		ultra96-wpa \
 		wilc3000-fw \
-                "
+		wilc \
+"
+
+IMAGE_INSTALL_append_uz = "\
+		blinky \
+		blinky-init \
+		hdparm \
+		i2c-tools-misc \
+		libdrm \
+		libdrm-kms \
+		libdrm-tests \
+		libstdc++ \
+		libv4l \
+		mac-eeprom-config \
+		mac-eeprom-config-init \
+		media-ctl \
+		performance-tests \
+		python3 \
+		python3-core \
+		python3-dbus \
+		python3-pygobject \
+		python-webserver \
+		python-webserver-init \
+		yavta \
+"
+
+COMMON_FEATURES_append_ultra96v2 = "\
+		package-management \
+"
+
