@@ -20,6 +20,7 @@ do_install[noexec] = "1"
 
 do_compile() {
     for file in ${WORKDIR}/avnet_*; do
+        [ -e "$file" ] || continue
         mkimage -A arm -T script -C none -n "Boot script" -d "$file" $file.scr
     done
 }
