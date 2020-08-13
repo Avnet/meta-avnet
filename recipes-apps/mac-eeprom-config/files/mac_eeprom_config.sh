@@ -125,22 +125,22 @@ echo "Reading MAC ID from target EEPROM at ${SLAVE} on bus i2c-${BUS}"
 
 # Read each of the six individual EUI-48 byte values from EEPROM memory 
 # locations 0xFA to 0xFF and store as individual octets.
-EEPROM_RAW_READ_STRING=$(i2cget -y ${BUS} ${SLAVE} 0xFA)
+EEPROM_RAW_READ_STRING=$(i2cget -f -y ${BUS} ${SLAVE} 0xFA)
 MAC_OCTET1=${EEPROM_RAW_READ_STRING#$HEX_PREFIX}
 
-EEPROM_RAW_READ_STRING=$(i2cget -y ${BUS} ${SLAVE} 0xFB)
+EEPROM_RAW_READ_STRING=$(i2cget -f -y ${BUS} ${SLAVE} 0xFB)
 MAC_OCTET2=${EEPROM_RAW_READ_STRING#$HEX_PREFIX}
 
-EEPROM_RAW_READ_STRING=$(i2cget -y ${BUS} ${SLAVE} 0xFC)
+EEPROM_RAW_READ_STRING=$(i2cget -f -y ${BUS} ${SLAVE} 0xFC)
 MAC_OCTET3=${EEPROM_RAW_READ_STRING#$HEX_PREFIX}
 
-EEPROM_RAW_READ_STRING=$(i2cget -y ${BUS} ${SLAVE} 0xFD)
+EEPROM_RAW_READ_STRING=$(i2cget -f -y ${BUS} ${SLAVE} 0xFD)
 MAC_OCTET4=${EEPROM_RAW_READ_STRING#$HEX_PREFIX}
 
-EEPROM_RAW_READ_STRING=$(i2cget -y ${BUS} ${SLAVE} 0xFE)
+EEPROM_RAW_READ_STRING=$(i2cget -f -y ${BUS} ${SLAVE} 0xFE)
 MAC_OCTET5=${EEPROM_RAW_READ_STRING#$HEX_PREFIX}
 
-EEPROM_RAW_READ_STRING=$(i2cget -y ${BUS} ${SLAVE} 0xFF)
+EEPROM_RAW_READ_STRING=$(i2cget -f -y ${BUS} ${SLAVE} 0xFF)
 MAC_OCTET6=${EEPROM_RAW_READ_STRING#$HEX_PREFIX}
 
 # Compute and display formatted MAC ID string.
