@@ -9,6 +9,7 @@ inherit deploy nopackages plnx-deploy
 INHIBIT_DEFAULT_DEPS = "1"
 
 FAMILY_PATH_PREPEND = ""
+FAMILY_PATH_PREPEND_uz = "${THISDIR}/files/uz"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files/${MACHINE}:${FAMILY_PATH_PREPEND}:${THISDIR}/files:"
 
