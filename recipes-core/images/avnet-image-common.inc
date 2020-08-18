@@ -71,6 +71,7 @@ IMAGE_INSTALL_append_ultra96v2 = "\
 IMAGE_INSTALL_append_uz = "\
 		blinky \
 		blinky-init \
+		e2fsprogs-resize2fs \
 		hdparm \
 		i2c-tools-misc \
 		libdrm \
@@ -81,6 +82,7 @@ IMAGE_INSTALL_append_uz = "\
 		mac-eeprom-config \
 		mac-eeprom-config-init \
 		media-ctl \
+		parted \
 		performance-tests \
 		python3 \
 		python3-core \
@@ -94,4 +96,3 @@ IMAGE_INSTALL_append_uz = "\
 COMMON_FEATURES_append_ultra96v2 = "\
 		package-management \
 "
-
