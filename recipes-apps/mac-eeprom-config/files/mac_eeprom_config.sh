@@ -169,12 +169,17 @@ if [ ! -f ${OUTPUT_FILE} ]; then
 	IIC_EEPROM_MAC_RESULT=$?
 else
 	echo "Networking interfaces configuration file $OUTPUT_FILENAME detected"
-    echo "programming EEPROM MAC ID to ${ETHERNET_INTERFACE_NAME}"
+	echo "programming EEPROM MAC ID to ${ETHERNET_INTERFACE_NAME}"
 
-	# Append the network configuration file with the new MAC address 
-	# configuration.
-	sed -i "/iface $ETHERNET_INTERFACE_NAME inet dhcp/a\ \ \ \ \ \ \ \ hwaddress ether $RESULT_FORMATTED_MAC_STRING" "${OUTPUT_FILE}"
-	
+	if grep -A1 "iface $ETHERNET_INTERFACE_NAME" ${OUTPUT_FILE} | grep hw
+        then
+                echo "hwaddress was already set"
+        else
+                # Append the network configuration file with the new MAC address
+                # configuration.
+                sed -i "/iface $ETHERNET_INTERFACE_NAME inet dhcp/a\ \ \ \ \ \ \ \ hwaddress ether $RESULT_FORMATTED_MAC_STRING" "${OUTPUT_FILE}"
+        fi
+
 	# Capture the return code from set as the script result.
 	IIC_EEPROM_MAC_RESULT=$?
 fi
