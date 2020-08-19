@@ -8,8 +8,6 @@ inherit deploy nopackages plnx-deploy
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
-
 SRC_URI = " \
             file://avnet_* \
             "
@@ -20,14 +18,18 @@ do_install[noexec] = "1"
 
 do_compile() {
     for file in ${WORKDIR}/avnet_*; do
+        [ -e "$file" ] || continue
         mkimage -A arm -T script -C none -n "Boot script" -d "$file" $file.scr
     done
 }
 
-
 do_deploy() {
     install -d ${DEPLOYDIR}/avnet-boot/
-    install -m 0644 ${WORKDIR}/avnet_*.scr ${DEPLOYDIR}/avnet-boot/
+
+    for file in ${WORKDIR}/avnet_*.scr; do
+        [ -e "$file" ] || continue
+        install -m 0644 $file ${DEPLOYDIR}/avnet-boot/
+    done
 }
 
 addtask do_deploy after do_compile before do_build
