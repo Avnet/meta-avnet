@@ -1,3 +1,4 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI = "git://github.com/xilinx/ultra96-startup-pages.git;branch=ultra96v2;protocol=https \ 
       file://ultra96-startup-page.sh \
 	   file://launch-ultra96-startup-page.desktop \
