@@ -102,19 +102,12 @@ COMMON_FEATURES_append_ultra96v2 = "\
 		package-management \
 "
 
+
 IMAGE_INSTALL_append_zynq = "\
-                glibc \
-                haveged \
-                hostapd \
-                iperf3 \
-                iw \
-                kernel-modules \
-                minized-misc \
-                minized-wireless \
-                mtd-utils \
-                packagegroup-core-boot \
-                run-postinsts \
-                tcf-agent \
-                udev-extraconf \
-                wpa-supplicant \
+                e2fsprogs \
+                e2fsprogs-resize2fs \
+                e2fsprogs-e2fsck \
+                e2fsprogs-mke2fs \
+                parted \
+                util-linux-mkfs \
 "

@@ -9,17 +9,27 @@ IMAGE_INSTALL_append_zynq = "\
                 can-utils \
                 dialog-control \
                 get-gpio-offsets \
+                glibc \
+                haveged \
+                hostapd \
                 i2c-tools-misc \
                 i2c-tools \
                 i2csensor \
+                iperf3 \
+                iw \
+                kernel-modules \
                 libogg \
                 libpulse \
                 libpulsecommon \
                 libpulsecore \
                 libvorbis \
                 lis2ds \
+                minized-misc \
+                minized-wireless \
+                mtd-utils \
                 nano \
                 openssh-sftp-server \
+                packagegroup-core-boot \
                 packagegroup-core-ssh-dropbear \
                 pciutils \
                 pulseaudio-misc \
@@ -30,7 +40,11 @@ IMAGE_INSTALL_append_zynq = "\
                 pulseaudio-module-switch-on-connect \
                 pulseaudio-server \
                 pulseaudio \
+                run-postinsts \
                 sbc \
+                tcf-agent \
+                udev-extraconf \
+                wpa-supplicant \
 "
 
 COMMON_FEATURES_append_zynq = "\
