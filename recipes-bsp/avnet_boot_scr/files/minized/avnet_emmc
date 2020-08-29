@@ -1,0 +1,8 @@
+# This is a boot script for U-Boot
+# Generate boot.scr:
+# mkimage -c none -A arm -T script -d boot.cmd.default boot.scr
+#
+################
+
+fatload mmc 1:1 0x4000000 fitImage
+bootm 0x04000000
