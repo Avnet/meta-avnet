@@ -10,6 +10,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS = "i2c-tools"
 
+COMPATIBLE_MACHINE = "uz|ultra96v2"
+
 SRC_URI = "git://github.com/Avnet/BSP-rootfs-sources.git;protocol=https;branch=${SRCBRANCH};subpath=${SUBPATH};"
 
 SRC_URI_append_uz = " file://pmic-configs/"
