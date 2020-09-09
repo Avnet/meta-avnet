@@ -101,3 +101,13 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
 COMMON_FEATURES_append_ultra96v2 = "\
 		package-management \
 "
+
+
+IMAGE_INSTALL_append_zynq = "\
+                e2fsprogs \
+                e2fsprogs-resize2fs \
+                e2fsprogs-e2fsck \
+                e2fsprogs-mke2fs \
+                parted \
+                util-linux-mkfs \
+"
