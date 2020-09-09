@@ -93,6 +93,11 @@ IMAGE_INSTALL_append_uz = "\
 		yavta \
 "
 
+IMAGE_INSTALL_append_uz7ev-evcc = "\
+		user-led-test \
+		user-switch-test \
+"
+
 COMMON_FEATURES_append_ultra96v2 = "\
 		package-management \
 "

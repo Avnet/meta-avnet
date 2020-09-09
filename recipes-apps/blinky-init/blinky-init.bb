@@ -12,8 +12,6 @@ SRC_URI = "file://blinky-init \
 
 S = "${WORKDIR}"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-
 inherit update-rc.d
 
 INITSCRIPT_NAME = "blinky-init"
