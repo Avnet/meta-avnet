@@ -102,12 +102,32 @@ COMMON_FEATURES_append_ultra96v2 = "\
 		package-management \
 "
 
+IMAGE_INSTALL_append_minized = "\
+		e2fsprogs \
+		e2fsprogs-resize2fs \
+		e2fsprogs-e2fsck \
+		e2fsprogs-mke2fs \
+		parted \
+		util-linux-mkfs \
+"
 
-IMAGE_INSTALL_append_zynq = "\
-                e2fsprogs \
-                e2fsprogs-resize2fs \
-                e2fsprogs-e2fsck \
-                e2fsprogs-mke2fs \
-                parted \
-                util-linux-mkfs \
+IMAGE_INSTALL_append_mz = "\
+		bonnie++ \
+		bridge-utils \
+		can-utils \
+		haveged \
+		iperf3 \
+		kernel-modules \
+		mtd-utils \
+		openssh-sftp-server \
+		packagegroup-core-boot \
+		packagegroup-core-ssh-dropbear \
+		pciutils \
+		run-postinsts \
+		tcf-agent \
+		udev-extraconf \
+"
+COMMON_FEATURES_append_mz = "\
+		hwcodecs \
+		ssh-server-dropbear \
 "

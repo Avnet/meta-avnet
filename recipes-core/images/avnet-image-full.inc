@@ -1,7 +1,7 @@
 require recipes-core/images/avnet-image-common.inc
 
 # append what's already defined by petalinux (build/conf/plnxtool.conf)
-IMAGE_INSTALL_append_zynq = "\
+IMAGE_INSTALL_append_minized = "\
                 bluez5 \
                 bluez5-doc \
                 bluez5-obex \
@@ -47,7 +47,7 @@ IMAGE_INSTALL_append_zynq = "\
                 wpa-supplicant \
 "
 
-COMMON_FEATURES_append_zynq = "\
+COMMON_FEATURES_append_minized = "\
                 hwcodecs \
                 ssh-server-dropbear \
 "
