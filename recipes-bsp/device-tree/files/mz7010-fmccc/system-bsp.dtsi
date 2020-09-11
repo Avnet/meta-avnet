@@ -18,7 +18,7 @@
 		#interrupt-cells = <2>;
 		compatible = "xlnx,axi-intc-4.1", "xlnx,xps-intc-1.00.a";
 		interrupt-controller;
-		reg = <0x0 0x41800000 0x0 0x1000>;
+		reg = <0x41800000 0x1000>;
 		xlnx,kind-of-intr = <0x0>;
 		xlnx,num-intr-inputs = <0x20>;
 		interrupt-parent = <&intc>;
