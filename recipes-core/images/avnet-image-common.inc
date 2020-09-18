@@ -64,6 +64,8 @@ IMAGE_INSTALL_append_ultra96v2 = "\
         ultra96-misc \
         ultra96-radio-leds \
         ultra96-wpa \
+        usb-gadget-ethernet \
+        usb-gadget-ethernet-init \
         wilc3000-fw \
         wilc \
 "
