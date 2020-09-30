@@ -22,6 +22,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         packagegroup-core-boot \
         packagegroup-core-ssh-dropbear \
         packagegroup-petalinux-gstreamer \
+        packagegroup-petalinux-lmsensors \
         packagegroup-petalinux-matchbox \
         packagegroup-petalinux-opencv \
         packagegroup-petalinux-v4lutils \
@@ -45,6 +46,7 @@ IMAGE_INSTALL_append_ultra96v2 = "\
         git \
         iw \
         libftdi \
+        libpython3 \
         openamp-fw-echo-testd \
         openamp-fw-mat-muld \
         openamp-fw-rpc-demo \
@@ -55,6 +57,7 @@ IMAGE_INSTALL_append_ultra96v2 = "\
         packagegroup-petalinux-96boards-sensors \
         packagegroup-petalinux-benchmarks \
         packagegroup-petalinux-openamp \
+        packagegroup-petalinux-python-modules \
         packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-ultra96-webapp \
         packagegroup-petalinux-utils \
