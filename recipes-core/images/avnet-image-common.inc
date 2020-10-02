@@ -136,3 +136,12 @@ COMMON_FEATURES_append_mz = "\
         hwcodecs \
         ssh-server-dropbear \
 "
+
+IMAGE_INSTALL_append_pz = "\
+        e2fsprogs \
+        e2fsprogs-resize2fs \
+        e2fsprogs-e2fsck \
+        e2fsprogs-mke2fs \
+        parted \
+        util-linux-mkfs \
+"

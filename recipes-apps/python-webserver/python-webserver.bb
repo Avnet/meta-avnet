@@ -7,7 +7,7 @@ SECTION = "PETALINUX/apps"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-COMPATIBLE_MACHINE = "uz"
+COMPATIBLE_MACHINE = "uz|pz"
 
 # Packages
 RDEPENDS_${PN} += "\
@@ -28,8 +28,11 @@ SRC_URI = "file://cgi.py \
      file://images/Avnet_logo_tagline_rgb.png \
      file://images/favicon.ico \
      file://images/board.jpg \
-     file://images/ultrazed.png \
      file://pdfs/Delkin_Devices_Product_Line.pdf \
+      "
+
+SRC_URI_append_uz = "\
+     file://images/ultrazed.png \
       "
 
 SRC_URI_append_uz3eg-iocc = "\
@@ -43,6 +46,12 @@ SRC_URI_append_uz3eg-pciec = "\
 SRC_URI_append_uz7ev-evcc = "\
      file://pdfs/5342-pb-ultrazed-ev-som-v1.pdf \
      file://pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf \
+      "
+
+SRC_URI_append_pz = "\
+     file://images/picozed.png \
+     file://pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
+     file://pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
       "
 
 S = "${WORKDIR}"
@@ -66,10 +75,12 @@ do_install() {
        install -m 0755 ${S}/images/Avnet_logo_tagline_rgb.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
        install -m 0755 ${S}/images/favicon.ico ${D}/home/root/webserver/images
-       install -m 0755 ${S}/images/ultrazed.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/Delkin_Devices_Product_Line.pdf ${D}/home/root/webserver/pdfs
 }
 
+do_install_append_uz () {
+       install -m 0755 ${S}/images/ultrazed.png ${D}/home/root/webserver/images
+}
 do_install_append_uz3eg-iocc () {
        install -m 0755 ${S}/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/5080-PB-AES-ZU-IOCC-G-V2e.pdf ${D}/home/root/webserver/pdfs
@@ -85,6 +96,12 @@ do_install_append_uz7ev-evcc () {
        install -m 0755 ${S}/pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf ${D}/home/root/webserver/pdfs
 }
 
+do_install_append_pz () {
+       install -m 0755 ${S}/images/picozed.png ${D}/home/root/webserver/images
+       install -m 0755 ${S}/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf ${D}/home/root/webserver/pdfs
+       install -m 0755 ${S}/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf ${D}/home/root/webserver/pdfs
+}
+
 FILES_${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/index.html \
            /home/root/webserver/launch_server.sh \
@@ -98,10 +115,12 @@ FILES_${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/images/Avnet_logo_tagline_rgb.png \
            /home/root/webserver/images/board.jpg \
            /home/root/webserver/images/favicon.ico \
-           /home/root/webserver/images/ultrazed.png \
            /home/root/webserver/pdfs/Delkin_Devices_Product_Line.pdf \
                "
 
+FILES_${PN}_append_uz = "\
+           /home/root/webserver/images/ultrazed.png \
+               "
 FILES_${PN}_append_uz3eg-iocc = "\
            /home/root/webserver/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf \
            /home/root/webserver/pdfs/5080-PB-AES-ZU-IOCC-G-V2e.pdf \
@@ -113,4 +132,10 @@ FILES_${PN}_append_uz3eg-pciec = "\
 FILES_${PN}_append_uz7ev-evcc = "\
            /home/root/webserver/pdfs/5342-pb-ultrazed-ev-som-v1.pdf \
            /home/root/webserver/pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf \
+               "
+
+FILES_${PN}_append_pz = "\
+           /home/root/webserver/images/picozed.png \
+           /home/root/webserver/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
+           /home/root/webserver/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
                "
