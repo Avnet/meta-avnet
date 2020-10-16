@@ -6,7 +6,10 @@ IMAGE_INSTALL_append_zynqmp = "\
         bonnie++ \
         bridge-utils \
         can-utils \
+        cmake \
         coreutils \
+        dnf \
+        e2fsprogs-resize2fs \
         ethtool \
         fpga-manager-script \
         haveged \
@@ -15,20 +18,35 @@ IMAGE_INSTALL_append_zynqmp = "\
         iperf3 \
         json-c \
         kernel-modules \
+        libpython3 \
         lmsensors-sensorsdetect \
+        mesa-megadriver \
         mtd-utils \
         nano \
+        opencl-clhpp-dev \
+        opencl-headers-dev \
+        openssh \
+        openssh-scp \
         openssh-sftp-server \
+        openssh-sshd \
         packagegroup-core-boot \
-        packagegroup-core-ssh-dropbear \
         packagegroup-petalinux-gstreamer \
         packagegroup-petalinux-lmsensors \
         packagegroup-petalinux-matchbox \
         packagegroup-petalinux-opencv \
+        packagegroup-petalinux-opencv-dev \
+        packagegroup-petalinux-python-modules \
+        packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-v4lutils \
+        packagegroup-petalinux-vitisai \
+        packagegroup-petalinux-vitisai-dev \
         packagegroup-petalinux-x11 \
+        parted \
         pciutils \
         pmic-prog \
+        python3 \
+        python3-pip \
+        python-pyserial \
         run-postinsts \
         sds-lib \
         tcf-agent \
@@ -42,27 +60,19 @@ IMAGE_INSTALL_append_zynqmp = "\
 
 IMAGE_INSTALL_append_ultra96v2 = "\
         bluez5 \
-        cmake \
         git \
         iw \
         libftdi \
-        libpython3 \
         openamp-fw-echo-testd \
         openamp-fw-mat-muld \
         openamp-fw-rpc-demo \
-        opencl-clhpp-dev \
-        opencl-headers-dev \
         packagegroup-base-extended \
         packagegroup-petalinux \
         packagegroup-petalinux-96boards-sensors \
         packagegroup-petalinux-benchmarks \
         packagegroup-petalinux-openamp \
-        packagegroup-petalinux-python-modules \
-        packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-ultra96-webapp \
         packagegroup-petalinux-utils \
-        python3-pip \
-        python-pyserial \
         ultra96-ap-setup \
         ultra96-misc \
         ultra96-radio-leds \
@@ -87,9 +97,7 @@ IMAGE_INSTALL_append_uz = "\
         mac-eeprom-config \
         mac-eeprom-config-init \
         media-ctl \
-        parted \
         performance-tests \
-        python3 \
         python3-core \
         python3-dbus \
         python3-pygobject \
@@ -103,8 +111,11 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
         user-switch-test \
 "
 
-COMMON_FEATURES_append_ultra96v2 = "\
+COMMON_FEATURES_append_zynqmp = "\
+        debug-tweaks \
+        hwcodecs \
         package-management \
+        ssh-server-openssh \
 "
 
 IMAGE_INSTALL_append_minized = "\
