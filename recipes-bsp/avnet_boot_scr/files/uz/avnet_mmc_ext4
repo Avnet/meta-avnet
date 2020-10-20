@@ -5,11 +5,11 @@
 ################
 
 echo Trying to boot from SD...
-setenv bootargs "console=ttyPS0,115200 earlycon root=/dev/mmcblk1p2 rw rootwait"
+setenv bootargs "console=ttyPS0,115200 earlycon root=/dev/mmcblk1p2 rw rootwait cma=512M"
 fatload mmc 1:1 0x4000000 image.ub
 bootm 0x04000000
 
 echo Trying to boot from EMMC...
-setenv bootargs "console=ttyPS0,115200 earlycon root=/dev/mmcblk0p2 rw rootwait"
+setenv bootargs "console=ttyPS0,115200 earlycon root=/dev/mmcblk0p2 rw rootwait cma=512M"
 fatload mmc 0:1 0x4000000 image.ub
 bootm 0x04000000
