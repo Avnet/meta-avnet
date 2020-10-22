@@ -1,6 +1,10 @@
 require recipes-core/images/petalinux-image-common.inc
 
 # append what's already defined by petalinux (build/conf/plnxtool.conf)
+IMAGE_INSTALL_append_zynq = "\
+        haveged \
+"
+
 IMAGE_INSTALL_append_zynqmp = "\
         bc \
         bonnie++ \
@@ -9,12 +13,17 @@ IMAGE_INSTALL_append_zynqmp = "\
         cmake \
         coreutils \
         dnf \
+        e2fsprogs \
         e2fsprogs-resize2fs \
+        e2fsprogs-e2fsck \
+        e2fsprogs-mke2fs \
         ethtool \
         fpga-manager-script \
         haveged \
+        hdparm \
         hellopm \
         i2c-tools \
+        i2c-tools-misc \
         iperf3 \
         json-c \
         kernel-modules \
@@ -42,6 +51,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         packagegroup-petalinux-vitisai-dev \
         packagegroup-petalinux-x11 \
         parted \
+        parted \
         pciutils \
         pmic-prog \
         python3 \
@@ -52,6 +62,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         tcf-agent \
         udev-extraconf \
         usbutils \
+        util-linux-mkfs \
         watchdog-init \
         xrt \
         xrt-dev \
@@ -78,7 +89,6 @@ IMAGE_INSTALL_append_ultra96v2 = "\
         ultra96-radio-leds \
         ultra96-wpa \
         usb-gadget-ethernet \
-        usb-gadget-ethernet-init \
         wilc3000-fw \
         wilc \
 "
@@ -86,9 +96,6 @@ IMAGE_INSTALL_append_ultra96v2 = "\
 IMAGE_INSTALL_append_uz = "\
         blinky \
         blinky-init \
-        e2fsprogs-resize2fs \
-        hdparm \
-        i2c-tools-misc \
         libdrm \
         libdrm-kms \
         libdrm-tests \
@@ -111,13 +118,6 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
         user-switch-test \
 "
 
-COMMON_FEATURES_append_zynqmp = "\
-        debug-tweaks \
-        hwcodecs \
-        package-management \
-        ssh-server-openssh \
-"
-
 IMAGE_INSTALL_append_minized = "\
         e2fsprogs \
         e2fsprogs-resize2fs \
@@ -125,34 +125,61 @@ IMAGE_INSTALL_append_minized = "\
         e2fsprogs-mke2fs \
         parted \
         util-linux-mkfs \
+        usb-gadget-ethernet \
 "
 
 IMAGE_INSTALL_append_mz = "\
         bonnie++ \
         bridge-utils \
-        can-utils \
-        haveged \
         iperf3 \
         kernel-modules \
         mtd-utils \
+        openssh \
+        openssh-scp \
         openssh-sftp-server \
+        openssh-sshd \
         packagegroup-core-boot \
-        packagegroup-core-ssh-dropbear \
-        pciutils \
         run-postinsts \
         tcf-agent \
         udev-extraconf \
 "
-COMMON_FEATURES_append_mz = "\
-        hwcodecs \
-        ssh-server-dropbear \
-"
 
 IMAGE_INSTALL_append_pz = "\
+        bonnie++ \
+        bridge-utils \
+        iperf3 \
+        kernel-modules \
+        mtd-utils \
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        openssh \
+        openssh-scp \
+        openssh-sftp-server \
+        openssh-sshd \
         parted \
+        pciutils \
+        packagegroup-core-boot \
+        run-postinsts \
+        tcf-agent \
+        udev-extraconf \
         util-linux-mkfs \
+"
+
+COMMON_FEATURES_append_zynqmp = "\
+        debug-tweaks \
+        hwcodecs \
+        package-management \
+        ssh-server-openssh \
+"
+
+COMMON_FEATURES_append_mz = "\
+        hwcodecs \
+        ssh-server-openssh \
+"
+
+COMMON_FEATURES_append_mz = "\
+        hwcodecs \
+        ssh-server-openssh \
 "

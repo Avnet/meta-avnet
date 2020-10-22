@@ -72,8 +72,7 @@ echo 0x01 > bDeviceProtocol
 mkdir -p strings/0x409
 echo "0000" > strings/0x409/serialnumber
 echo "Avnet"   > strings/0x409/manufacturer
-echo "Ultra96-V2"   > strings/0x409/product
-
+echo "SBC Gadget Ethernet"   > strings/0x409/product
 
 # Setup the OS Descriptors for our RNDIS device to be automatically installed
 echo 1  > os_desc/use
@@ -111,5 +110,5 @@ fi
 udevadm settle -t 5 || :
 ls /sys/class/udc/ > UDC
 echo "" > /sys/kernel/config/usb_gadget/g/UDC
-ls /sys/class/udc/ > UDC
+
 ifconfig usb0 192.168.3.1
