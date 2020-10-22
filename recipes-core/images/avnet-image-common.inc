@@ -125,7 +125,6 @@ IMAGE_INSTALL_append_minized = "\
         e2fsprogs-mke2fs \
         parted \
         util-linux-mkfs \
-        usb-gadget-ethernet \
 "
 
 IMAGE_INSTALL_append_mz = "\

@@ -72,7 +72,7 @@ echo 0x01 > bDeviceProtocol
 mkdir -p strings/0x409
 echo "0000" > strings/0x409/serialnumber
 echo "Avnet"   > strings/0x409/manufacturer
-echo "SBC Gadget Ethernet"   > strings/0x409/product
+echo "Ultra96-V2 Gadget Ethernet"   > strings/0x409/product
 
 # Setup the OS Descriptors for our RNDIS device to be automatically installed
 echo 1  > os_desc/use
