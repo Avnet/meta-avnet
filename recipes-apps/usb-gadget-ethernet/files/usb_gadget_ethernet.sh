@@ -51,6 +51,8 @@
 #!/bin/sh
 
 # Script Adapted from http://irq5.io/2016/12/22/raspberry-pi-zero-as-multiple-usb-gadgets/
+# https://www.element14.com/community/message/295530/l/re-ultra96-v2-usb-otgdevice-port#295530
+
 cd /sys/kernel/config/usb_gadget/
 mkdir -p g
 cd g
@@ -107,8 +109,34 @@ fi
 #if [ ! -e configs/c.1/mass_storage.ms0 ]; then
 #ln -s functions/mass_storage.ms0 configs/c.1/
 #fi
-udevadm settle -t 5 || :
-ls /sys/class/udc/ > UDC
-echo "" > /sys/kernel/config/usb_gadget/g/UDC
 
-ifconfig usb0 192.168.3.1
+udevadm settle -t 5 || :
+
+# Clear the UDC file if we have been here before
+# This avoids errors if we run this script twice 
+# and allows us to essentially reset the interface if necessary
+str=$(ls /sys/class/udc/)
+if [[ $(< ./UDC) != "$str" ]]; then
+  # We have not been here before (file does not match $str), so write the UDC file
+  # For some unknown reason we need to write, clear, then write the file again
+  ls /sys/class/udc/ > ./UDC
+  sync
+  echo "" > ./UDC
+  sync
+  ls /sys/class/udc/ > ./UDC
+else
+  # We have been here before, so clear the UDC file first
+  echo "" > ./UDC
+  sync
+  ls /sys/class/udc/ > ./UDC
+  sync
+  echo "" > ./UDC
+  sync
+  ls /sys/class/udc/ > ./UDC
+fi
+
+ip=192.168.3.1
+echo "**************************************"
+echo "Assigned static IP $ip to usb0"
+echo "**************************************"
+ifconfig usb0 $ip
