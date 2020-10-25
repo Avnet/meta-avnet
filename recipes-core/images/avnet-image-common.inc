@@ -137,7 +137,6 @@ IMAGE_INSTALL_append_mz = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
-        packagegroup-core-boot \
         run-postinsts \
         tcf-agent \
         udev-extraconf \
