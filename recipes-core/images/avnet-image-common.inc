@@ -159,7 +159,6 @@ IMAGE_INSTALL_append_pz = "\
         openssh-sshd \
         parted \
         pciutils \
-        packagegroup-core-boot \
         run-postinsts \
         tcf-agent \
         udev-extraconf \
@@ -178,7 +177,7 @@ COMMON_FEATURES_append_mz = "\
         ssh-server-openssh \
 "
 
-COMMON_FEATURES_append_mz = "\
+COMMON_FEATURES_append_pz = "\
         hwcodecs \
         ssh-server-openssh \
 "
