@@ -1,4 +1,4 @@
 DESCRIPTION = "OSL image definition for Avnet boards"
 LICENSE = "MIT"
 
-require avnet-image-common.inc
+require avnet-image-minimal.inc
