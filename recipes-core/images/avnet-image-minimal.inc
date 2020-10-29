@@ -8,9 +8,8 @@ IMAGE_INSTALL_append_zynq = "\
 
 IMAGE_INSTALL_append_zynqmp = "\
         bc \
-        cmake \
+        bonnie++ \
         coreutils \
-        dnf \
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
@@ -23,43 +22,20 @@ IMAGE_INSTALL_append_zynqmp = "\
         i2c-tools \
         i2c-tools-misc \
         iperf3 \
-        json-c \
         kernel-modules \
-        libpython3 \
-        lmsensors-sensorsdetect \
-        mesa-megadriver \
         mtd-utils \
         nano \
-        opencl-clhpp-dev \
-        opencl-headers-dev \
         packagegroup-core-boot \
         packagegroup-core-ssh-dropbear \
-        packagegroup-petalinux-gstreamer \
         packagegroup-petalinux-lmsensors \
-        packagegroup-petalinux-matchbox \
-        packagegroup-petalinux-opencv \
-        packagegroup-petalinux-opencv-dev \
-        packagegroup-petalinux-python-modules \
-        packagegroup-petalinux-self-hosted \
-        packagegroup-petalinux-v4lutils \
-        packagegroup-petalinux-vitisai \
-        packagegroup-petalinux-vitisai-dev \
-        packagegroup-petalinux-x11 \
         parted \
-        pciutils \
         pmic-prog \
-        python3 \
-        python3-pip \
-        python-pyserial \
         run-postinsts \
         tcf-agent \
         udev-extraconf \
         usbutils \
         util-linux-mkfs \
         watchdog-init \
-        xrt \
-        xrt-dev \
-        zocl \
 "
 
 IMAGE_INSTALL_append_ultra96v2 = "\
@@ -97,12 +73,14 @@ IMAGE_INSTALL_append_uz = "\
         mac-eeprom-config \
         mac-eeprom-config-init \
         media-ctl \
+        pciutils \
         performance-tests \
+        python-webserver \
+        python-webserver-init \
+        python3 \
         python3-core \
         python3-dbus \
         python3-pygobject \
-        python-webserver \
-        python-webserver-init \
         yavta \
 "
 
@@ -126,6 +104,7 @@ IMAGE_INSTALL_append_mz = "\
 IMAGE_INSTALL_append_pz = "\
         blinky-init \
         blinky \
+        bonnie++ \
         mac-eeprom-config-init \
         mac-eeprom-config \
         mtd-utils \
@@ -151,5 +130,6 @@ COMMON_FEATURES_append_zynqmp = "\
 
 COMMON_FEATURES_append_zynq = "\
         hwcodecs \
+        ssh-server-dropbear \
 "
 

@@ -125,12 +125,14 @@ IMAGE_INSTALL_append_uz = "\
         mac-eeprom-config \
         mac-eeprom-config-init \
         media-ctl \
+        pciutils \
         performance-tests \
+        python-webserver \
+        python-webserver-init \
+        python3 \
         python3-core \
         python3-dbus \
         python3-pygobject \
-        python-webserver \
-        python-webserver-init \
         yavta \
 "
 
@@ -205,12 +207,11 @@ COMMON_FEATURES_append_zynqmp = "\
         debug-tweaks \
         hwcodecs \
         package-management \
-        ssh-server-dropbear \
+        ssh-server-openssh \
 "
 
 COMMON_FEATURES_append_zynq = "\
         hwcodecs \
-        ssh-server-dropbear \
+        ssh-server-openssh \
 "
-
 
