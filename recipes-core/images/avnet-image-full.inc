@@ -61,7 +61,6 @@ IMAGE_INSTALL_append_zynqmp = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
-        packagegroup-core-boot \
         packagegroup-petalinux-gstreamer \
         packagegroup-petalinux-lmsensors \
         packagegroup-petalinux-matchbox \
