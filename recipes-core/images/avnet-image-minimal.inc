@@ -104,7 +104,6 @@ IMAGE_INSTALL_append_mz = "\
 IMAGE_INSTALL_append_pz = "\
         blinky-init \
         blinky \
-        bonnie++ \
         mac-eeprom-config-init \
         mac-eeprom-config \
         mtd-utils \
@@ -112,9 +111,10 @@ IMAGE_INSTALL_append_pz = "\
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        i2c-tools \
+        i2c-tools-misc \
         parted \
         pciutils \
-        performance-tests \
         run-postinsts \
         tcf-agent \
         udev-extraconf \

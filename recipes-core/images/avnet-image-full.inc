@@ -22,6 +22,7 @@ IMAGE_INSTALL_append_zynq = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
+        packagegroup-core-boot \
         run-postinsts \
         sbc \
         tcf-agent \
