@@ -18,6 +18,8 @@ IMAGE_INSTALL_append_zynq = "\
         kernel-modules \
         mtd-utils \
         nano \
+        opencl-clhpp-dev \
+        opencl-headers-dev \
         openssh \
         openssh-scp \
         openssh-sftp-server \
@@ -28,6 +30,9 @@ IMAGE_INSTALL_append_zynq = "\
         tcf-agent \
         udev-extraconf \
         usbutils \
+        xrt \
+        xrt-dev \
+        zocl \
 "
 
 IMAGE_INSTALL_append_zynqmp = "\
