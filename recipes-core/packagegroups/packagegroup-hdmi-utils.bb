@@ -18,5 +18,6 @@ RDEPENDS_${PN}_append += " \
 	packagegroup-petalinux-v4lutils \
 	packagegroup-petalinux-x11 \
 	gstreamer1.0-plugins-good \
+	packagegroup-petalinux-self-hosted \
 	${APP_PACKAGES} \
 	"
