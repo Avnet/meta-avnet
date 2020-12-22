@@ -177,4 +177,5 @@
 };
 
 #include "hdmi.dtsi"
+#include "fmc-quad.dtsi"
 
