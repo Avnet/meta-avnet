@@ -178,7 +178,7 @@
                         video-width = <8>;
                         cfa-pattern = "rggb";
                         serdes_out0: endpoint {
-                            remote-endpoint = <&csiss_in>;
+                            remote-endpoint = <&mipi_csi_infmc_quad_mipi_csi2_rx_mipi_csi2_rx_subsystem_0>;
                         };
                     };
                 };
@@ -233,547 +233,119 @@
 };
 
 &fmc_quad_mipi_csi2_rx_mipi_csi2_rx_subsystem_0 {
-    
-    xlnx,csi-pxl-format = "RAW8";
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-            xlnx,video-width = <8>;
-            xlnx,cfa-pattern = "rggb";
-
-            csiss_out: endpoint {
-                remote-endpoint = <&switch_in0>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-            xlnx,video-width = <8>;
-            xlnx,cfa-pattern = "rggb";
-
-            csiss_in: endpoint {
-                data-lanes = <1 2 3 4>;
-                remote-endpoint = <&serdes_out0>;
-            };
-        };
-    };
+    compatible = "xlnx,mipi-csi2-rx-subsystem-5.0";
 };
 
-&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_demosaic_0
-{
-    reset-gpios = <&gpio 85 1>;
-    xlnx,max-height = <1080>;
-    xlnx,max-width = <1920>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-width = <8>;
-            xlnx,cfa-pattern = "grbg";
-
-            demosaic_0_in: endpoint {
-                remote-endpoint = <&switch_out0>;
-            };
-        };
-
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-width = <8>;
-
-            demosaic_0_out: endpoint {
-                remote-endpoint = <&v_csc_0_in>;
-            };
-        };
-    };
-};
-&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_demosaic_1
-{
-    reset-gpios = <&gpio 98 1>;
-    xlnx,max-height = <1080>;
-    xlnx,max-width = <1920>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-width = <8>;
-            xlnx,cfa-pattern = "grbg";
-
-            demosaic_1_in: endpoint {
-                remote-endpoint = <&switch_out1>;
-            };
-        };
-
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-width = <8>;
-
-            demosaic_1_out: endpoint {
-                remote-endpoint = <&v_csc_1_in>;
-            };
-        };
-    };
-};
-&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_demosaic_2
-{
-    reset-gpios = <&gpio 101 1>;
-    xlnx,max-height = <1080>;
-    xlnx,max-width = <1920>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-width = <8>;
-            xlnx,cfa-pattern = "grbg";
-
-            demosaic_2_in: endpoint {
-                remote-endpoint = <&switch_out2>;
-            };
-        };
-
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-width = <8>;
-
-            demosaic_2_out: endpoint {
-                remote-endpoint = <&v_csc_2_in>;
-            };
-        };
-    };
-};
-&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_demosaic_3
-{
-    reset-gpios = <&gpio 104 1>;
-    xlnx,max-height = <1080>;
-    xlnx,max-width = <1920>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-width = <8>;
-            xlnx,cfa-pattern = "grbg";
-
-            demosaic_3_in: endpoint {
-                remote-endpoint = <&switch_out3>;
-            };
-        };
-
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-width = <8>;
-
-            demosaic_3_out: endpoint {
-                remote-endpoint = <&v_csc_3_in>;
-            };
-        };
-    };
+&mipi_csi_infmc_quad_mipi_csi2_rx_mipi_csi2_rx_subsystem_0 {
+    data-lanes = <1 2 3 4>;
+    remote-endpoint = <&serdes_out0>;
 };
 
 &fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_csc_0
 {
     compatible = "xlnx,v-vpss-csc";
-    reset-gpios = <&gpio 84 1>;
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_RBG>;
-            xlnx,video-width = <8>;
-
-            v_csc_0_in: endpoint {
-                remote-endpoint = <&demosaic_0_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_csc_0_out: endpoint {
-                remote-endpoint = <&v_scaler_0_in>;
-            };
-        };
-    };  
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_csc_1
 {
     compatible = "xlnx,v-vpss-csc";
-    reset-gpios = <&gpio 92 1>;
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_RBG>;
-            xlnx,video-width = <8>;
-
-            v_csc_1_in: endpoint {
-                remote-endpoint = <&demosaic_1_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_csc_1_out: endpoint {
-                remote-endpoint = <&v_scaler_1_in>;
-            };
-        };
-    };  
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_csc_2
 {
     compatible = "xlnx,v-vpss-csc";
-    reset-gpios = <&gpio 93 1>;
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_RBG>;
-            xlnx,video-width = <8>;
-
-            v_csc_2_in: endpoint {
-                remote-endpoint = <&demosaic_2_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_csc_2_out: endpoint {
-                remote-endpoint = <&v_scaler_2_in>;
-            };
-        };
-    };  
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_csc_3
 {
     compatible = "xlnx,v-vpss-csc";
-    reset-gpios = <&gpio 94 1>;
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_RBG>;
-            xlnx,video-width = <8>;
-
-            v_csc_3_in: endpoint {
-                remote-endpoint = <&demosaic_3_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_csc_3_out: endpoint {
-                remote-endpoint = <&v_scaler_3_in>;
-            };
-        };
-    };  
 };
 
 &fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0
 {
     compatible = "xlnx,v-vpss-scaler-2.2";
-    reset-gpios = <&gpio 82 1>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_0_in: endpoint {
-                remote-endpoint = <&v_csc_0_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_0_out: endpoint {
-                remote-endpoint = <&vcap_gmsl_in0>;
-            };
-        };
-    };
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1
 {
     compatible = "xlnx,v-vpss-scaler-2.2";
-    reset-gpios = <&gpio 99 1>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_1_in: endpoint {
-                remote-endpoint = <&v_csc_1_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_1_out: endpoint {
-                remote-endpoint = <&vcap_gmsl_in1>;
-            };
-        };
-    };
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2
 {
     compatible = "xlnx,v-vpss-scaler-2.2";
-    reset-gpios = <&gpio 102 1>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_2_in: endpoint {
-                remote-endpoint = <&v_csc_2_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_2_out: endpoint {
-                remote-endpoint = <&vcap_gmsl_in2>;
-            };
-        };
-    };
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3
 {
     compatible = "xlnx,v-vpss-scaler-2.2";
-    reset-gpios = <&gpio 105 1>;
-
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_3_in: endpoint {
-                remote-endpoint = <&v_csc_3_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            v_scaler_3_out: endpoint {
-                remote-endpoint = <&vcap_gmsl_in3>;
-            };
-        };
-    };
 };
 
 &fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0
 {
-    compatible = "xlnx,axi-frmbuf-wr-v2";
     xlnx,dma-align = <32>;
-    reset-gpios = <&gpio 83 1>;
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1
 {
-    compatible = "xlnx,axi-frmbuf-wr-v2";
     xlnx,dma-align = <32>;
-    reset-gpios = <&gpio 100 1>;
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2
 {
-    compatible = "xlnx,axi-frmbuf-wr-v2";
     xlnx,dma-align = <32>;
-    reset-gpios = <&gpio 103 1>;
 };
 &fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3
 {
-    compatible = "xlnx,axi-frmbuf-wr-v2";
     xlnx,dma-align = <32>;
-    reset-gpios = <&gpio 106 1>;
 };
 
-/ {
+&fmc_quad_mipi_csi2_rx_axis_switch_0 {
+    xlnx,num-si-slots = <0x1>;
+    xlnx,num-mi-slots = <0x4>;
+    clock-names = "aclk";
+    clocks = <&misc_clk_0>;
+};
 
-    amba: amba {
+&amba_pl {
 
-        fmc_quad_mipi_csi2_axis_switch_0: axis_switch@0 {
-            compatible = "xlnx,axis-switch-1.1";
-            xlnx,routing-mode = <0x0>;
-            xlnx,num-si-slots = <0x1>;
-            xlnx,num-mi-slots = <0x4>;
-            clock-names = "aclk";
-            clocks = <&misc_clk_0>; 
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0;
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1;
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2;
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3;
 
-            ports {
-                #address-cells = <1>;
-                #size-cells = <0>;
-                port@0 {
-                    reg = <0>;
-                    xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-                    xlnx,video-width = <8>;
-                    switch_in0: endpoint {
-                        remote-endpoint = <&csiss_out>;
-                    };
+    vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0 {
+        compatible = "xlnx,video";
+        dma-names = "port0", "port1", "port2", "port3";
+        dmas = <&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3 0>;
+
+        vcap_portsfmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0: ports {
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0: port@0 {
+                direction = "input";
+                reg = <0>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0>;
                 };
-                port@1 {
-                    reg = <1>;
-                    xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-                    xlnx,video-width = <8>;
-                    switch_out0: endpoint {
-                        remote-endpoint = <&demosaic_0_in>;
-                    };
+            };
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1: port@1 {
+                direction = "input";
+                reg = <1>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1>;
                 };
-                port@2 {
-                    reg = <2>;
-                    xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-                    xlnx,video-width = <8>;
-                    switch_out1: endpoint {
-                        remote-endpoint = <&demosaic_1_in>;
-                    };
+            };
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2: port@2 {
+                direction = "input";
+                reg = <2>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2>;
                 };
-                port@3 {
-                    reg = <3>;
-                    xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-                    xlnx,video-width = <8>;
-                    switch_out2: endpoint {
-                        remote-endpoint = <&demosaic_2_in>;
-                    };
-                };
-                port@4 {
-                    reg = <4>;
-                    xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-                    xlnx,video-width = <8>;
-                    switch_out3: endpoint {
-                        remote-endpoint = <&demosaic_3_in>;
-                    };
+            };
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3: port@3 {
+                direction = "input";
+                reg = <3>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3>;
                 };
             };
         };
     };
-
-    amba_pl: amba_pl@0 {
-
-        vcap_gmsl {
-            compatible = "xlnx,video";
-            dmas = <&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3 0>;
-            dma-names = "port0", "port1", "port2", "port3";
-
-            ports {
-                #address-cells = <1>;
-                #size-cells = <0>;
-
-                port@0 {
-                    reg = <0>;
-                    direction = "input";
-
-                    vcap_gmsl_in0: endpoint {
-                        remote-endpoint = <&v_scaler_0_out>;
-                    };
-                };
-
-                port@1 {
-                    reg = <1>;
-                    direction = "input";
-
-                    vcap_gmsl_in1: endpoint {
-                        remote-endpoint = <&v_scaler_1_out>;
-                    };
-                };
-
-                port@2 {
-                    reg = <2>;
-                    direction = "input";
-
-                    vcap_gmsl_in2: endpoint {
-                        remote-endpoint = <&v_scaler_2_out>;
-                    };
-                };
-
-                port@3 {
-                    reg = <3>;
-                    direction = "input";
-
-                    vcap_gmsl_in3: endpoint {
-                        remote-endpoint = <&v_scaler_3_out>;
-                    };
-                };
-
-            };
-        };
-    };
 };
-

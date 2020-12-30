@@ -13,141 +13,58 @@
 };
 
 /* HDMI TX */
-&hdmi_tx_v_mix_0 {
-    reset-gpios = <&gpio 78 1>; // emio_gpio 78 + 0
-
-    crtc_mixer_port: port@0 {
-            reg = <0>;
-            mixer_crtc: endpoint {
-                    remote-endpoint = <&hdmi_encoder>;
-            };
-    };
-    mixer_master_layer: layer_0 {
-            xlnx,layer-id = <0>;
-            xlnx,vformat = "BG24";
-            xlnx,layer-max-width = <3840>;
-            xlnx,layer-max-height = <2160>;
-    };
-    mixer_overlay_1: layer_1 {
-            xlnx,layer-id = <1>;
-            xlnx,vformat = "YUYV";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-    };
-    mixer_overlay_2: layer_2 {
-            xlnx,layer-id = <2>;
-            xlnx,vformat = "YUYV";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-    };
-    mixer_overlay_3: layer_3 {
-            xlnx,layer-id = <3>;
-            xlnx,vformat = "UYVY";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-    };
-    mixer_overlay_4: layer_4 {
-            xlnx,layer-id = <4>;
-            xlnx,vformat = "UYVY";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-    };
-    mixer_overlay_5: layer_5 {
-            xlnx,layer-id = <5>;
-            xlnx,vformat = "UYVY";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-    };
-    mixer_overlay_6: layer_6 {
-            xlnx,layer-id = <6>;
-            xlnx,vformat = "UYVY";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-    };
-    mixer_overlay_7: layer_7 {
-            xlnx,layer-id = <7>;
-            xlnx,vformat = "AR24";
-            xlnx,layer-alpha;
-            xlnx,layer-max-width = <3840>;
-            xlnx,layer-primary;
-    };
+&xx_mix_masterhdmi_tx_v_mix_0 {
+    /delete-property/ xlnx,layer-primary;
+    xlnx,vformat = "BG24";
+};
+&xx_mix_overlay_1hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_2hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_3hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_4hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_5hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_6hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_7hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+    xlnx,layer-primary;
 };
 
 &hdmi_tx_v_hdmi_tx_ss_0 {
     clock-names = "s_axi_cpu_aclk", "link_clk", "s_axis_audio_aclk", "video_clk", "s_axis_video_aclk", "txref-clk", "retimer-clk";
-    clocks = <&zynqmp_clk 71>, <&misc_clk_1>, <&zynqmp_clk 71>, <&misc_clk_2>, <&misc_clk_0>, <&idt8t49n24x 3>, <&dp159>;
-    phy-names = "hdmi-phy0", "hdmi-phy1", "hdmi-phy2";
-    phys = <&vphy_lane0 0 1 1 1>, <&vphy_lane1 0 1 1 1>, <&vphy_lane2 0 1 1 1>;
-    xlnx,input-pixels-per-clock = <2>;
-    xlnx,max-bits-per-component = <8>;
-    hdmitx_ports: ports {
-            #address-cells = <1>;
-            #size-cells = <0>;
-            encoder_hdmi_port: port@0 {
-                    reg = <0>;
-                    hdmi_encoder: endpoint {
-                            remote-endpoint = <&mixer_crtc>;
-                    };
-            };
-    };
+    clocks = <&zynqmp_clk 71>, <&misc_clk_2>, <&zynqmp_clk 71>, <&misc_clk_3>, <&misc_clk_0>, <&idt8t49n24x 3>, <&dp159>;
 };
 
 /* HDMI RX */
-&hdmi_rx_v_frmbuf_wr_0 {
-    reset-gpios = <&gpio 80 1>; // emio_gpio 78 + 2
-};
-
 &hdmi_rx_v_proc_ss_0 {
     compatible = "xlnx,v-vpss-scaler-2.2";
-    reset-gpios = <&gpio 79 1>; // emio_gpio 78 + 1
-    ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        port@0 {
-            reg = <0>;
-
-            xlnx,video-format = <XVIP_VF_RBG>;
-            xlnx,video-width = <8>;
-
-            scaler_2_in: endpoint {
-                remote-endpoint = <&hdmi_rx_out>;
-            };
-        };
-        port@1 {
-            reg = <1>;
-
-            xlnx,video-format = <XVIP_VF_YUV_422>;
-            xlnx,video-width = <8>;
-
-            scaler_2_out: endpoint {
-                remote-endpoint = <&vcap_hdmi_in>;
-            };
-        };
-    };
 };
 
-&hdmi_rx_v_hdmi_rx_ss_0 {
-    phy-names = "hdmi-phy0", "hdmi-phy1", "hdmi-phy2";
-    phys = <&vphy_lane0 0 1 1 0>, <&vphy_lane1 0 1 1 0>, <&vphy_lane2 0 1 1 0>;
-    reg-names = "hdmi-rxss";
-    xlnx,edid-ram-size = <0x100>;
-    xlnx,input-pixels-per-clock = <2>;
-    xlnx,max-bits-per-component = <8>;
-    hdmirx_ports: ports {
-        #address-cells = <1>;
-        #size-cells = <0>;
-        hdmirx_port: port@0 {
-                reg = <0>;
-                hdmi_rx_out: endpoint {
-                        remote-endpoint = <&scaler_2_in>;
-                };
-        };
-    };
+&scaler_port0hdmi_rx_v_proc_ss_0 {
+    xlnx,video-format = <XVIP_VF_RBG>;
+    xlnx,video-width = <8>;
+};
+&scaler_port1hdmi_rx_v_proc_ss_0 {
+    xlnx,video-format = <XVIP_VF_YUV_422>;
+    xlnx,video-width = <8>;
+};
+
+&hdmirx_porthdmi_rx_v_hdmi_rx_ss_0 {
+    xlnx,video-format = <XVIP_VF_RBG>;
+    xlnx,video-width = <8>;
 };
 
 / {
-
     amba: amba {
         i2c@ff030000 {
             i2cswitch@70 {
@@ -177,23 +94,6 @@
                 compatible = "fixed-clock";
                 #clock-cells = <0>;
                 clock-frequency = <38880000>;
-        };
-
-        vcap_hdmi {
-            compatible = "xlnx,video";
-            dma-names = "port0";
-            dmas = <&hdmi_rx_v_frmbuf_wr_0 0>;
-            vcap_hdmi_ports: ports {
-                    #address-cells = <1>;
-                    #size-cells = <0>;
-                    vcap_hdmi_port: port@0 {
-                            direction = "input";
-                            reg = <0>;
-                            vcap_hdmi_in: endpoint {
-                                    remote-endpoint = <&scaler_2_out>;
-                            };
-                    };
-            };
         };
     };
 };
