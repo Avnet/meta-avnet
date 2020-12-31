@@ -1,0 +1,55 @@
+From 0a193f8586772108f1121b7d04a372561725a507 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Wed, 30 Dec 2020 18:50:55 -0800
+Subject: [PATCH] webapp: improve wifi scan parsing
+
+When parsing the output of a wifi scan, it could happen that the strings
+"BSS", "RSN", and "SSID" were used in sub categories.
+
+For example:
+BSS 10:be:f5:25:fb:4c(on wlan0)
+	TSF: 805520561641 usec (9d, 07:45:20)
+	freq: 2462
+	beacon interval: 100 TUs
+	capability: ESS Privacy ShortPreamble ShortSlotTime (0x0431)
+	signal: -59.00 dBm
+	last seen: 4 ms ago
+	SSID: FUNBOX2.4
+	Overlapping BSS scan params:
+		 * passive dwell: 20 TUs
+		 * active dwell: 10 TUs
+		 * channel width trigger scan interval: 300 s
+		 * scan passive total per channel: 200 TUs
+		 * scan active total per channel: 20 TUs
+		 * BSS width channel transition delay factor: 5
+		 * OBSS Scan Activity Threshold: 0.25 %
+
+The parsing was then wrong.
+---
+ webapp/webserver.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/webapp/webserver.py b/webapp/webserver.py
+index 53ecbed..1dbd6d9 100644
+--- a/webapp/webserver.py
++++ b/webapp/webserver.py
+@@ -100,15 +100,15 @@ def createWiFi(output):
+     ssid =False
+     password = False
+     for line in output.splitlines():
+-        line.strip()
+-        if "SSID" in line:
++        line = line.strip()
++        if line.startswith("SSID"):
+             ssid_list = line.split(": ")
+             if len(ssid_list) == 2:
+                 ssid_name = ssid_list[1]
+             ssid = True
+-        elif "RSN" in line:
++        elif line.startswith("RSN"):
+             password = True
+-        elif "BSS" in line:
++        elif line.startswith("BSS"):
+             if ssid and password:
+                 password_ssid.append(ssid_name)
+             if ssid and not password: 
