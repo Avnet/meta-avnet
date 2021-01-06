@@ -3,12 +3,7 @@ require recipes-core/images/petalinux-image-common.inc
 # append what's already defined by petalinux (build/conf/plnxtool.conf)
 IMAGE_INSTALL_append_zynq = "\
         haveged \
-        opencl-clhpp-dev \
-        opencl-headers-dev \
         packagegroup-core-boot \
-        xrt \
-        xrt-dev \
-        zocl \
 "
 
 IMAGE_INSTALL_append_zynqmp = "\

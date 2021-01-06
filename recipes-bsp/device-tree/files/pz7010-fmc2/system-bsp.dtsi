@@ -46,7 +46,7 @@
     phy-handle = <&phy0>;
     phy-mode = "rgmii-id";
     phy0: phy@0 {
-        compatible = "marvell,88e1510";
+        compatible = "marvell,88E1510";
         device_type = "ethernet-phy";
         reg = <0x0>;
         /* linux,phandle = <0x5>; */

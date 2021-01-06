@@ -46,7 +46,7 @@
     phy-handle = <&phy0>;
 	phy-mode = "rgmii-id";
     phy0: phy@0 {
-        compatible = "marvell,88e1510";
+        compatible = "marvell,88E1510";
         device_type = "ethernet-phy";
         reg = <0x0>;
         /* linux,phandle = <0x5>; */
@@ -71,9 +71,14 @@
 
 
 &qspi {
-	flash0: flash@0 {
-		compatible = "micron,n25q128a13";
-	};
+   #address-cells = <1>;
+   #size-cells = <0>;
+   flash0: flash@0 {
+      compatible = "micron,m25p80";
+      reg = <0x0>;
+      #address-cells = <1>;
+      #size-cells = <1>;
+   };
 };
 
 / {
