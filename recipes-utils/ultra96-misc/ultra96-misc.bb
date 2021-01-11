@@ -8,7 +8,6 @@ SRC_URI += "file://minized-mount.sh \
 	    file://wpa_supplicant.conf \
 	    file://wifi.sh \
 	    file://bt.sh \
-	    file://ble.sh \
 " 
 
 
@@ -17,12 +16,10 @@ do_install() {
 	install -m 755 ${WORKDIR}/wpa_supplicant.conf ${D}/home/root/
 	install -m 755 ${WORKDIR}/wifi.sh ${D}/home/root/
 	install -m 755 ${WORKDIR}/bt.sh ${D}/home/root/
-	install -m 755 ${WORKDIR}/ble.sh ${D}/home/root/
 }
 
 FILES_${PN} = " \
 		/home/root/wpa_supplicant.conf \
 		/home/root/wifi.sh \
 		/home/root/bt.sh \
-		/home/root/ble.sh \
 "
