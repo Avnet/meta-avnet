@@ -95,7 +95,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         zocl \
 "
 
-IMAGE_INSTALL_append_ultra96v2 = "\
+IMAGE_INSTALL_append_u96v2-sbc = "\
         bluez5 \
         git \
         iw \
@@ -146,7 +146,7 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
         user-switch-test \
 "
 
-IMAGE_INSTALL_append_minized = "\
+IMAGE_INSTALL_append_minized-sbc = "\
         bluez5 \
         bluez5-doc \
         bluez5-obex \

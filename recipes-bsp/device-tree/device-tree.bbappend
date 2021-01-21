@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "file://system-bsp.dtsi \
 "
 
-SRC_URI_append_ultra96v2 = " file://openamp.dtsi \
+SRC_URI_append_u96v2-sbc = " file://openamp.dtsi \
 "
 
 do_configure_append () {

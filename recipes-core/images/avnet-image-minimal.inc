@@ -38,7 +38,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         watchdog-init \
 "
 
-IMAGE_INSTALL_append_ultra96v2 = "\
+IMAGE_INSTALL_append_u96v2-sbc = "\
         bluez5 \
         git \
         iw \
@@ -89,7 +89,7 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
         user-switch-test \
 "
 
-IMAGE_INSTALL_append_minized = "\
+IMAGE_INSTALL_append_minized-sbc = "\
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
