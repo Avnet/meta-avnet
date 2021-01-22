@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 inherit module
 
-COMPATIBLE_MACHINE = "ultra96v2"
+COMPATIBLE_MACHINE = "u96v2-sbc"
 
 SRC_URI = "git://github.com/linux4wilc/driver.git;protocol=git;branch=${BRANCH} \
            file://0001-ultra96-modifications.patch \

@@ -10,12 +10,12 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS = "i2c-tools"
 
-COMPATIBLE_MACHINE = "uz|ultra96v2"
+COMPATIBLE_MACHINE = "uz|u96v2-sbc"
 
 SRC_URI = "git://github.com/Avnet/BSP-rootfs-sources.git;protocol=https;branch=${SRCBRANCH};subpath=${SUBPATH};"
 
 SRC_URI_append_uz = " file://pmic-configs/"
-SRC_URI_append_ultra96v2 = " file://pmic-configs/"
+SRC_URI_append_u96v2-sbc = " file://pmic-configs/"
 
 SRCREV = "${AUTOREV}"
 
@@ -36,7 +36,7 @@ do_install_append_uz() {
         cp -r ${WORKDIR}/pmic-configs ${D}${ROOT_HOME}/${SUBPATH}/
 }
 
-do_install_append_ultra96v2() {
+do_install_append_u96v2-sbc() {
         cp -r ${WORKDIR}/pmic-configs ${D}${ROOT_HOME}/${SUBPATH}/
 }
 
