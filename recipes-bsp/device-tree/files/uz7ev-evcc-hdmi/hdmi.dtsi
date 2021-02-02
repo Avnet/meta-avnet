@@ -37,6 +37,12 @@
 };
 &xx_mix_overlay_7hdmi_tx_v_mix_0 {
     xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_8hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
+};
+&xx_mix_overlay_9hdmi_tx_v_mix_0 {
+    xlnx,layer-max-width = <3840>;
     xlnx,layer-primary;
 };
 
