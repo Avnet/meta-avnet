@@ -5,6 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI += "file://hdmi_passthrough.sh \
 "
 
+COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-quadcam"
+
 SRC_URI_append_uz7ev-evcc-quadcam = " \
     file://isp_tune.sh \
     file://launch_quad_cam_gstreamer.sh \
