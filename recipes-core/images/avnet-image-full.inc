@@ -104,6 +104,7 @@ IMAGE_INSTALL_append_ultra96v2 = "\
         openamp-fw-mat-muld \
         openamp-fw-rpc-demo \
         packagegroup-base-extended \
+        packagegroup-petalinux-openamp \
         packagegroup-petalinux \
         packagegroup-petalinux-96boards-sensors \
         packagegroup-petalinux-benchmarks \
