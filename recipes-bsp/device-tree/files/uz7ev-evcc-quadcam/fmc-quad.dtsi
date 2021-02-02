@@ -1,0 +1,351 @@
+#include <dt-bindings/media/xilinx-vip.h>
+
+&fmc_quad_fmc_multicam_control_fmc_multicam_iic {
+    
+    i2cswitch@70 {
+        compatible = "nxp,pca9548";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        reg = <0x70>;
+        reset-gpios = <&gpio 112 1>;
+
+        i2c@0 {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <0>;
+
+            /* Sensors */
+            ar0231_0: sensor@11 {
+                compatible = "ar0231";
+                reg = <0x11>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    sensor_out0: endpoint {
+                        remote-endpoint = <&serdes_in0>;
+                    };
+                };
+            };
+            ar0231_1: sensor@12 {
+                compatible = "ar0231";
+                reg = <0x12>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    sensor_out1: endpoint {
+                        remote-endpoint = <&serdes_in1>;
+                    };
+                };
+            };
+            ar0231_2: sensor@13 {
+                compatible = "ar0231";
+                reg = <0x13>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    sensor_out2: endpoint {
+                        remote-endpoint = <&serdes_in2>;
+                    };
+                };
+            };
+            ar0231_3: sensor@14 {
+                compatible = "ar0231";
+                reg = <0x14>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    sensor_out3: endpoint {
+                        remote-endpoint = <&serdes_in3>;
+                    };
+                };
+            };
+            ar0231_4: sensor@10 {
+                compatible = "ar0231-i2c";
+                reg = <0x10>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+            };
+
+            /* Serializer */
+            max96705_serdes_0: serdes@40 {
+                compatible = "max96705-serdes";
+                reg = <0x40>;
+            };
+            max96705_serdes_1: serdes@41 {
+                compatible = "max96705-serdes";
+                reg = <0x41>;
+            };
+            max96705_serdes_2: serdes@42 {
+                compatible = "max96705-serdes";
+                reg = <0x42>;
+            };
+            max96705_serdes_3: serdes@43 {
+                compatible = "max96705-serdes";
+                reg = <0x43>;
+            };
+            max96705_serdes_4: serdes@44 {
+                compatible = "max96705-serdes";
+                reg = <0x44>;
+            };
+            max96705_serdes_5: serdes@45 {
+                compatible = "max96705-serdes";
+                reg = <0x45>;
+            };
+
+            /* Deserializer */
+            max9286_serdes_0: serdes@48 {
+                compatible = "max9286-serdes";
+                reg = <0x48>;
+                num-si-slots = <0x4>;
+                num-mi-slots = <0x1>;
+                cam-config = <0x6>;
+                mipi-lanes = <0x4>;
+                pixel-freq = <75>;
+                sensor_0-supply = <&camvcc_0>;
+                sensor_1-supply = <&camvcc_1>;
+                sensor_2-supply = <&camvcc_2>;
+                sensor_3-supply = <&camvcc_3>;
+                enable-gpios = <&gpio 110 0>;
+
+                serializer_adapter_default  = <&max96705_serdes_0>;
+                serializer_adapter_brdcast  = <&max96705_serdes_5>;
+                sensor_adapter_brdcast = <&ar0231_4>;
+
+                ports {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+
+                    port@0 {
+                        reg = <0>;
+                        enable = <1>;
+                        video-format = <XVIP_VF_MONO_SENSOR>;
+                        video-width = <8>;
+                        cfa-pattern = "rggb";
+                        serializer_adapter_link0 = <&max96705_serdes_1>;
+                        sensor_adapter_0 = <&ar0231_0>;
+                        serdes_in0: endpoint {
+                            remote-endpoint = <&sensor_out0>;
+                        };
+                    };
+                    port@1 {
+                        reg = <1>;
+                        enable = <1>;
+                        video-format = <XVIP_VF_MONO_SENSOR>;
+                        video-width = <8>;
+                        cfa-pattern = "rggb";
+                        serializer_adapter_link1 = <&max96705_serdes_2>;
+                        sensor_adapter_1 = <&ar0231_1>;
+                        serdes_in1: endpoint {
+                            remote-endpoint = <&sensor_out1>;
+                        };
+                    };
+                    port@2 {
+                        reg = <2>;
+                        enable = <1>;
+                        video-format = <XVIP_VF_MONO_SENSOR>;
+                        video-width = <8>;
+                        cfa-pattern = "rggb";
+                        serializer_adapter_link2 = <&max96705_serdes_3>;
+                        sensor_adapter_2 = <&ar0231_2>;
+                        serdes_in2: endpoint {
+                            remote-endpoint = <&sensor_out2>;
+                        };
+                    };
+                    port@3 {
+                        reg = <3>;
+                        enable = <1>;
+                        video-format = <XVIP_VF_MONO_SENSOR>;
+                        video-width = <8>;
+                        cfa-pattern = "rggb";
+                        serializer_adapter_link3 = <&max96705_serdes_4>;
+                        sensor_adapter_3 = <&ar0231_3>;
+                        serdes_in3: endpoint {
+                            remote-endpoint = <&sensor_out3>;
+                        };
+                    };
+                    port@4 {
+                        reg = <4>;
+                        enable = <1>;
+                        video-format = <XVIP_VF_MONO_SENSOR>;
+                        video-width = <8>;
+                        cfa-pattern = "rggb";
+                        serdes_out0: endpoint {
+                            remote-endpoint = <&mipi_csi_infmc_quad_mipi_csi2_rx_mipi_csi2_rx_subsystem_0>;
+                        };
+                    };
+                };
+            };
+        };
+
+        /* Serializer & Sensor power */
+        i2c@2 {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <2>;
+
+            poc1: poc@28 {
+                compatible = "max20087";
+                reg = <0x28>;
+                /*interrupts = <3 27>;*/
+                enable-gpios = <&gpio 108 0>;
+
+                regulators {
+                    camvcc_0: OUT1 {
+                        regulator-name = "VOUT1";
+                        regulator-min-microvolt = <1200000>;
+                        regulator-max-microvolt = <1200000>;
+                        regulator-min-microamp  = <600000>;
+                        regulator-max-microamp  = <600000>;
+                    };
+                    camvcc_1: OUT2 {
+                        regulator-name = "VOUT2";
+                        regulator-min-microvolt = <1200000>;
+                        regulator-max-microvolt = <1200000>;
+                        regulator-min-microamp  = <600000>;
+                        regulator-max-microamp  = <600000>;
+                    };
+                    camvcc_2: OUT3 {
+                        regulator-name = "VOUT3";
+                        regulator-min-microvolt = <1200000>;
+                        regulator-max-microvolt = <1200000>;
+                        regulator-min-microamp  = <600000>;
+                        regulator-max-microamp  = <600000>;
+                    };
+                    camvcc_3: OUT4 {
+                        regulator-name = "VOUT4";
+                        regulator-min-microvolt = <1200000>;
+                        regulator-max-microvolt = <1200000>;
+                        regulator-min-microamp  = <600000>;
+                        regulator-max-microamp  = <600000>;
+                    };
+                };
+            };
+        };
+    };
+};
+
+&fmc_quad_mipi_csi2_rx_mipi_csi2_rx_subsystem_0 {
+    compatible = "xlnx,mipi-csi2-rx-subsystem-5.0";
+};
+
+&mipi_csi_infmc_quad_mipi_csi2_rx_mipi_csi2_rx_subsystem_0 {
+    data-lanes = <1 2 3 4>;
+    remote-endpoint = <&serdes_out0>;
+};
+
+&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_csc_0
+{
+    compatible = "xlnx,v-vpss-csc";
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_csc_1
+{
+    compatible = "xlnx,v-vpss-csc";
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_csc_2
+{
+    compatible = "xlnx,v-vpss-csc";
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_csc_3
+{
+    compatible = "xlnx,v-vpss-csc";
+};
+
+&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0
+{
+    compatible = "xlnx,v-vpss-scaler-2.2";
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1
+{
+    compatible = "xlnx,v-vpss-scaler-2.2";
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2
+{
+    compatible = "xlnx,v-vpss-scaler-2.2";
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3
+{
+    compatible = "xlnx,v-vpss-scaler-2.2";
+};
+
+&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0
+{
+    xlnx,dma-align = <32>;
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1
+{
+    xlnx,dma-align = <32>;
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2
+{
+    xlnx,dma-align = <32>;
+};
+&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3
+{
+    xlnx,dma-align = <32>;
+};
+
+&fmc_quad_mipi_csi2_rx_axis_switch_0 {
+    xlnx,num-si-slots = <0x1>;
+    xlnx,num-mi-slots = <0x4>;
+    clock-names = "aclk";
+    clocks = <&misc_clk_0>;
+};
+
+&amba_pl {
+
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0;
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1;
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2;
+    /delete-node/ vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3;
+
+    vcap_fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0 {
+        compatible = "xlnx,video";
+        dma-names = "port0", "port1", "port2", "port3";
+        dmas = <&fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2 0>, <&fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3 0>;
+
+        vcap_portsfmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0: ports {
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0: port@0 {
+                direction = "input";
+                reg = <0>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_frmbuf_wr_0fmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_0_v_proc_ss_scaler_0>;
+                };
+            };
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1: port@1 {
+                direction = "input";
+                reg = <1>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_frmbuf_wr_1fmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_1_v_proc_ss_scaler_1>;
+                };
+            };
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2: port@2 {
+                direction = "input";
+                reg = <2>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_frmbuf_wr_2fmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_2_v_proc_ss_scaler_2>;
+                };
+            };
+
+            vcap_portfmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3: port@3 {
+                direction = "input";
+                reg = <3>;
+                fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_frmbuf_wr_3fmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3: endpoint {
+                    remote-endpoint = <&sca_outfmc_quad_mipi_csi2_rx_capture_pipeline_3_v_proc_ss_scaler_3>;
+                };
+            };
+        };
+    };
+};

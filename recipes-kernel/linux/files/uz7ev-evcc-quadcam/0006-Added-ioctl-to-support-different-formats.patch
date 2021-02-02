@@ -1,0 +1,86 @@
+From 1f4c8a2a04daa0524adf4751ceb7f234e4d9be1c Mon Sep 17 00:00:00 2001
+From: Manjuraehmad <manjurae@xilinx.com>
+Date: Tue, 21 Apr 2020 05:08:46 -0600
+Subject: [PATCH 06/15] Added ioctl to support different formats
+
+- Added ioctl to provide format information
+  from PCIe Host application to PCIe endpoint application
+- Added profile support from PCIe Host to PCIe endpoint
+  application
+
+Signed-off-by: Manjuraehmad <manjurae@xilinx.com>
+---
+ drivers/misc/xilinx_pci_endpoint.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/xilinx_pci_endpoint.c b/drivers/misc/xilinx_pci_endpoint.c
+index 4840a7d..47616e9 100644
+--- a/drivers/misc/xilinx_pci_endpoint.c
++++ b/drivers/misc/xilinx_pci_endpoint.c
+@@ -93,6 +93,7 @@
+ #define GET_RESOLUTION            0x9
+ #define GET_MODE                  0xa
+ #define GET_FPS                   0xb
++#define GET_FORMAT                0xc
+ 
+ #define WIDTH_SHIFT               0x0
+ #define WIDTH_MASK                0xFFFF
+@@ -100,8 +101,10 @@
+ #define HEIGHT_MASK               0xFFFF
+ #define USE_CASE_MODE_SHIFT       0x0
+ #define USE_CASE_MODE_MASK        0x3
+-#define FPS_SHIFT                 0x2
++#define FPS_SHIFT                 0x5
+ #define FPS_MASK                  0x3FF
++#define FORMAT_SHIFT              0x2
++#define FORMAT_MASK               0x7
+ 
+ #define L2CACHE_SHIFT             0x0
+ #define L2CACHE_MASK		      0x1
+@@ -126,8 +129,10 @@
+ #define ENC_TYPE_MASK			  0x3
+ #define GOP_MODE_SHIFT			  0xf
+ #define GOP_MODE_MASK			  0x3
+-#define LATENCY_MODE_SHIFT		  0x11
+-#define LATENCY_MODE_MASK	      0x3
++#define PROFILE_SHIFT			  0x12
++#define PROFILE_MASK			  0x3
++#define LATENCY_MODE_SHIFT		  0x15
++#define LATENCY_MODE_MASK		  0x3
+ 
+ #define READ_BUF_HIGH_OFFSET      0xFFFF0000
+ #define WRITE_BUF_HIGH_OFFSET     0xFFFF0000
+@@ -185,6 +190,7 @@ typedef struct enc_params {
+     unsigned int      enc_type;
+     unsigned int      gop_mode;
+     unsigned int      latency_mode;
++    unsigned int      profile;
+ } enc_params;
+ 
+ typedef struct resolution {
+@@ -312,6 +318,7 @@ static long pciep_driver_file_ioctl(struct file *file, unsigned int cmd,
+ 			params.rc_mode = (value1>>RC_MODE_SHIFT) & RC_MODE_MASK;
+ 			params.enc_type = (value1>>ENC_TYPE_SHIFT) & ENC_TYPE_MASK;
+ 			params.gop_mode = (value1>>GOP_MODE_SHIFT) & GOP_MODE_MASK;
++			params.profile = (value1>>PROFILE_SHIFT) & PROFILE_MASK;
+ 			params.latency_mode = (value1>>LATENCY_MODE_SHIFT) & LATENCY_MODE_MASK;
+ 			ret = copy_to_user((struct enc_params *) arg, &params, sizeof(params));
+ 			return ret;
+@@ -370,7 +377,13 @@ static long pciep_driver_file_ioctl(struct file *file, unsigned int cmd,
+ 			ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+ 			return ret;
+ 
+-	default:
++	case GET_FORMAT:
++			value = reg_read(this, PCIRC_USECASE_MODE);
++			value = (value >> FORMAT_SHIFT) & FORMAT_MASK;
++			ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++			return ret;
++
++    default:
+ 		return -ENOTTY;
+ 	}
+ }
+-- 
+2.7.4
+

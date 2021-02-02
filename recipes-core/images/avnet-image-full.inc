@@ -146,6 +146,20 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
         user-switch-test \
 "
 
+IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
+        blinky \
+        blinky-init \
+        python-webserver \
+        python-webserver-init \
+        user-led-test \
+        user-switch-test \
+"
+
+IMAGE_INSTALL_append_uz7ev-evcc-hdmi = "\
+    hdmi-utils \
+    kernel-module-hdmi \
+"
+
 IMAGE_INSTALL_append_minized-sbc = "\
         bluez5 \
         bluez5-doc \
