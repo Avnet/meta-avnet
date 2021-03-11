@@ -8,6 +8,9 @@ SRC_URI = "git://github.com/Avnet/BSP-rootfs-sources.git;protocol=https;branch=$
        file://connman_settings \
        "
 
+RDEPENDS_${PN}_remove = "chromium-x11"
+RDEPENDS_${PN}_append = " epiphany "
+
 SRCREV = "${AUTOREV}"
 
 SRCBRANCH ?= "master"
