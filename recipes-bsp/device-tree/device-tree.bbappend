@@ -9,7 +9,7 @@ SRC_URI_append_u96v2-sbc = " file://openamp.dtsi \
 SRC_URI_append_uz7ev-evcc-hdmi = " file://hdmi.dtsi \
 "
 
-SRC_URI_append_uz7ev-evcc-quadcam = " file://fmc-quad.dtsi \
+SRC_URI_append_uz7ev-evcc-quadcam-h = " file://fmc-quad.dtsi \
 "
 
 do_configure_append () {
