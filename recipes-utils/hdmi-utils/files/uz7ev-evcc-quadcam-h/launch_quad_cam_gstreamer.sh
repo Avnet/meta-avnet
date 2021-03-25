@@ -1,10 +1,6 @@
 #!/bin/sh
 
 source /etc/profile
-
-# Adjust alpha instead of killing x11
-modetest-hdmi -w 42:alpha:0
-
         
  gst-launch-1.0 \
      v4l2src device=/dev/video2 io-mode=4 ! \
@@ -28,5 +24,3 @@ modetest-hdmi -w 42:alpha:0
      render-rectangle=\"<1920,1080,1920,1080>\"" sync=false can-scale=false \
      \
      -v
-    
-modetest-hdmi -w 42:alpha:256
