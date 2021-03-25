@@ -5,9 +5,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI += "file://hdmi_passthrough.sh \
 "
 
-COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-quadcam"
+COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-quadcam-h"
 
-SRC_URI_append_uz7ev-evcc-quadcam = " \
+SRC_URI_append_uz7ev-evcc-quadcam-h = " \
     file://isp_tune.sh \
     file://launch_quad_cam_gstreamer.sh \
     file://launch_one_cam_gstreamer.sh \
@@ -19,7 +19,7 @@ do_install() {
 	install -m 777 ${WORKDIR}/hdmi_passthrough.sh ${D}/home/root/
 }
 
-do_install_append_uz7ev-evcc-quadcam () {
+do_install_append_uz7ev-evcc-quadcam-h () {
     install -m 777 ${WORKDIR}/isp_tune.sh ${D}/home/root/
     install -m 777 ${WORKDIR}/launch_quad_cam_gstreamer.sh ${D}/home/root/
     install -m 777 ${WORKDIR}/launch_one_cam_gstreamer.sh ${D}/home/root/
@@ -30,7 +30,7 @@ FILES_${PN} = " \
 		/home/root/hdmi_passthrough.sh \
 "
 
-FILES_${PN}_append_uz7ev-evcc-quadcam = " \
+FILES_${PN}_append_uz7ev-evcc-quadcam-h = " \
         /home/root/isp_tune.sh \
         /home/root/launch_quad_cam_gstreamer.sh \
         /home/root/launch_one_cam_gstreamer.sh \
