@@ -4,6 +4,7 @@ require recipes-core/images/petalinux-image-common.inc
 IMAGE_INSTALL_append_zynq = "\
         haveged \
         packagegroup-core-boot \
+        tcf-agent \
 "
 
 IMAGE_INSTALL_append_zynqmp = "\
@@ -106,7 +107,6 @@ IMAGE_INSTALL_append_pz = "\
         blinky \
         mac-eeprom-config-init \
         mac-eeprom-config \
-        mtd-utils \
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
@@ -114,10 +114,6 @@ IMAGE_INSTALL_append_pz = "\
         i2c-tools \
         i2c-tools-misc \
         parted \
-        pciutils \
-        run-postinsts \
-        tcf-agent \
-        udev-extraconf \
         util-linux-mkfs \
 "
 

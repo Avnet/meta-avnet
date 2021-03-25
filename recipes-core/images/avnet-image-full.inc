@@ -1,4 +1,4 @@
-require recipes-core/images/avnet-image-common.inc
+require recipes-core/images/petalinux-image-common.inc
 
 # append what's already defined by petalinux (build/conf/plnxtool.conf)
 
@@ -67,6 +67,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
+        packagegroup-core-boot \
         packagegroup-petalinux-gstreamer \
         packagegroup-petalinux-lmsensors \
         packagegroup-petalinux-matchbox \
@@ -202,7 +203,6 @@ IMAGE_INSTALL_append_pz = "\
         blinky \
         mac-eeprom-config-init \
         mac-eeprom-config \
-        mtd-utils \
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
@@ -216,9 +216,6 @@ IMAGE_INSTALL_append_pz = "\
         python3-core \
         python3-dbus \
         python3-pygobject \
-        run-postinsts \
-        tcf-agent \
-        udev-extraconf \
         util-linux-mkfs \
 "
 
