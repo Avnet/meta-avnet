@@ -2,10 +2,6 @@ require recipes-core/images/petalinux-image-common.inc
 
 # append what's already defined by petalinux (build/conf/plnxtool.conf)
 IMAGE_INSTALL_append_zynq = "\
-        haveged \
-        packagegroup-core-boot \
-        run-postinsts \
-        tcf-agent \
 "
 
 IMAGE_INSTALL_append_zynqmp = "\
