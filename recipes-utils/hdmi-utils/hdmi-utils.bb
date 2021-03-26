@@ -2,7 +2,7 @@ DESCRIPTION = "Util scripts for hdmi"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-hdmi-v|uz7ev-evcc-quadcam-h"
+COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-hdmi-v|uz7ev-evcc-quadcam-h|uz7ev-evcc-quadcam-h-v"
 
 FF = "files"
 
@@ -35,6 +35,13 @@ SRC_URI_uz7ev-evcc-hdmi-v = " \
 SRC_URI_uz7ev-evcc-quadcam-h = " \
     ${QUADCAM_FILES} \
     ${HDMI_FILES} \
+"
+
+SRC_URI_uz7ev-evcc-quadcam-h-v = " \
+    ${QUADCAM_FILES} \
+    ${HDMI_FILES} \
+    ${VCU_FILES} \
+    file://launch_quad_cam_vcu_gstreamer.sh;subdir=${FF}  \
 "
 
 do_install() {
