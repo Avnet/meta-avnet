@@ -2,7 +2,7 @@ DESCRIPTION = "Util scripts for hdmi"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-quadcam-h"
+COMPATIBLE_MACHINE = "uz7ev-evcc-hdmi|uz7ev-evcc-hdmi-v|uz7ev-evcc-quadcam-h"
 
 FF = "files"
 
@@ -17,8 +17,19 @@ QUADCAM_FILES = " \
     file://media_cfg.sh;subdir=${FF} \
 "
 
+VCU_FILES = " \
+    file://file_to_vcu_to_hdmi.sh;subdir=${FF} \
+    file://hdmi_to_vcu_to_file.sh;subdir=${FF} \
+    file://hdmi_to_vcu_to_hdmi.sh;subdir=${FF} \
+"
+
 SRC_URI_uz7ev-evcc-hdmi = " \
     ${HDMI_FILES} \
+"
+
+SRC_URI_uz7ev-evcc-hdmi-v = " \
+    ${HDMI_FILES} \
+    ${VCU_FILES} \
 "
 
 SRC_URI_uz7ev-evcc-quadcam-h = " \
