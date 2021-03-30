@@ -2,10 +2,6 @@
 
 source /etc/profile
 
-# Adjust alpha instead of killing x11
-modetest-hdmi -w 42:alpha:0
-
-        
  gst-launch-1.0 \
      v4l2src device=/dev/video2 io-mode=4 ! \
      video/x-raw, width=1920, height=1080, format=UYVY, framerate=30/1 ! \
@@ -25,5 +21,3 @@ modetest-hdmi -w 42:alpha:0
      fakesink \
      \
      -v
-    
-modetest-hdmi -w 42:alpha:256
