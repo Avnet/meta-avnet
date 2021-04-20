@@ -37,6 +37,7 @@ SRC_URI_u96v2-sbc = " \
             "
 
 SRC_URI_uz = " \
+            file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_mmc_ext4.txt \
             "
