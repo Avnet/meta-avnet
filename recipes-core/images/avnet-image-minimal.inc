@@ -131,6 +131,7 @@ COMMON_FEATURES_append_zynqmp = "\
 "
 
 COMMON_FEATURES_append_zynq = "\
+        debug-tweaks \
         hwcodecs \
         ssh-server-dropbear \
 "
