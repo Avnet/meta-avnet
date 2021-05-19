@@ -56,10 +56,13 @@ cd /home/root/webserver
 echo "Export and initialize the GPIO"
 source ./setup_gpio.sh
 
-echo "Set web page location:"
-killall -9 httpd
-httpd -h /home/root/webserver
+if [ -f ./server.py ]; then
+    echo "Start the Python webserver in the background"
+    python3 ./server.py &
+else
+    echo "Set web page location:"
+    killall -9 httpd
+    httpd -h /home/root/webserver
+fi
 
-echo "Start the Python webserver in the background"
-python3 ./server.py &
 
