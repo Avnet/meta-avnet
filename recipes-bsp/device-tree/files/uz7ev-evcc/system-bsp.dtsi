@@ -1,4 +1,6 @@
 /include/ "system-conf.dtsi"
+#include "include/dt-bindings/phy/phy.h"
+
 / {
    xlnk {
       compatible = "xlnx,xlnk-1.0";
@@ -177,22 +179,8 @@
 };
 
 &sata {
-	/* SATA OOB timing settings */
-	ceva,p0-cominit-params = /bits/ 8 <0x18 0x40 0x18 0x28>;
-	ceva,p0-comwake-params = /bits/ 8 <0x06 0x14 0x08 0x0E>;
-	ceva,p0-burst-params = /bits/ 8 <0x13 0x08 0x4A 0x06>;
-	ceva,p0-retry-params = /bits/ 16 <0x96A4 0x3FFC>;
-
-	ceva,p1-cominit-params = /bits/ 8 <0x18 0x40 0x18 0x28>;
-	ceva,p1-comwake-params = /bits/ 8 <0x06 0x14 0x08 0x0E>;
-	ceva,p1-burst-params = /bits/ 8 <0x13 0x08 0x4A 0x06>;
-	ceva,p1-retry-params = /bits/ 16 <0x96A4 0x3FFC>;
-   status = "okay";
+	status = "okay";
 	phy-names = "sata-phy";
-	/* PHY_TYPE_SATA appears to not be defined anywhere */
-	/* This line produces a devicetree compiler error */
-	/*phys = <&lane1 PHY_TYPE_SATA 1 1 125000000>; */
-	/* What would be PHY_TYPE_SATA is hard coded to '1' */
-	phys = <&lane1 1 1 1 125000000>;
+	phys = <&lane1 PHY_TYPE_SATA 1 1 125000000>;
 };
 

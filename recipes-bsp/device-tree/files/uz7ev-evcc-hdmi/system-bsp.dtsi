@@ -1,4 +1,5 @@
 #include "system-conf.dtsi"
+#include "include/dt-bindings/phy/phy.h"
 
 / {
    xlnk {
@@ -174,6 +175,12 @@
 			     <24 4>, <25 4>, <26 4>, <27 4>,
 			     <28 4>, <29 4>, <30 4>, <31 4>;
 	};
+};
+
+&sata {
+	status = "okay";
+	phy-names = "sata-phy";
+	phys = <&lane1 PHY_TYPE_SATA 1 1 125000000>;
 };
 
 #include "hdmi.dtsi"

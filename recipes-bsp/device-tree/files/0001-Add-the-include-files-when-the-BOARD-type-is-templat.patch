@@ -1,0 +1,50 @@
+From f3fcf6019c956a5855a349e9d2e8b8138f510459 Mon Sep 17 00:00:00 2001
+From: Venkatesh Yadav Abbarapu <venkatesh.abbarapu@xilinx.com>
+Date: Wed, 19 May 2021 04:30:32 -0600
+Subject: [PATCH] Add the include files when the BOARD type is template
+
+Some of the customers want the updated include header macro definitions
+for the nodes which they are using in system-user.dtsi. So add the
+include header files.
+
+Signed-off-by: Sandeep Gundlupet Raju <sandeep.gundlupet-raju@xilinx.com>
+Signed-off-by: Venkatesh Yadav Abbarapu <venkatesh.abbarapu@xilinx.com>
+---
+ device_tree/data/device_tree.tcl | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/device_tree/data/device_tree.tcl b/device_tree/data/device_tree.tcl
+index d0f7de2..53de4f8 100644
+--- a/device_tree/data/device_tree.tcl
++++ b/device_tree/data/device_tree.tcl
+@@ -352,13 +352,6 @@ proc gen_board_info {} {
+ 			update_system_dts_include [file tail $dtsi_file]
+ 			return
+ 		}
+-		set dts_name [string tolower [lindex $override 1]]
+-		if {[string match -nocase $dts_name "template"]} {
+-			return
+-		}
+-		if {[llength $dts_name] == 0} {
+-			return
+-		}
+ 		set kernel_ver [get_property CONFIG.kernel_version [get_os]]
+ 		set include_dtsi [file normalize "[get_property "REPOSITORY" $i]/data/kernel_dtsi/${kernel_ver}/include"]
+ 		set include_list "include*"
+@@ -393,6 +386,13 @@ proc gen_board_info {} {
+ 				}
+ 			}
+ 		}
++		set dts_name [string tolower [lindex $override 1]]
++		if {[string match -nocase $dts_name "template"]} {
++			return
++		}
++		if {[llength $dts_name] == 0} {
++			return
++		}
+ 		set mainline_ker [get_property CONFIG.mainline_kernel [get_os]]
+ 		set valid_mainline_kernel_list "v4.17 v4.18 v4.19 v5.0 v5.1 v5.2 v5.3 v5.4"
+ 		if {[lsearch $valid_mainline_kernel_list $mainline_ker] >= 0 } {
+-- 
+2.17.1
+
