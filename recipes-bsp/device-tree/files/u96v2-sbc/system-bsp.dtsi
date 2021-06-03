@@ -70,8 +70,9 @@
 
 &sdhci1 {
    bus-width= <0x4>;
-   /* non-removeable; */
-   /* mmc-pwrseq = <&sdio_pwrseq>; */
+   non-removeable;
+   disable-wp;
+   mmc-pwrseq = <&sdio_pwrseq>;
    max-frequency = <50000000>;
    /delete-property/cap-power-off-card; // This is not compatible with the WILC3000 and means the WILC will always be powered on
    status = "okay";
