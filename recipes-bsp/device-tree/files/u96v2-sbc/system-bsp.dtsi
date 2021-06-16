@@ -90,6 +90,12 @@
    /delete-node/wifi@2;
 };
 
+// Set 3.3 V for SD Card
+&sdhci0 {
+   no-1-8-v;
+   disable-wp;
+};
+
 &i2c1 {
 	status = "okay";
 	clock-frequency = <100000>;
