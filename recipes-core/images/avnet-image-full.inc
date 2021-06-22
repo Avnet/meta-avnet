@@ -1,4 +1,3 @@
-#require recipes-core/images/avnet-image-common.inc
 require recipes-core/images/avnet-image-minimal.inc
 
 # append what's already defined by petalinux (build/conf/plnxtool.conf)
@@ -167,7 +166,7 @@ COMMON_FEATURES_append_zynqmp = "\
 "
 
 COMMON_FEATURES_remove_zynqmp = "\
-        ssh-server-dropbear
+        ssh-server-dropbear \
 "
 
 COMMON_FEATURES_append_zynq = "\
