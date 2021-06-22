@@ -51,7 +51,6 @@ IMAGE_INSTALL_append_zynqmp = "\
         packagegroup-petalinux-vitisai-dev \
         packagegroup-petalinux-x11 \
         parted \
-        parted \
         pciutils \
         pmic-prog \
         python3 \
