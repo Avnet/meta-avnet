@@ -33,10 +33,6 @@ IMAGE_INSTALL_append_zynq = "\
         zocl \
 "
 
-IMAGE_INSTALL_remove_zynq = "\
-        packagegroup-core-boot \
-"
-
 IMAGE_INSTALL_append_zynqmp = "\
         bridge-utils \
         can-utils \
@@ -110,7 +106,6 @@ IMAGE_INSTALL_append_minized-sbc = "\
         pulseaudio-module-switch-on-connect \
         pulseaudio-server \
         pulseaudio \
-        util-linux-mkfs \
         wpa-supplicant \
 "
 
@@ -147,22 +142,7 @@ IMAGE_INSTALL_append_pz = "\
         python3-pygobject \
 "
 
-IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
-        blinky \
-        blinky-init \
-        python-webserver \
-        python-webserver-init \
-        user-led-test \
-        user-switch-test \
-"
-
-IMAGE_INSTALL_append_uz7ev-evcc-hdmi = "\
-        hdmi-utils \
-        kernel-module-hdmi \
-"
-
 COMMON_FEATURES_append_zynqmp = "\
-        ssh-server-openssh \
 "
 
 COMMON_FEATURES_remove_zynqmp = "\
@@ -176,3 +156,18 @@ COMMON_FEATURES_append_zynq = "\
 COMMON_FEATURES_remove_zynq = "\
         ssh-server-dropbear \
 "
+
+IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
+        blinky \
+        blinky-init \
+        python-webserver \
+        python-webserver-init \
+        user-led-test \
+        user-switch-test \
+"
+
+IMAGE_INSTALL_append_uz7ev-evcc-hdmi = "\
+    hdmi-utils \
+    kernel-module-hdmi \
+"
+
