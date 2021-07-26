@@ -1,7 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 SRC_URI += "file://system-bsp.dtsi \
-	file://0001-Add-the-include-files-when-the-BOARD-type-is-templat.patch \
 "
 
 SRC_URI_append_u96v2-sbc = " file://openamp.dtsi \
