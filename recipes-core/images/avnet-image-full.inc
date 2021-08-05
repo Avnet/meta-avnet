@@ -46,6 +46,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        e2fsprogs-badblocks \
         ethtool \
         fpga-manager-script \
         haveged \
@@ -89,7 +90,11 @@ IMAGE_INSTALL_append_zynqmp = "\
         tcf-agent \
         udev-extraconf \
         usbutils \
+        util-linux \
+        util-linux-mount \
         util-linux-mkfs \
+        util-linux-blkid \
+        util-linux-fdisk \
         watchdog-init \
         xrt \
         xrt-dev \
