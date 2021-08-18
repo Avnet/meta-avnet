@@ -53,6 +53,7 @@
 # ----------------------------------------------------------------------------
 #!/bin/sh
 
+
 #Determine the I2C bus that the	MAC ID EEPROM is on.  We know from the SOM    
 #schematics that the MAC ID EEPROM is on I2C mux channel 0, so	we need	to
 #probe and capture what bus this is in Linux.  The I2C bus number is the 5th
