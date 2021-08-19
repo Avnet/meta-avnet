@@ -51,15 +51,22 @@
 #
 #  Revision:            Apr 02, 2018: 1.0 Initial version
 #                       Mar 27, 2020: 1.1 Updated for adding DisplayPort
+#                       Aug 16, 2021: 1.2 Updated to auto-detect I2C bus
 #
 # ----------------------------------------------------------------------------
 #!/bin/sh
+
+#Determine the I2C bus that the	MAC ID EEPROM is on.  We know from the SOM    
+#schematics that the MAC ID EEPROM is on I2C mux channel 0, so	we need	to
+#probe and capture what bus this is in Linux.  The I2C bus number is the 5th
+#character in the grepped output of the	i2cdetect command (i2c-<n>).
+i2cbus=($(i2cdetect -y -l |grep "chan_id 0" |cut -c5) )
 
 DAEMON=/home/root/mac_eeprom_config.sh
 #This script launches the script that will configure the MAC address of eth0
 #with the contents of the MAC address stored in the EEPROM
 #In this case the MAC EEPROM is located at I2C address 0x51
-DAEMON_OPTS="--bus 2 --slave 0x51 --file /etc/network/interfaces --interface eth0"
+DAEMON_OPTS="--bus $i2cbus --slave 0x51 --file /etc/network/interfaces --interface eth0"
 
 start ()
 {
@@ -72,7 +79,7 @@ echo "***   MAC address init config for eth0                            ***"
 echo "***                                                               ***"
 echo "*********************************************************************"
 echo " "
-echo "/home/root/mac_eeprom_config.sh --bus 2 --slave 0x51 --file /etc/network/interfaces --interface eth0"
+echo "/home/root/mac_eeprom_config.sh --bus $i2cbus --slave 0x51 --file /etc/network/interfaces --interface eth0"
 echo " "
 #    start-stop-daemon -S -o --background -x $DAEMON -- $DAEMON_OPTS
     start-stop-daemon -S -o -x $DAEMON -- $DAEMON_OPTS

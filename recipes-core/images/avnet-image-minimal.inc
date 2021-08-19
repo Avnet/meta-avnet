@@ -13,11 +13,13 @@ IMAGE_INSTALL_append_zynq = "\
 IMAGE_INSTALL_append_zynqmp = "\
         bc \
         bonnie++ \
+        bridge-utils \
         coreutils \
         e2fsprogs \
-        e2fsprogs-resize2fs \
+        e2fsprogs-badblocks \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        e2fsprogs-resize2fs \
         ethtool \
         fpga-manager-script \
         haveged \
@@ -29,16 +31,22 @@ IMAGE_INSTALL_append_zynqmp = "\
         kernel-modules \
         mtd-utils \
         nano \
+        nvme-cli \
         packagegroup-core-boot \
         packagegroup-core-ssh-dropbear \
         packagegroup-petalinux-lmsensors \
         parted \
+        pciutils \
         pmic-prog \
         run-postinsts \
         tcf-agent \
         udev-extraconf \
         usbutils \
+        util-linux \
+        util-linux-blkid \
+        util-linux-fdisk \
         util-linux-mkfs \
+        util-linux-mount \
         watchdog-init \
 "
 

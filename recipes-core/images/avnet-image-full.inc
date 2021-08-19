@@ -43,9 +43,10 @@ IMAGE_INSTALL_append_zynqmp = "\
         coreutils \
         dnf \
         e2fsprogs \
-        e2fsprogs-resize2fs \
+        e2fsprogs-badblocks \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        e2fsprogs-resize2fs \
         ethtool \
         fpga-manager-script \
         haveged \
@@ -61,6 +62,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         mesa-megadriver \
         mtd-utils \
         nano \
+        nvme-cli \
         opencl-clhpp-dev \
         opencl-headers-dev \
         openssh \
@@ -89,7 +91,11 @@ IMAGE_INSTALL_append_zynqmp = "\
         tcf-agent \
         udev-extraconf \
         usbutils \
+        util-linux \
+        util-linux-blkid \
+        util-linux-fdisk \
         util-linux-mkfs \
+        util-linux-mount \
         watchdog-init \
         xrt \
         xrt-dev \
