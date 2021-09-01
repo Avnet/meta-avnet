@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DEV="/dev/"`ls /sys/devices/platform/amba/ff000000.serial/tty/`
+DEV="/dev/"`ls /sys/devices/platform/axi/ff000000.serial/tty/`
 
 # Remove wifi interfaces
 ifconfig wlan0 down
@@ -14,12 +14,14 @@ modprobe wilc_sdio
 echo BT_POWER_UP > /dev/wilc_bt
 echo BT_DOWNLOAD_FW > /dev/wilc_bt
 
+sleep 1
+
 stty -F $DEV 115200
 stty -F $DEV crtscts
 
 # Initialize the device:
 hciattach $DEV -t 10 any 115200 noflow nosleep
-sleep 2s
+sleep 2
 
 #Configure the right BT device:
 hciconfig hci0 up
