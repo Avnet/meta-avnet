@@ -1,5 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+# Remove avnet-ultra96-rev1 dependency
+YAML_DT_BOARD_FLAGS_u96v2-sbc ?= "{BOARD template}"
+
 SRC_URI_append = "\
 	file://system-bsp.dtsi \
 "
