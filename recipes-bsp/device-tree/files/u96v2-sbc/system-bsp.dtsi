@@ -5,7 +5,7 @@
 		bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M";
 	};
 
-   sdio_pwrseq: sdio_pwrseq {  /* This needs to be able to manipulate the chip_en and the resetn properly */
+   sdio_pwrseq: sdio-pwrseq {  /* This needs to be able to manipulate the chip_en and the resetn properly */
       compatible = "mmc-pwrseq-simple";
       /* post-power-on-delay-ms = <10>; */
       reset-gpios = <&gpio 7 1>; // MIO[7] for WILC3000 RESETN, Active low
@@ -192,10 +192,6 @@
 
 &dwc3_0 {
    status = "okay";
-   dr_mode = "peripheral";
-   phy-names = "usb3-phy";
-	phys = <&lane2 4 0 0 26000000>;
-	maximum-speed = "super-speed";   
 };
 
 &usb1 {
@@ -204,10 +200,6 @@
 
 &dwc3_1 {
    status = "okay";
-	dr_mode = "host";
-	phy-names = "usb3-phy";
-	phys = <&lane3 4 1 0 26000000>;
-	maximum-speed = "super-speed";
 };
 
 &spi0 {

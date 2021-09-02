@@ -1,0 +1,117 @@
+From 4580dbca28bccb8b11e4457f354b50f26db1c5d4 Mon Sep 17 00:00:00 2001
+From: Sandeep Gundlupet Raju <sandeep.gundlupet-raju@xilinx.com>
+Date: Thu, 10 Jun 2021 09:44:50 -0600
+Subject: [PATCH] kernel: v2021.1: Sync the psgtr node from U-boot
+
+Sync the psgtr node properties from u-boot, DP and USB requires
+these node for psgtr clocks to probe.
+
+Signed-off-by: Sandeep Gundlupet Raju <sandeep.gundlupet-raju@xilinx.com>
+Signed-off-by: Venkatesh Yadav Abbarapu <venkatesh.abbarapu@xilinx.com>
+---
+ .../2021.1/BOARD/avnet-ultra96-rev1.dtsi      | 40 +++++++++++++++----
+ 1 file changed, 32 insertions(+), 8 deletions(-)
+
+diff --git a/device_tree/data/kernel_dtsi/2021.1/BOARD/avnet-ultra96-rev1.dtsi b/device_tree/data/kernel_dtsi/2021.1/BOARD/avnet-ultra96-rev1.dtsi
+index 7bfbf84..d2d926e 100644
+--- a/device_tree/data/kernel_dtsi/2021.1/BOARD/avnet-ultra96-rev1.dtsi
++++ b/device_tree/data/kernel_dtsi/2021.1/BOARD/avnet-ultra96-rev1.dtsi
+@@ -21,8 +21,6 @@
+ 
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+ 		autorepeat;
+ 		sw4 {
+ 			label = "sw4";
+@@ -70,7 +68,7 @@
+ 			linux,default-trigger = "bluetooth-power";
+ 		};
+ 
+-		vbus_det { /* U5 USB5744 VBUS detection via MIO25 */
++		vbus-det { /* U5 USB5744 VBUS detection via MIO25 */
+ 			label = "vbus_det";
+ 			gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+ 			default-state = "on";
+@@ -95,9 +93,27 @@
+ 		regulator-boot-on;
+ 	};
+ 
+-	sdio_pwrseq: sdio_pwrseq {
++	sdio_pwrseq: sdio-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpio 7 GPIO_ACTIVE_LOW>; /* WIFI_EN */
++		post-power-on-delay-ms = <10>;
++	};
++
++	ina226 {
++		compatible = "iio-hwmon";
++		io-channels = <&u35 0>, <&u35 1>, <&u35 2>, <&u35 3>;
++	};
++
++	si5335_0: si5335_0 { /* clk0_usb - u23 */
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <26000000>;
++	};
++
++	si5335_1: si5335_1 { /* clk1_dp - u23 */
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <27000000>;
+ 	};
+ };
+ 
+@@ -188,7 +204,7 @@
+ 				compatible = "ti,tps65086";
+ 				reg = <0x5e>;
+ 				interrupt-parent = <&gpio>;
+-				interrupts = <77 GPIO_ACTIVE_LOW>;
++				interrupts = <77 IRQ_TYPE_LEVEL_LOW>;
+ 				#gpio-cells = <2>;
+ 				gpio-controller;
+ 			};
+@@ -198,8 +214,9 @@
+ 			#size-cells = <0>;
+ 			reg = <5>;
+ 			/* PS_PMBUS */
+-			ina226@40 { /* u35 */
++			u35: ina226@40 { /* u35 */
+ 				compatible = "ti,ina226";
++				#io-channel-cells = <1>;
+ 				reg = <0x40>;
+ 				shunt-resistor = <10000>;
+ 				/* MIO31 is alert which should be routed to PMUFW */
+@@ -237,7 +254,7 @@
+ 			groups = "i2c1_1_grp";
+ 			bias-pull-up;
+ 			slew-rate = <SLEW_RATE_SLOW>;
+-			io-standard = <IO_STANDARD_LVCMOS18>;
++			power-source = <IO_STANDARD_LVCMOS18>;
+ 		};
+ 	};
+ 
+@@ -250,11 +267,18 @@
+ 		conf {
+ 			groups = "gpio0_4_grp", "gpio0_5_grp";
+ 			slew-rate = <SLEW_RATE_SLOW>;
+-			io-standard = <IO_STANDARD_LVCMOS18>;
++			power-source = <IO_STANDARD_LVCMOS18>;
+ 		};
+ 	};
+ };
+ 
++&psgtr {
++	status = "okay";
++	/* usb3, dp */
++	clocks = <&si5335_0>, <&si5335_1>;
++	clock-names = "ref0", "ref1";
++};
++
+ /* SD0 only supports 3.3V, no level shifter */
+ &sdhci0 {
+ 	no-1-8-v;
+-- 
+2.17.1
+
