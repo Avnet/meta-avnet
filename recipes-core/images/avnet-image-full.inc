@@ -98,6 +98,7 @@ IMAGE_INSTALL_append_zynqmp = "\
 
 IMAGE_INSTALL_append_u96v2-sbc = "\
         bluez5 \
+        connman-gtk \
         git \
         iw \
         libftdi \
