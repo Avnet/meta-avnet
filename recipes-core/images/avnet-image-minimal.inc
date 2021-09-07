@@ -15,9 +15,9 @@ IMAGE_INSTALL_append_zynqmp = "\
         bonnie++ \
         coreutils \
         e2fsprogs \
-        e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        e2fsprogs-resize2fs \
         ethtool \
         fpga-manager-script \
         haveged \
@@ -101,9 +101,6 @@ IMAGE_INSTALL_append_minized-sbc = "\
         e2fsprogs-mke2fs \
         parted \
         util-linux-mkfs \
-"
-
-IMAGE_INSTALL_append_mz = "\
 "
 
 IMAGE_INSTALL_append_pz = "\
