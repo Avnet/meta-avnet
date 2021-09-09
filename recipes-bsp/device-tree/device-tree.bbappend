@@ -12,6 +12,10 @@ SRC_URI_append_u96v2-sbc = "\
 	file://0001-kernel-v2021.1-Sync-the-psgtr-node-from-U-boot.patch \
 "
 
+SRC_URI_append_uz3eg-pciec-netfmc = "\
+	file://netfmc.dtsi \
+"
+
 SRC_URI_append_uz7ev-evcc-hdmi = "\
 	file://hdmi.dtsi \
 "
@@ -34,6 +38,14 @@ do_configure_append_u96v2-sbc () {
 	if [ -e ${WORKDIR}/openamp.dtsi ]; then
 		cp ${WORKDIR}/openamp.dtsi ${DT_FILES_PATH}/openamp.dtsi
 		echo '#include "openamp.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
+	fi
+}
+
+# For uz3eg-pciec-netfmc BSP only
+do_configure_append_uz3eg-pciec-netfmc () {
+	if [ -e ${WORKDIR}/netfmc.dtsi ]; then
+		cp ${WORKDIR}/netfmc.dtsi ${DT_FILES_PATH}/netfmc.dtsi
+		echo '#include "netfmc.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
 	fi
 }
 
