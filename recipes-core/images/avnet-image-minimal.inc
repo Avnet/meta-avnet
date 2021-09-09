@@ -15,9 +15,9 @@ IMAGE_INSTALL_append_zynqmp = "\
         bonnie++ \
         coreutils \
         e2fsprogs \
-        e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
+        e2fsprogs-resize2fs \
         ethtool \
         fpga-manager-script \
         haveged \
@@ -103,9 +103,6 @@ IMAGE_INSTALL_append_minized-sbc = "\
         util-linux-mkfs \
 "
 
-IMAGE_INSTALL_append_mz = "\
-"
-
 IMAGE_INSTALL_append_pz = "\
         blinky-init \
         blinky \
@@ -131,6 +128,7 @@ COMMON_FEATURES_append_zynqmp = "\
 "
 
 COMMON_FEATURES_append_zynq = "\
+        debug-tweaks \
         hwcodecs \
         ssh-server-dropbear \
 "
