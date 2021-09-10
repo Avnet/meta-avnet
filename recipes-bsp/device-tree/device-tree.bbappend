@@ -9,7 +9,6 @@ SRC_URI_append = "\
 
 SRC_URI_append_u96v2-sbc = "\
 	file://openamp.dtsi \
-	file://0001-kernel-v2021.1-Sync-the-psgtr-node-from-U-boot.patch \
 "
 
 SRC_URI_append_uz3eg-pciec-netfmc = "\
