@@ -178,9 +178,9 @@
 };
 
 &sata {
-	status = "okay";
-	phy-names = "sata-phy";
-	phys = <&lane1 PHY_TYPE_SATA 1 1 125000000>;
+   status = "okay";
+   phy-names = "sata-phy";
+   phys = <&psgtr 1 PHY_TYPE_SATA 1 1>;
 };
 
 #include "hdmi.dtsi"
