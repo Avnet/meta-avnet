@@ -1,4 +1,3 @@
-/include/ "system-conf.dtsi"
 #include "include/dt-bindings/phy/phy.h"
 
 / {
