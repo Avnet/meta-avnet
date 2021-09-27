@@ -19,6 +19,14 @@ SRC_URI_append_uz7ev-evcc-hdmi = "\
 	file://hdmi.dtsi \
 "
 
+SRC_URI_append_uz7ev-evcc-hdmi-v = "\
+	file://hdmi.dtsi \
+"
+
+SRC_URI_append_uz7ev-evcc-hdmi-v-n = "\
+	file://hdmi.dtsi \
+"
+
 SRC_URI_append_uz7ev-evcc-quadcam-h = "\
 	file://fmc-quad.dtsi \
 "
@@ -50,6 +58,22 @@ do_configure_append_uz3eg-pciec-netfmc () {
 
 # For uz7ev-evcc-hdmi BSP only
 do_configure_append_uz7ev-evcc-hdmi () {
+	if [ -e ${WORKDIR}/hdmi.dtsi ]; then
+		cp ${WORKDIR}/hdmi.dtsi ${DT_FILES_PATH}/hdmi.dtsi
+		echo '#include "hdmi.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
+	fi
+}
+
+# For uz7ev-evcc-hdmi-v BSP only
+do_configure_append_uz7ev-evcc-hdmi-v () {
+	if [ -e ${WORKDIR}/hdmi.dtsi ]; then
+		cp ${WORKDIR}/hdmi.dtsi ${DT_FILES_PATH}/hdmi.dtsi
+		echo '#include "hdmi.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
+	fi
+}
+
+# For uz7ev-evcc-hdmi-v-n BSP only
+do_configure_append_uz7ev-evcc-hdmi-v-n () {
 	if [ -e ${WORKDIR}/hdmi.dtsi ]; then
 		cp ${WORKDIR}/hdmi.dtsi ${DT_FILES_PATH}/hdmi.dtsi
 		echo '#include "hdmi.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts

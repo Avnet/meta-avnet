@@ -90,6 +90,7 @@ IMAGE_INSTALL_append_uz = "\
 "
 
 IMAGE_INSTALL_append_uz7ev-evcc = "\
+        nvme-cli \
         user-led-test \
         user-switch-test \
 "
@@ -109,10 +110,12 @@ IMAGE_INSTALL_append_pz = "\
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
+        e2fsprogs-mke2fs \
         i2c-tools \
         mac-eeprom-config-init \
         mac-eeprom-config \
         parted \
+        util-linux-mkfs \
 "
 
 IMAGE_INSTALL_remove_pz = "\
