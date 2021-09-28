@@ -19,8 +19,6 @@ SRC_URI_append_uz7ev-evcc-hdmi-v = " \
 
 SRC_URI_append_uz7ev-evcc-hdmi-v-n = " \
                 file://nvme.cfg \
-                file://0002-drm-xlnx_mixer-Dont-enable-primary-plane-by-default.patch \
-                file://0003-drm_atomic_helper-Supress-vblank-timeout-warning-mes.patch \
 "
 
 SRC_URI_append_uz7ev-evcc-quadcam-h = " \
