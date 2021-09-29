@@ -72,7 +72,7 @@
 };
 
 / {
-    amba: amba {
+    i2c_mux: amba {
         i2c@ff030000 {
             i2cswitch@70 {
                 i2c@0 {
@@ -93,7 +93,7 @@
         };
     };
 
-    amba_pl: amba_pl@0 {
+    hdmi_tx_clk: amba_pl@0 {
 
         /* 38.880MHz reference crystal for 8t49n241 clock for HDMI */
         /* IIC controller with 8t49n24x clock generator and DP159 retimer for HDMI TX */
