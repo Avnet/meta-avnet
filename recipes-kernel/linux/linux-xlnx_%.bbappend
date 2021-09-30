@@ -17,6 +17,10 @@ SRC_URI_append_uz7ev-evcc-hdmi-v = " \
                 file://0003-drm_atomic_helper-Supress-vblank-timeout-warning-mes.patch \
 "
 
+SRC_URI_append_uz7ev-evcc-nvme = " \
+                file://nvme.cfg \
+"
+
 SRC_URI_append_uz7ev-evcc-hdmi-v-n = " \
                 file://nvme.cfg \
 "
