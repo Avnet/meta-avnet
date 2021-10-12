@@ -21,7 +21,7 @@ SRC_URI_append_uz7ev-evcc-hdmi = "\
 
 SRC_URI_append_uz7ev-evcc-quadcam-h = "\
 	file://fmc-quad.dtsi \
-"
+"	
 
 
 # For Avnet BSP only

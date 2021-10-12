@@ -15,6 +15,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         bonnie++ \
         coreutils \
         e2fsprogs \
+        e2fsprogs-badblocks \
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
         e2fsprogs-resize2fs \
@@ -33,11 +34,16 @@ IMAGE_INSTALL_append_zynqmp = "\
         packagegroup-core-ssh-dropbear \
         packagegroup-petalinux-lmsensors \
         parted \
+        pciutils \
         pmic-prog \
         run-postinsts \
         tcf-agent \
         udev-extraconf \
         usbutils \
+        util-linux \
+        util-linux-blkid \
+        util-linux-fdisk \
+        util-linux-mount \
         util-linux-mkfs \
         watchdog-init \
 "
@@ -90,8 +96,17 @@ IMAGE_INSTALL_append_uz = "\
 "
 
 IMAGE_INSTALL_append_uz7ev-evcc = "\
+        nvme-cli \
         user-led-test \
         user-switch-test \
+"
+
+IMAGE_INSTALL_append_uz7ev-evcc-hdmi-v-n = "\
+        nvme-cli \
+"
+
+IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
+        nvme-cli \
 "
 
 IMAGE_INSTALL_append_minized-sbc = "\
@@ -109,10 +124,12 @@ IMAGE_INSTALL_append_pz = "\
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
+        e2fsprogs-mke2fs \
         i2c-tools \
         mac-eeprom-config-init \
         mac-eeprom-config \
         parted \
+        util-linux-mkfs \
 "
 
 IMAGE_INSTALL_remove_pz = "\
