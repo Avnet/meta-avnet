@@ -11,10 +11,30 @@
 ### END INIT INFO
 
 SYS_GPIO_FOLDER=/sys/class/gpio
-WIFI_LED=506
-BT_LED=505
+WIFI_LED=498
+BT_LED=497
 LED_ON=1
 LED_OFF=0
+
+for gpiochip in `ls /sys/class/gpio | grep gpiochip`
+do
+	label=$(cat /sys/class/gpio/$gpiochip/label)
+	base=$(cat /sys/class/gpio/$gpiochip/base)
+	ngpio=$(cat /sys/class/gpio/$gpiochip/ngpio)
+
+	#echo $gpiochip : $label $base $ngpio
+
+	#if [ $ngpio == 2 ]; then
+	if [[ "$label" == *"a0050000.gpio"* ]]; then
+		((BT_LED=base+0))
+		((WIFI_LED=base+1))
+
+		echo "   WIFI LED GPIO = $WIFI_LED"
+		echo "   BT   LED GPIO = $BT_LED"
+   
+		break
+	fi
+done
 
 
 DESC="ultra96-radio-leds.sh will turn the WiFi and Bluetooth LEDs on and off on Ultra96"
