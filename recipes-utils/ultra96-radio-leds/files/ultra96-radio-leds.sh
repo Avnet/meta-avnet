@@ -11,20 +11,16 @@
 ### END INIT INFO
 
 SYS_GPIO_FOLDER=/sys/class/gpio
-WIFI_LED=498
-BT_LED=497
+WIFI_LED=502
+BT_LED=501
 LED_ON=1
 LED_OFF=0
 
-for gpiochip in `ls /sys/class/gpio | grep gpiochip`
+for gpiochip in `ls $SYS_GPIO_FOLDER | grep gpiochip`
 do
-	label=$(cat /sys/class/gpio/$gpiochip/label)
-	base=$(cat /sys/class/gpio/$gpiochip/base)
-	ngpio=$(cat /sys/class/gpio/$gpiochip/ngpio)
+	label=$(cat $SYS_GPIO_FOLDER/$gpiochip/label)
+	base=$(cat $SYS_GPIO_FOLDER/$gpiochip/base)
 
-	#echo $gpiochip : $label $base $ngpio
-
-	#if [ $ngpio == 2 ]; then
 	if [[ "$label" == *"a0050000.gpio"* ]]; then
 		((BT_LED=base+0))
 		((WIFI_LED=base+1))
