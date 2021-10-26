@@ -10,6 +10,12 @@ IMAGE_INSTALL_append_zynq = "\
         udev-extraconf \
 "
 
+# remove unnecessary packages to fit in qspi
+IMAGE_INSTALL_remove_zynq = "\
+        htop \
+        meson \
+"
+
 IMAGE_INSTALL_append_zynqmp = "\
         bc \
         bonnie++ \
