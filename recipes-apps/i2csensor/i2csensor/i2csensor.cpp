@@ -32,7 +32,7 @@ int kbhit(void) {
 
 #define u8	unsigned char
 #define u16 unsigned short
-#define I2C_FILE_NAME "/dev/i2c-0"
+#define I2C_FILE_NAME "/dev/i2c-1"
 
 // The following constant defines the address of the IIC device on the IIC bus.  Note that since
 // the address is only 7 bits, this  constant is the address divided by 2.
@@ -690,16 +690,16 @@ void assign_offsets(void)
 	GPIO_PS_LED_R_OFFSET			= iMIO0_Offset + 52; //MIO#52
 	GPIO_PS_LED_G_OFFSET			= iMIO0_Offset + 53; //MIO#53
 	GPIO_PL_LED_G_OFFSET			= iAXI_MAX_Offset; //pl_led_2bits(1)
-	GPIO_PL_LED_R_OFFSET			= iAXI_MAX_Offset - 1; //pl_led_2bits(0)
-	GPIO_PL_SWITCH_OFFSET			= iAXI_MAX_Offset - 2; //pl_sw_1bit
-	GPIO_PL_MICROPHONE7_OFFSET		= iAXI_MAX_Offset - 3; //Bit 7 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE6_OFFSET		= iAXI_MAX_Offset - 4; //Bit 6 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE5_OFFSET		= iAXI_MAX_Offset - 5; //Bit 5 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE4_OFFSET		= iAXI_MAX_Offset - 6; //Bit 4 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE3_OFFSET		= iAXI_MAX_Offset - 7; //Bit 3 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE2_OFFSET		= iAXI_MAX_Offset - 8; //Bit 2 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE1_OFFSET		= iAXI_MAX_Offset - 9; //Bit 1 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE0_OFFSET		= iAXI_MAX_Offset - 10; //Bit 0 of AXI_GPIO to microphone
+	GPIO_PL_LED_R_OFFSET			= iAXI_MAX_Offset + 1; //pl_led_2bits(0)
+	GPIO_PL_SWITCH_OFFSET			= iAXI_MAX_Offset - 1; //pl_sw_1bit
+	GPIO_PL_MICROPHONE7_OFFSET		= iAXI_MAX_Offset - 2; //Bit 7 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE6_OFFSET		= iAXI_MAX_Offset - 3; //Bit 6 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE5_OFFSET		= iAXI_MAX_Offset - 4; //Bit 5 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE4_OFFSET		= iAXI_MAX_Offset - 5; //Bit 4 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE3_OFFSET		= iAXI_MAX_Offset - 6; //Bit 3 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE2_OFFSET		= iAXI_MAX_Offset - 7; //Bit 2 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE1_OFFSET		= iAXI_MAX_Offset - 8; //Bit 1 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE0_OFFSET		= iAXI_MAX_Offset - 9; //Bit 0 of AXI_GPIO to microphone
 } //assign_offsets()
 
 
