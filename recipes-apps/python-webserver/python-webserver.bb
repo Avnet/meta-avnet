@@ -89,7 +89,6 @@ do_install_append_uz () {
 do_install_append_uz3eg-iocc () {
        install -m 0755 ${S}/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/5080-PB-AES-ZU-IOCC-G-V2e.pdf ${D}/home/root/webserver/pdfs
-       install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
 }
 
 do_install_append_uz3eg-pciec () {
@@ -106,6 +105,7 @@ do_install_append_pz () {
        install -m 0755 ${S}/images/picozed.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf ${D}/home/root/webserver/pdfs
+       install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
 }
 
 do_install_append_minized-sbc () {
