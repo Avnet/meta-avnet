@@ -11,8 +11,6 @@
 ### END INIT INFO
 
 SYS_GPIO_FOLDER=/sys/class/gpio
-WIFI_LED=502
-BT_LED=501
 LED_ON=1
 LED_OFF=0
 
@@ -32,6 +30,10 @@ do
 	fi
 done
 
+if [ -z "$BT_LED" ]; then
+	echo "ERROR: /etc/init.d/ultra96-radio-leds.sh : Could not find axi gpio device with base address 0xa0050000 !"
+	exit 1
+fi
 
 DESC="ultra96-radio-leds.sh will turn the WiFi and Bluetooth LEDs on and off on Ultra96"
 
