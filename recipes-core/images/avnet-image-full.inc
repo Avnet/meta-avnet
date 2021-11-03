@@ -5,6 +5,7 @@ IMAGE_INSTALL_append_zynq = "\
         bonnie++ \
         bridge-utils \
         coreutils \
+        edge-impulse \
         ethtool \
         hdparm \
         i2c-tools \
@@ -30,6 +31,7 @@ IMAGE_INSTALL_append_zynq = "\
 IMAGE_INSTALL_append_zynqmp = "\
         bridge-utils \
         cmake \
+        edge-impulse \
         dnf \
         json-c \
         libpython3 \
