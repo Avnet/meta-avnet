@@ -108,6 +108,9 @@ IMAGE_INSTALL_append_minized-sbc = "\
         pulseaudio-module-switch-on-connect \
         pulseaudio-server \
         wpa-supplicant \
+        python-webserver-init \
+        python-webserver \
+        python3 \
 "
 
 IMAGE_INSTALL_append_pz = "\
