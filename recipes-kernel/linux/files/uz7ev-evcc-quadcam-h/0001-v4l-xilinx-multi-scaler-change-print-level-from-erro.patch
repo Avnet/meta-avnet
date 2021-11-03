@@ -1,0 +1,31 @@
+From dfadf7cd51660434b957186bf3af070ef6890ae2 Mon Sep 17 00:00:00 2001
+From: Anil Kumar Mamidala <anil.mamidala@xilinx.com>
+Date: Mon, 16 Aug 2021 15:49:31 +0530
+Subject: [PATCH] v4l: xilinx: multi-scaler: change print level from error to
+ debug
+
+All channels does not have buffer at the given time while streaming
+is going on. In multichannel senario it is a common case. So change
+the log level of the print to debug.
+
+Signed-off-by: Anil Kumar Mamidala <anil.mamidala@xilinx.com>
+---
+ drivers/media/platform/xilinx/xilinx-multi-scaler.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/xilinx/xilinx-multi-scaler.c b/drivers/media/platform/xilinx/xilinx-multi-scaler.c
+index 99be5cbd3cfd..eb4ec0c89632 100644
+--- a/drivers/media/platform/xilinx/xilinx-multi-scaler.c
++++ b/drivers/media/platform/xilinx/xilinx-multi-scaler.c
+@@ -1286,7 +1286,7 @@ static void xm2msc_device_run(void *priv)
+ 		 * channel while streaming is going on
+ 		 */
+ 		if (xm2msc->out_streamed_chan || xm2msc->cap_streamed_chan)
+-			dev_err(xm2msc->dev,
++			dev_dbg(xm2msc->dev,
+ 				"Buffer not available, streaming chan 0x%x\n",
+ 				xm2msc->cap_streamed_chan);
+ 
+-- 
+2.17.1
+

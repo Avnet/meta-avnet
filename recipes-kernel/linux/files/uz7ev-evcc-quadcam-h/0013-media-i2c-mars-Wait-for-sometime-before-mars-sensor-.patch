@@ -1,0 +1,31 @@
+From 67e8d5dd0b8d2722c05b9179c0838a0d2679ffe3 Mon Sep 17 00:00:00 2001
+From: Nirmal Luhana <nirmal.luhana@xilinx.com>
+Date: Thu, 29 Jul 2021 19:31:12 +0530
+Subject: [PATCH 13/15] media: i2c: mars: Wait for sometime before mars sensor
+ initialization
+
+Wait for sometime before mars image sensor initialization to
+synchronize mars image sensor and max9286 drivers for I2C configurations
+
+Signed-off-by: Nirmal Luhana <nirmal.luhana@xilinx.com>
+---
+ drivers/media/i2c/mars.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/media/i2c/mars.c b/drivers/media/i2c/mars.c
+index a969199cbe86..4d8ddb49eeb4 100644
+--- a/drivers/media/i2c/mars.c
++++ b/drivers/media/i2c/mars.c
+@@ -584,6 +584,9 @@ static int mars_initialize(struct mars_device *dev)
+ 	int ret;
+ 	unsigned int chip_version = 0;
+ 
++	/* wait at least 700ms */
++	usleep_range(700000, 1000000);
++
+ 	/* Verify communication with the MAX96705: ping to wakeup. */
+ 	dev->serializer.client->addr = MAX96705_DEFAULT_ADDR;
+ 	i2c_smbus_read_byte(dev->serializer.client);
+-- 
+2.17.1
+

@@ -1,0 +1,45 @@
+From 8583d5357d9432bf0b2b14716639a5914d72d1dd Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Fri, 30 Jul 2021 13:48:45 +0000
+Subject: [PATCH 14/15] media: i2c: mars: Wait for correct sensor
+ initialization
+
+---
+ drivers/media/i2c/mars.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/media/i2c/mars.c b/drivers/media/i2c/mars.c
+index 4d8ddb49eeb4..06e14e86a0e7 100644
+--- a/drivers/media/i2c/mars.c
++++ b/drivers/media/i2c/mars.c
+@@ -647,6 +647,9 @@ static int mars_initialize(struct mars_device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	/* wait at least 200ms */
++	usleep_range(200000, 400000);
++
+ 	ret = sensor_set_regs(dev, ar0231_config_part1b,
+ 			 ARRAY_SIZE(ar0231_config_part1b));
+ 	if (ret)
+@@ -657,11 +660,17 @@ static int mars_initialize(struct mars_device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	/* wait at least 1s */
++	usleep_range(1000000, 1200000);
++
+ 	ret = sensor_set_regs(dev, ar0231_config_part6_exposure,
+ 			 ARRAY_SIZE(ar0231_config_part6_exposure));
+ 	if (ret)
+ 		return ret;
+ 
++	/* wait at least 1s */
++	usleep_range(1000000, 1200000);
++
+ 	ret = sensor_set_regs(dev, ar0231_config_part7_gains,
+ 			 ARRAY_SIZE(ar0231_config_part7_gains));
+ 	if (ret)
+-- 
+2.17.1
+
