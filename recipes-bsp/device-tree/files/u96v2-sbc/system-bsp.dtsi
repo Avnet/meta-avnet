@@ -15,13 +15,6 @@
 	gpio-keys {
 		compatible = "gpio-keys";
 		autorepeat;
-		sw4 {
-			label = "sw4";
-			gpios = <&gpio 23 GPIO_ACTIVE_LOW>;
-			linux,code = <KEY_POWER>; /* down */
-			wakeup-source;
-			autorepeat;
-		};
 	};
 
 	iio-hwmon {
