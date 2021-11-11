@@ -111,6 +111,8 @@ IMAGE_INSTALL_append_minized-sbc = "\
 "
 
 IMAGE_INSTALL_append_mz = "\
+        python-webserver-init \
+        python-webserver \
         python3 \
         python3-core \
         python3-dbus \
