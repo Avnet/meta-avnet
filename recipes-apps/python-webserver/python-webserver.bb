@@ -54,6 +54,14 @@ SRC_URI_append_pz = "\
      file://pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
       "
 
+SRC_URI_append_mz = "\
+     file://images/microzed.png \
+     file://pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf \
+     file://pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf \
+     file://pdfs/PB-AES-Z7MB-7Z010-G-V2.pdf \
+     file://pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf \
+      "
+
 S = "${WORKDIR}"
 
 do_install() {
@@ -102,6 +110,14 @@ do_install_append_pz () {
        install -m 0755 ${S}/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf ${D}/home/root/webserver/pdfs
 }
 
+do_install_append_mz () {
+       install -m 0755 ${S}/images/microzed.png ${D}/home/root/webserver/images
+       install -m 0755 ${S}/pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
+       install -m 0755 ${S}/pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
+       install -m 0755 ${S}/pdfs/PB-AES-Z7MB-7Z010-G-V2.pdf ${D}/home/root/webserver/pdfs
+       install -m 0755 ${S}/pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
+}
+
 FILES_${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/index.html \
            /home/root/webserver/launch_server.sh \
@@ -139,3 +155,12 @@ FILES_${PN}_append_pz = "\
            /home/root/webserver/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
            /home/root/webserver/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
                "
+               
+FILES_${PN}_append_mz = "\
+           /home/root/webserver/images/microzed.png \
+           /home/root/webserver/pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf \
+           /home/root/webserver/pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf \
+           /home/root/webserver/pdfs/PB-AES-Z7MB-7Z010-G-V2.pdf \
+           /home/root/webserver/pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf \
+               "
+               
