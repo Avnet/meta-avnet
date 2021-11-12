@@ -113,6 +113,15 @@ IMAGE_INSTALL_append_minized-sbc = "\
         python3 \
 "
 
+IMAGE_INSTALL_append_mz = "\
+        python-webserver-init \
+        python-webserver \
+        python3 \
+        python3-core \
+        python3-dbus \
+        python3-pygobject \
+"
+
 IMAGE_INSTALL_append_pz = "\
         haveged \
         pciutils \
