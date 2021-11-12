@@ -20,6 +20,12 @@ IMAGE_INSTALL_append_zynq = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
+        python-webserver-init \
+        python-webserver \
+        python3 \
+        python3-core \
+        python3-dbus \
+        python3-pygobject \
         sbc \
         usbutils \
         xrt \
@@ -108,30 +114,15 @@ IMAGE_INSTALL_append_minized-sbc = "\
         pulseaudio-module-switch-on-connect \
         pulseaudio-server \
         wpa-supplicant \
-        python-webserver-init \
-        python-webserver \
-        python3 \
 "
 
 IMAGE_INSTALL_append_mz = "\
-        python-webserver-init \
-        python-webserver \
-        python3 \
-        python3-core \
-        python3-dbus \
-        python3-pygobject \
 "
 
 IMAGE_INSTALL_append_pz = "\
         haveged \
         pciutils \
         performance-tests \
-        python-webserver-init \
-        python-webserver \
-        python3 \
-        python3-core \
-        python3-dbus \
-        python3-pygobject \
         util-linux-mkfs \
 "
 
