@@ -3,7 +3,7 @@
 """
 Save this file as server.py
 >>> python3 server.py
-Serving on localhost:8000
+Serving on localhost:80
 You can use this to test GET and POST methods.
 """
 
@@ -41,7 +41,7 @@ elif len(sys.argv) > 1:
     PORT = int(sys.argv[1])
     I = ""
 else:
-    PORT = 8000
+    PORT = 80
     I = ""
 
 class ServerHandler(http.server.SimpleHTTPRequestHandler):
