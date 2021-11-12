@@ -1,74 +1,112 @@
 <!DOCTYPE html>
 <html>
-    <center>
-        <head>
-            <FONT face="arial" size="+2">
-                <b>Web Server using Python</b>
-            </FONT>
-        </head>
-        <br>
-        </br>
-    </center>
-    <body>
-        <iframe name="dummy" style="display:none;"></iframe>
-        <img src="logo_image.jpg" align="Left">
-        <center><form action="#" method="POST" target="dummy">
-                <fieldset>
-                    <br>
-                    </br>
-                    <legend>Changing LEDs</legend>
-                    <p>
-                    <FONT FACE="arial" SIZE="+2">
-                        <table>
-                            <tr>
-                                <td>
-                                    <label>PS LED&nbsp</label>
-                                </td>
-                                <td>
-                                    <select name="PSledSel" id = "PSledSel" style="font-family : arial; font-size : 25pt">
-                                        <option value = "0">Off</option>
-                                        <option value = "1">Red</option>
-                                        <option value = "2">Green</option>
-                                        <option value = "3">Amber</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="submit" name="SETPSLED" value="SET PS LED" style="height:50px; width:190px; margin-top: 10px; margin-left: 20px; border-width:5px; font-size:x-large">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>PL LED&nbsp</label>
-                                </td>
-                                <td>
-                                    <select name="PLledSel" id = "PLledSel" style="font-family : arial; font-size : 25pt">
-                                        <option value = "0">Off</option>
-                                        <option value = "1">Red</option>
-                                        <option value = "2">Green</option>
-                                        <option value = "3">Amber</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="submit" name="SETPLLED" value="SET PL LED" style="height:50px; width:190px; margin-top: 10px; margin-left: 20px; border-width:5px; font-size:x-large">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>PL LED Mode&nbsp</label>
-                                </td>
-                                <td>
-                                    <select name="PLledMode" id = "PLledMode" style="font-family : arial; font-size : 25pt">
-                                        <option value = "0">User Led</option>
-                                        <option value = "1">Microphone Led</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="submit" name="SETMICLLED" value="SET PL LED MODE" style="height:50px; width:190px; margin-top: 10px; margin-left: 20px; border-width:5px; font-size:x-large">
-                                </td>
-                            </tr>
-                        </table>
-                    </FONT>
-                </fieldset>
-            </form></center>
-    </body>
+   <head>
+      <title> Avnet Python WebServer Demo </title>
+      <link type="text/css" rel="stylesheet" href="css/main.css" />
+      <script>
+      </script>
+   </head>
+   
+   <body>
+      <iframe name="dummy" style="display:none;"></iframe>
+      
+      <center>
+         <img src="images/Avnet_logo_tagline_rgb.png" > </img>
+         <br>
+         </br>
+         <img src="images/minized.png">
+      </center>
+      
+      <div id="container">
+         <b class="rtop">
+           <b class="r1"></b> <b class="r2"></b> <b class="r3"></b> <b class="r4"></b>
+         </b>
+         
+         <h1>Avnet Python Web Server Demo</h1>
+         
+         <p> Hello! This is a demonstration of a simple Python embedded webserver. Using Python, a webserver can be easily embedded into your Linux system. A webserver provides an easy method to control or monitor the embedded platform via an Internet browser. </p>
+         
+         <h2> Controlling the Embedded System </h2>
+         <p>
+         This example is intended to illustrate how the functionality of the embedded system can be controlled from the browser.
+         Here, the <a href="images/board.jpg" target="_blank">LEDs on the board</a> can be switched on or off by clicking on the 'Set PS LED' button.
+         </p>
+         <center>
+            <form action="#" method="POST" target="dummy">
+               <fieldset>
+                  <br>
+                  </br>
+                  <legend align="Center"><b>Changing LEDs &nbsp </b></legend>
+                  <p>
+                     <table>
+                        <tr>
+                           <td>
+                              <label>PS LED&nbsp</label>
+                           </td>
+                           <td>
+                              <select name="PSledSel" id = "PSledSel">
+                                 <option value = "0">Off</option>
+                                 <option value = "1">Red</option>
+                                 <option value = "2">Green</option>
+                                 <option value = "3">Amber</option>
+                              </select>
+                           </td>
+                           <td>
+                              <input type="submit" name="SETPSLED" value="SET PS LED">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              <label>PL LED&nbsp</label>
+                           </td>
+                           <td>
+                              <select name="PLledSel" id = "PLledSel">
+                                 <option value = "0">Off</option>
+                                 <option value = "1">Red</option>
+                                 <option value = "2">Green</option>
+                                 <option value = "3">Amber</option>
+                              </select>
+                           </td>
+                           <td>
+                              <input type="submit" name="SETPLLED" value="SET PL LED">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              <label>PL LED Mode&nbsp</label>
+                           </td>
+                           <td>
+                              <select name="PLledMode" id = "PLledMode">
+                                 <option value = "0">User Led</option>
+                                 <option value = "1">Microphone Led</option>
+                              </select>
+                           </td>
+                           <td>
+                              <input type="submit" name="SETMICLLED" value="SET PL LED MODE">
+                           </td>
+                        </tr>
+                     </table>
+                  </p>
+               </fieldset>
+            </form>
+         </center>
+         <h2> Documentation </h2>
+         <p> 
+            <ul>
+               <li>MiniZed SBC <a href="pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf" target="_blank"> product brief</a></li>
+            </ul>
+         </p>
+         <h2> External Links </h2>
+         <p> 
+            <i> (Note that these links point to locations not served by the embedded webserver)</i> 
+            <ul>
+               <li> <a href="https://avnet.me/minized" target="_blank">MiniZed Product Page</a></li>
+               <li> <a href="http://www.xilinx.com"  target="_blank">Xilinx</a></li>
+            </ul>
+         </p>
+         <b class="rbottom">
+            <b class="r4"></b> <b class="r3"></b> <b class="r2"></b> <b class="r1"></b>
+         </b>
+      </div>
+   </body>
 </html>
