@@ -7,14 +7,14 @@ SECTION = "PETALINUX/apps"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-COMPATIBLE_MACHINE = "uz|pz|mz"
+COMPATIBLE_MACHINE = "uz|pz|mz|minized-sbc"
 
 # Packages
 RDEPENDS_${PN} += "\
   python3-core \
   python-core \
     "
-    
+
 SRC_URI = "file://cgi.py \
      file://index.html \
      file://launch_server.sh \
@@ -27,12 +27,12 @@ SRC_URI = "file://cgi.py \
      file://html/usb3_results.html \
      file://images/Avnet_logo_tagline_rgb.png \
      file://images/favicon.ico \
-     file://images/board.jpg \
      file://pdfs/Delkin_Devices_Product_Line.pdf \
       "
 
 SRC_URI_append_uz = "\
      file://images/ultrazed.png \
+     file://images/board.jpg \
       "
 
 SRC_URI_append_uz3eg-iocc = "\
@@ -52,6 +52,11 @@ SRC_URI_append_pz = "\
      file://images/picozed.png \
      file://pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
      file://pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
+     file://images/board.jpg \
+      "
+
+SRC_URI_append_minized-sbc = "\
+     file://logo_image.jpg \
       "
 
 SRC_URI_append_mz = "\
@@ -81,13 +86,13 @@ do_install() {
        install -m 0755 ${S}/html/sata_results.html ${D}/home/root/webserver/html
        install -m 0755 ${S}/html/usb3_results.html ${D}/home/root/webserver/html
        install -m 0755 ${S}/images/Avnet_logo_tagline_rgb.png ${D}/home/root/webserver/images
-       install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
        install -m 0755 ${S}/images/favicon.ico ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/Delkin_Devices_Product_Line.pdf ${D}/home/root/webserver/pdfs
 }
 
 do_install_append_uz () {
        install -m 0755 ${S}/images/ultrazed.png ${D}/home/root/webserver/images
+       install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
 }
 do_install_append_uz3eg-iocc () {
        install -m 0755 ${S}/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf ${D}/home/root/webserver/pdfs
@@ -108,6 +113,11 @@ do_install_append_pz () {
        install -m 0755 ${S}/images/picozed.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf ${D}/home/root/webserver/pdfs
+       install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
+}
+
+do_install_append_minized-sbc () {
+       install -m 0755 ${S}/logo_image.jpg ${D}/home/root/webserver
 }
 
 do_install_append_mz () {
@@ -129,13 +139,13 @@ FILES_${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/html/sata_results.html \
            /home/root/webserver/html/usb3_results.html \
            /home/root/webserver/images/Avnet_logo_tagline_rgb.png \
-           /home/root/webserver/images/board.jpg \
            /home/root/webserver/images/favicon.ico \
            /home/root/webserver/pdfs/Delkin_Devices_Product_Line.pdf \
                "
 
 FILES_${PN}_append_uz = "\
            /home/root/webserver/images/ultrazed.png \
+           /home/root/webserver/images/board.jpg \
                "
 FILES_${PN}_append_uz3eg-iocc = "\
            /home/root/webserver/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf \
@@ -149,18 +159,20 @@ FILES_${PN}_append_uz7ev-evcc = "\
            /home/root/webserver/pdfs/5342-pb-ultrazed-ev-som-v1.pdf \
            /home/root/webserver/pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf \
                "
-
 FILES_${PN}_append_pz = "\
            /home/root/webserver/images/picozed.png \
+           /home/root/webserver/images/board.jpg \
            /home/root/webserver/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
            /home/root/webserver/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
                "
-               
 FILES_${PN}_append_mz = "\
            /home/root/webserver/images/microzed.png \
+           /home/root/webserver/images/board.jpg \
            /home/root/webserver/pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf \
            /home/root/webserver/pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf \
            /home/root/webserver/pdfs/PB-AES-Z7MB-7Z010-G-V2.pdf \
            /home/root/webserver/pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf \
                "
-               
+FILES_${PN}_append_minized-sbc = "\
+           /home/root/webserver/logo_image.jpg \
+               "
