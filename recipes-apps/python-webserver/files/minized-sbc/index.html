@@ -29,7 +29,7 @@
          <h2> Controlling the Embedded System </h2>
          <p>
          This example is intended to illustrate how the functionality of the embedded system can be controlled from the browser.
-         Here, the <a href="images/board.jpg" target="_blank">LEDs on the board</a> can be switched on or off by clicking on the 'Set PS LED' button.
+         Here, the <a href="images/board.jpg" target="_blank">LEDs on the board</a> are tri-color (red/green/amber) and the user can switch them on or off or select the color by clicking on the selector dropbox and 'Set PS LED' or 'Set PL LED' buttons.  The PL LED has two modes.  It can either be set to 'Microphone LED' and display audio detected on the microphone or it can be set to 'User LED' and display the color controllerd by this webpage. 
          </p>
          <center>
             <form action="#" method="POST" target="dummy">
@@ -52,7 +52,7 @@
                               </select>
                            </td>
                            <td>
-                              <input type="submit" name="SETPSLED" value="SET PS LED">
+                              <input type="submit" name="SETPSLED" value="Set PS LED">
                            </td>
                         </tr>
                         <tr>
@@ -68,7 +68,7 @@
                               </select>
                            </td>
                            <td>
-                              <input type="submit" name="SETPLLED" value="SET PL LED">
+                              <input type="submit" name="SETPLLED" value="Set PL LED">
                            </td>
                         </tr>
                         <tr>
@@ -77,12 +77,12 @@
                            </td>
                            <td>
                               <select name="PLledMode" id = "PLledMode">
-                                 <option value = "0">User Led</option>
-                                 <option value = "1">Microphone Led</option>
+                                 <option value = "0">User LED</option>
+                                 <option value = "1">Microphone LED</option>
                               </select>
                            </td>
                            <td>
-                              <input type="submit" name="SETMICLLED" value="SET PL LED MODE">
+                              <input type="submit" name="SETMICLLED" value="Set PL LED Mode">
                            </td>
                         </tr>
                      </table>
