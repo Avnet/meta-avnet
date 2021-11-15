@@ -3,7 +3,7 @@
 """
 Save this file as server.py
 >>> python3 server.py
-Serving on localhost:8000
+Serving on localhost:80
 You can use this to test GET and POST methods.
 """
 
