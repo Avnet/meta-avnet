@@ -10,6 +10,9 @@
 #include <string.h>
 #include <termios.h>
 #include <dirent.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 int kbhit(void) {
     static bool initflag = false;
@@ -32,7 +35,7 @@ int kbhit(void) {
 
 #define u8	unsigned char
 #define u16 unsigned short
-#define I2C_FILE_NAME "/dev/i2c-0"
+#define I2C_DEVICE_NAME "xiic-i2c"
 
 // The following constant defines the address of the IIC device on the IIC bus.  Note that since
 // the address is only 7 bits, this  constant is the address divided by 2.
@@ -792,6 +795,23 @@ void assign_offsets(void)
 	GPIO_PL_MICROPHONE0_OFFSET		= iAXI_MAX_Offset - 10; //Bit 0 of AXI_GPIO to microphone
 } //assign_offsets()
 
+int get_i2c_file_name(char * i2c_filename, size_t len)
+{
+       if(i2c_filename == NULL || len < 10)
+               return -1;
+
+       for(int i = 0; i < 2; i++) {
+               std::ostringstream device_name_filename;
+               device_name_filename << "/sys/bus/i2c/devices/i2c-" << i << "/name";
+
+               std::ifstream device_name_file(device_name_filename.str());
+               std::string device_name;
+               std::getline(device_name_file, device_name);
+               if(device_name.compare(I2C_DEVICE_NAME) == 0)
+                       return sprintf(i2c_filename, "/dev/i2c-%d", i) < 0 ? -1 : 0;
+       }
+       return -1;
+} //get_i2c_file_name()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main( int argc, char *argv[] )
@@ -802,6 +822,7 @@ int main( int argc, char *argv[] )
 	bool bUserEnteredTimeout;
 	bool bKeyPressed = false;
 	char chkey;
+    char i2c_file_name[11];
 
 	if (get_gpio_base())
 	{
@@ -831,8 +852,13 @@ int main( int argc, char *argv[] )
 		bUserEnteredTimeout = true;
 	}
 
+    if(get_i2c_file_name(i2c_file_name, sizeof(i2c_file_name)) < 0) {
+        perror("Unable to get I2C control file name");
+        exit(1);
+    }
+
 	// Open a connection to the I2C userspace control file.
-    if ((i2c_file = open(I2C_FILE_NAME, O_RDWR)) < 0) {
+    if ((i2c_file = open(i2c_file_name, O_RDWR)) < 0) {
         perror("Unable to open I2C control file");
         exit(1);
     }
