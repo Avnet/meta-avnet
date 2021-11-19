@@ -60,6 +60,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <gpio/gpio.h>
 
 /* String formats used to build the file name path to specific GPIO
  * instances. */
@@ -68,29 +69,28 @@
 #define FILE_FORMAT_GPIO_DIRECTION     "/direction"
 #define FILE_FORMAT_GPIO_VALUE         "/value"
 
-#define GPIO_PL_PB_OFFSET				493
-#define GPIO_LED_OFFSET					496
-
 /* The LEDx_GPIO_OFFSET and PBx_GPIO_OFFSET definitions are used to indicate
  * the relative offset from the base start of the EMIO GPIO user connections.
  * In a typical reference design, the User IO will be assigned all at once
  * to an EMIO connection and connected externally to via the
  * emio_user_tri_io[] bus in the XDC constraints file and so these offsets
  * here should match the offsets of the hardware constraints as well.
+ *
+ * Because gpios can shift without notice, use get_gpio to dynamically read value in assign_offsets
+ *
  */
-#define LED1_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 0)
-#define LED2_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 1)
-#define LED3_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 2)
-#define LED4_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 3)
-#define LED5_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 4)
-#define LED6_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 5)
-#define LED7_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 6)
-#define LED8_GPIO_OFFSET               ((GPIO_LED_OFFSET) + 7)
+int LED1_GPIO_OFFSET = 0;
+int LED2_GPIO_OFFSET = 0;
+int LED3_GPIO_OFFSET = 0;
+int LED4_GPIO_OFFSET = 0;
+int LED5_GPIO_OFFSET = 0;
+int LED6_GPIO_OFFSET = 0;
+int LED7_GPIO_OFFSET = 0;
+int LED8_GPIO_OFFSET = 0;
 
-#define PB1_GPIO_OFFSET                ((GPIO_PL_PB_OFFSET) + 0)
-#define PB2_GPIO_OFFSET                ((GPIO_PL_PB_OFFSET) + 1)
-#define PB3_GPIO_OFFSET                ((GPIO_PL_PB_OFFSET) + 2)
-//TC #define PB4_GPIO_OFFSET                ((GPIO_PL_PB_OFFSET) + 3)
+int PB1_GPIO_OFFSET  = 0;
+int PB2_GPIO_OFFSET  = 0;
+int PB3_GPIO_OFFSET  = 0;
 
 static unsigned int direction = 1;
 
@@ -838,6 +838,23 @@ int set_next_input_pattern(void)
 	return test_result;
 }
 
+
+void assign_offsets(void)
+{
+	LED1_GPIO_OFFSET = get_gpio_c("PL_LED1");
+	LED2_GPIO_OFFSET = get_gpio_c("PL_LED2");
+	LED3_GPIO_OFFSET = get_gpio_c("PL_LED3");
+	LED4_GPIO_OFFSET = get_gpio_c("PL_LED4");
+	LED5_GPIO_OFFSET = get_gpio_c("PL_LED5");
+	LED6_GPIO_OFFSET = get_gpio_c("PL_LED6");
+	LED7_GPIO_OFFSET = get_gpio_c("PL_LED7");
+	LED8_GPIO_OFFSET = get_gpio_c("PL_LED8");
+
+	PB1_GPIO_OFFSET = get_gpio_c("SW2");
+	PB2_GPIO_OFFSET = get_gpio_c("SW3");
+	PB3_GPIO_OFFSET = get_gpio_c("SW4");
+} //assign_offsets()
+
 int main()
 {
 	char gpio_setting[4];
@@ -858,6 +875,8 @@ int main()
 	printf("*                                                         *\n");
 	printf("***********************************************************\n");
 	printf(" \n");
+
+	assign_offsets();
 
 	// Open the export file and write the PSGPIO number for each Pmod GPIO
 	// signal to the Linux sysfs GPIO export property, then close the file.

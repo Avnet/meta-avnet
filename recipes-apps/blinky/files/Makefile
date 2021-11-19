@@ -8,7 +8,7 @@ all: build
 build: $(APP)
 
 $(APP): $(APP_OBJS)
-	$(CC) $(LDFLAGS) -o blinky $(APP_OBJS) $(LDLIBS)
+	$(CXX) $(LDFLAGS) -o blinky $(APP_OBJS) $(LDLIBS) -lgpio
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<

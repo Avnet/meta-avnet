@@ -6,10 +6,10 @@ IMAGE_INSTALL_append_zynq = "\
         bridge-utils \
         coreutils \
         ethtool \
+        gpio-utils \
         hdparm \
         i2c-tools \
         i2c-tools-misc \
-        i2csensor \
         iperf3 \
         iw \
         kernel-modules \
@@ -37,6 +37,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         bridge-utils \
         cmake \
         dnf \
+        gpio-utils \
         json-c \
         libpython3 \
         lmsensors-sensorsdetect \
@@ -97,6 +98,7 @@ IMAGE_INSTALL_append_minized-sbc = "\
         get-gpio-offsets \
         glibc \
         hostapd \
+        i2csensor \
         libogg \
         libpulse \
         libpulsecommon \

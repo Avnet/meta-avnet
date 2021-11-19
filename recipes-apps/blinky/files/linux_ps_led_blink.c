@@ -53,6 +53,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <gpio/gpio.h>
 
 /* Version information for this build. */
 #define APP_MAJOR_VERSION              1
@@ -73,7 +74,6 @@
  * maintainers.  So far, it has changed on me at least twice and it more
  * likely than not bound to change someday after this code is released.
  */
-#define GPIO_KERNEL_OFFSET             319
 
 static int blink_state = 1;
 static int verbose = 0;
@@ -86,12 +86,12 @@ static const struct option long_options[] = {
     { "debug",      0, NULL, 'd' },
     { "help",       0, NULL, 'h' },
     { "interval",   1, NULL, 'i' },
-    { "mio",        1, NULL, 'm' },
+    { "gpio",       1, NULL, 'g' },
     { "version",    0, NULL, 'v' },
 };
 
 /* Description of the short options for getopt_long. */
-static const char* const short_options = "dhi:m:v";
+static const char* const short_options = "dhi:g:v";
 
 /* Usage summary test. */
 static const char* const usage_template = 
@@ -99,7 +99,7 @@ static const char* const usage_template =
 "        -d, --debug              Print verbose debug messages.\n"
 "        -h, --help               Print this help information.\n"
 "        -i, --interval <NUMBER>  Use <NUMBER> * 0.1 seconds for LED blink.\n"
-"        -m, --mio <NUMBER>       Use MIO <NUMBER> for the LED blinking.\n"
+"        -g, --gpio <NUMBER>      Use <NUMBER> for the LED blinking.\n"
 "        -v, --version            Print appication version information.\n";
 
 static void print_usage(int is_error)
@@ -114,7 +114,7 @@ static void print_version(void)
     exit(0);
 }
 
-int set_next_blink_pattern(int user_led_mio)
+int set_next_blink_pattern(int user_led)
 {
     const int char_buf_size = 80;
     char gpio_setting[5];
@@ -124,7 +124,7 @@ int set_next_blink_pattern(int user_led_mio)
     FILE  *fp_led;
 
     // Open the gpio value properties so that they can be read/written.
-    test_result = snprintf(formatted_file_name, (char_buf_size - 1), FILE_FORMAT_GPIO_PATH"/gpio%d"FILE_FORMAT_GPIO_VALUE, (GPIO_KERNEL_OFFSET + user_led_mio));
+    test_result = snprintf(formatted_file_name, (char_buf_size - 1), FILE_FORMAT_GPIO_PATH"/gpio%d"FILE_FORMAT_GPIO_VALUE, user_led);
     if ((test_result < 0) ||
         (test_result == (char_buf_size - 1)))
     {
@@ -169,7 +169,7 @@ int main(int arg_count, char* arg_variables[])
     int next_option = 0;
     int test_result = 0;
     int user_interval = 1;
-    int user_led_mio = 0;
+    int user_led = 0;
     const int char_buf_size = 80;
     char formatted_file_name[char_buf_size];
 
@@ -206,10 +206,10 @@ int main(int arg_count, char* arg_variables[])
                 sscanf(optarg, "%d", &user_interval);
                 break;
             }
-            case 'm':
+            case 'g':
             {
-                /* User specified -m or --mio. */
-                sscanf(optarg, "%d", &user_led_mio);
+                /* User specified -g or --gpio. */
+                sscanf(optarg, "%d", &user_led);
                 break;
             }
             case 'v':
@@ -260,7 +260,7 @@ int main(int arg_count, char* arg_variables[])
     {
         // Set the value property for the export to the GPIO number 
         // for the user specified LED.
-        snprintf(gpio_setting, 4, "%d", (GPIO_KERNEL_OFFSET + user_led_mio));
+        snprintf(gpio_setting, 4, "%d", user_led);
         fwrite(&gpio_setting, sizeof(char), 3, fp);
         fflush(fp);
         fclose(fp);
@@ -268,7 +268,7 @@ int main(int arg_count, char* arg_variables[])
 
     // Check the direction property of the PSGPIO number for the user 
     // specified LED.
-    test_result = snprintf(formatted_file_name, (char_buf_size - 1), FILE_FORMAT_GPIO_PATH"/gpio%d"FILE_FORMAT_GPIO_DIRECTION, (GPIO_KERNEL_OFFSET + user_led_mio));
+    test_result = snprintf(formatted_file_name, (char_buf_size - 1), FILE_FORMAT_GPIO_PATH"/gpio%d"FILE_FORMAT_GPIO_DIRECTION, user_led);
     if ((test_result < 0) ||
         (test_result == (char_buf_size - 1)))
     {
@@ -280,7 +280,7 @@ int main(int arg_count, char* arg_variables[])
     fp = fopen(formatted_file_name, "r+");
     if (fp == NULL)
     {
-        printf("Error opening "FILE_FORMAT_GPIO_PATH"/gpio%d"FILE_FORMAT_GPIO_DIRECTION" node\n", (GPIO_KERNEL_OFFSET + user_led_mio));
+        printf("Error opening "FILE_FORMAT_GPIO_PATH"/gpio%d"FILE_FORMAT_GPIO_DIRECTION" node\n", user_led);
     }
     else
     {
@@ -288,7 +288,7 @@ int main(int arg_count, char* arg_variables[])
         
         if (verbose)
         {
-            printf("gpio%d set as ", (GPIO_KERNEL_OFFSET + user_led_mio));
+            printf("gpio%d set as ", user_led);
         }
 
         // Display whether the GPIO is set as input or output.
@@ -325,7 +325,7 @@ int main(int arg_count, char* arg_variables[])
 
     while (test_result == 0)
     {
-        test_result = set_next_blink_pattern(user_led_mio);
+        test_result = set_next_blink_pattern(user_led);
         usleep(user_interval * 100000);
     }
 

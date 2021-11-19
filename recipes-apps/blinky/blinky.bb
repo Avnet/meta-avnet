@@ -11,11 +11,14 @@ SRC_URI = "file://linux_ps_led_blink.c \
 	   file://Makefile \
 		  "
 
-COMPATIBLE_MACHINE = "uz|pz"
+# pz7010 does not have a route to the ps led
+COMPATIBLE_MACHINE = "uz|pz7015-fmc2|pz7020-fmc2|pz7030-fmc2"
 
 S = "${WORKDIR}"
 
 FILES_${PN} += "/home/root/*"
+
+DEPENDS_append = "gpio-utils"
 
 do_compile() {
 	     oe_runmake

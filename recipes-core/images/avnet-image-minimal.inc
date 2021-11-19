@@ -143,6 +143,12 @@ IMAGE_INSTALL_remove_pz = "\
         hwcodecs \
 "
 
+# pz7010 does not have a route to the ps led
+IMAGE_INSTALL_remove_pz7010-fmc2 = "\
+        blinky-init \
+        blinky \
+"
+
 COMMON_FEATURES_append_zynqmp = "\
         debug-tweaks \
         hwcodecs \

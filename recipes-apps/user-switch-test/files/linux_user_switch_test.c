@@ -57,6 +57,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <gpio/gpio.h>
 
 /* String formats used to build the file name path to specific GPIO
  * instances. */
@@ -73,15 +74,18 @@
  * to an EMIO connection and connected externally to via the
  * emio_user_tri_io[] bus in the XDC constraints file and so these offsets
  * here should match the offsets of the hardware constraints as well.
+ *
+ * Because gpios can shift without notice, use get_gpio to dynamically read value in assign_offsets
+ *
  */
-#define SWITCH1_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 0)
-#define SWITCH2_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 1)
-#define SWITCH3_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 2)
-#define SWITCH4_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 3)
-#define SWITCH5_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 4)
-#define SWITCH6_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 5)
-#define SWITCH7_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 6)
-#define SWITCH8_GPIO_OFFSET		((GPIO_SWITCH_OFFSET) + 7)
+int SWITCH1_GPIO_OFFSET		 = 0;
+int SWITCH2_GPIO_OFFSET		 = 0;
+int SWITCH3_GPIO_OFFSET		 = 0;
+int SWITCH4_GPIO_OFFSET		 = 0;
+int SWITCH5_GPIO_OFFSET		 = 0;
+int SWITCH6_GPIO_OFFSET		 = 0;
+int SWITCH7_GPIO_OFFSET		 = 0;
+int SWITCH8_GPIO_OFFSET		 = 0;
 
 int switch_values(void)
 {
@@ -296,6 +300,18 @@ int switch_values(void)
 	return test_result;
 }
 
+void assign_offsets(void)
+{
+	SWITCH1_GPIO_OFFSET = get_gpio_c("SW5_1");
+	SWITCH2_GPIO_OFFSET = get_gpio_c("SW5_2");
+	SWITCH3_GPIO_OFFSET = get_gpio_c("SW5_3");
+	SWITCH4_GPIO_OFFSET = get_gpio_c("SW5_4");
+	SWITCH5_GPIO_OFFSET = get_gpio_c("SW5_5");
+	SWITCH6_GPIO_OFFSET = get_gpio_c("SW5_6");
+	SWITCH7_GPIO_OFFSET = get_gpio_c("SW5_7");
+	SWITCH8_GPIO_OFFSET = get_gpio_c("SW5_8");
+} //assign_offsets()
+
 int main()
 {
 	char gpio_setting[8];
@@ -312,6 +328,8 @@ int main()
 	printf("*                                                         *\n");
 	printf("***********************************************************\n");
 	printf(" \n");
+
+	assign_offsets();
 
 	// Open the export file and write the PSGPIO number for each Pmod GPIO
 	// signal to the Linux sysfs GPIO export property, then close the file.

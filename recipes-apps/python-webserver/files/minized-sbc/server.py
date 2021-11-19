@@ -16,19 +16,17 @@ import re
 import subprocess
 import time, struct
 
-#Read GPIO offsets from a file that /sys/glass/gpio/gpiochipN/label fields
-for line in open("/mnt/emmc/gpio_offsets.txt"):
- if "MIO0_OFFSET" in line:
-  MIO0_OFFSET = line.split("=")[-1]
- if "AXI_GPIO_MAX_OFFSET" in line:
-  AXI_GPIO_MAX_OFFSET = line.split("=")[-1]
-PsButtonPortnumber = str(int(MIO0_OFFSET)+int(0))
-PS_RedPortnumber = str(int(MIO0_OFFSET)+int(52))
-PS_GreenPortnumber = str(int(MIO0_OFFSET)+int(53))
-PL_RedPortnumber = str(int(AXI_GPIO_MAX_OFFSET)+int(1))
-PL_GreenPortnumber = str(int(AXI_GPIO_MAX_OFFSET)+int(0))
+# add path helper script
+import sys
+sys.path.insert(1, '/usr/local/bin/gpio')
+from gpio_common import gpio_map
 
-EnableMicPortnumber = str(int(AXI_GPIO_MAX_OFFSET)-int(8))
+PsButtonPortnumber  = gpio_map['PS_BUTTON'].gpio
+PS_RedPortnumber    = gpio_map['PS_R'].gpio
+PS_GreenPortnumber  = gpio_map['PS_G'].gpio
+PL_RedPortnumber    = gpio_map['PL_R'].gpio
+PL_GreenPortnumber  = gpio_map['PL_G'].gpio
+EnableMicPortnumber = gpio_map['PL_MIC1'].gpio
 
 if len(sys.argv) > 2:
     PORT = int(sys.argv[2])
