@@ -32,9 +32,9 @@ import sys
 sys.path.insert(1, '/usr/local/bin/gpio')
 from gpio_common import gpio_map
 
-LEDPortnumbers = [gpio_map['PL_LED4'].gpio]
+LEDPortnumbers = [gpio_map['PL_LED1'].gpio]
 if "pz7010" not in str(subprocess.check_output(["uname", "-n"])):
-    LEDPortnumbers += [gpio_map['PL_LED' + str(i)].gpio for i in range(1, 4)]
+    LEDPortnumbers += [gpio_map['PL_LED' + str(i)].gpio for i in range(2, 5)]
 
 LEDPaths = [f'/sys/class/gpio/gpio{LEDPortnumber}/value' for LEDPortnumber in LEDPortnumbers]
 
