@@ -100,6 +100,11 @@
 
 };
 
+&axi_intc_0 {
+   compatible = "xlnx,xps-intc-1.00.a";
+   interrupt-parent = <&gic>;
+   interrupts = <0 95 1>; // vitis interrupt connected at PS interrupt offset [6] (89+6=95) 
+};
 &amba_pl {
    zyxclmm_drm {
       compatible = "xlnx,zocl";
