@@ -8,7 +8,7 @@ all: build
 build: $(APP)
 
 $(APP): $(APP_OBJS)
-	$(CXX) $(LDFLAGS) -o $@ $(APP_OBJS) $(LDLIBS)
+	$(CXX) $(LDFLAGS) -o $@ $(APP_OBJS) $(LDLIBS) -lgpio
 
 clean:
 	-rm -f $(APP) *.elf *.gdb *.o

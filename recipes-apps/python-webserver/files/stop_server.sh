@@ -57,5 +57,6 @@ kill `pidof python3`
 cd /home/root/webserver
 
 echo "Unexport the GPIO"
-source ./unexport_gpio.sh
+source /usr/local/bin/gpio/gpio_common.sh
+unexport_gpio_map
 

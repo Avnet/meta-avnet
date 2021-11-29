@@ -19,9 +19,7 @@ SRC_URI = "file://cgi.py \
      file://index.html \
      file://launch_server.sh \
      file://server.py \
-     file://setup_gpio.sh \
      file://stop_server.sh \
-     file://unexport_gpio.sh \
      file://css/main.css \
      file://html/sata_results.html \
      file://html/usb3_results.html \
@@ -81,9 +79,7 @@ do_install() {
        install -m 0755 ${S}/index.html ${D}/home/root/webserver
        install -m 0755 ${S}/launch_server.sh ${D}/home/root/webserver
        install -m 0755 ${S}/server.py ${D}/home/root/webserver
-       install -m 0755 ${S}/setup_gpio.sh ${D}/home/root/webserver
        install -m 0755 ${S}/stop_server.sh ${D}/home/root/webserver
-       install -m 0755 ${S}/unexport_gpio.sh ${D}/home/root/webserver
        install -m 0755 ${S}/css/main.css ${D}/home/root/webserver/css
        install -m 0755 ${S}/html/sata_results.html ${D}/home/root/webserver/html
        install -m 0755 ${S}/html/usb3_results.html ${D}/home/root/webserver/html
@@ -135,9 +131,7 @@ FILES_${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/index.html \
            /home/root/webserver/launch_server.sh \
            /home/root/webserver/server.py \
-           /home/root/webserver/setup_gpio.sh \
            /home/root/webserver/stop_server.sh \
-           /home/root/webserver/unexport_gpio.sh \
            /home/root/webserver/css/main.css \
            /home/root/webserver/html/sata_results.html \
            /home/root/webserver/html/usb3_results.html \

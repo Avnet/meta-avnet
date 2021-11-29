@@ -16,23 +16,15 @@ import re
 import subprocess
 import time, struct
 
-LED0Portnumber = str(496)
-LED1Portnumber = str(497)
-LED2Portnumber = str(498)
-LED3Portnumber = str(499)
-LED4Portnumber = str(500)
-LED5Portnumber = str(501)
-LED6Portnumber = str(502)
-LED7Portnumber = str(503)
-LED0Path = '/sys/class/gpio/gpio' + LED0Portnumber + '/value'
-LED1Path = '/sys/class/gpio/gpio' + LED1Portnumber + '/value'
-LED2Path = '/sys/class/gpio/gpio' + LED2Portnumber + '/value'
-LED3Path = '/sys/class/gpio/gpio' + LED3Portnumber + '/value'
-LED4Path = '/sys/class/gpio/gpio' + LED4Portnumber + '/value'
-LED5Path = '/sys/class/gpio/gpio' + LED5Portnumber + '/value'
-LED6Path = '/sys/class/gpio/gpio' + LED6Portnumber + '/value'
-LED7Path = '/sys/class/gpio/gpio' + LED7Portnumber + '/value'
+# add path helper script
+import sys
+sys.path.insert(1, '/usr/local/bin/gpio')
+from gpio_common import gpio_map
 
+LEDPaths = []
+for i in range(1, 9):
+    gpio = gpio_map[f'PL_LED{i}'].gpio
+    LEDPaths.append(f'/sys/class/gpio/gpio{gpio}/value')
 
 if len(sys.argv) > 2:
     PORT = int(sys.argv[2])
@@ -66,50 +58,10 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
         if (form.getvalue('SETPLLED')):
             ledChosen = form.getvalue('PLledSel')
             logging.warning("PL LED Setting is %s", ledChosen)
-            LED0File= open (LED0Path,'w')
-            LED1File= open (LED1Path,'w')
-            LED2File= open (LED2Path,'w')
-            LED3File= open (LED3Path,'w')
-            LED4File= open (LED4Path,'w')
-            LED5File= open (LED5Path,'w')
-            LED6File= open (LED6Path,'w')
-            LED7File= open (LED7Path,'w')
-            #time.sleep(0.5)
-            if (int(ledChosen) == 0):
-                LED0File.write('0')
-                LED1File.write('0')
-                LED2File.write('0')
-                LED3File.write('0')
-                LED4File.write('0')
-                LED5File.write('0')
-                LED6File.write('0')
-                LED7File.write('0')
-            elif (int(ledChosen) == 1):
-                LED0File.write('1')
-                LED1File.write('1')
-                LED2File.write('1')
-                LED3File.write('1')
-                LED4File.write('1')
-                LED5File.write('1')
-                LED6File.write('1')
-                LED7File.write('1')
-            else:
-                LED0File.write('0')
-                LED1File.write('0')
-                LED2File.write('0')
-                LED3File.write('0')
-                LED4File.write('0')
-                LED5File.write('0')
-                LED6File.write('0')
-                LED7File.write('0')
-            LED0File.close()
-            LED1File.close()
-            LED2File.close()
-            LED3File.close()
-            LED4File.close()
-            LED5File.close()
-            LED6File.close()
-            LED7File.close()
+
+            for LEDPath in LEDPaths:
+                with open(LEDPath,'w') as LEDFile:
+                    LEDFile.write('1' if int(ledChosen) == 1 else '0')
 
         #if (form.getvalue('GETPLSW')):
             #SW0Portnumber = str(504)

@@ -14,6 +14,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <gpio/gpio.h>
+
 int kbhit(void) {
     static bool initflag = false;
     static const int STDIN = 0;
@@ -336,8 +338,21 @@ void read_motion(void)
 // Therefore these are now variables and they are assigned after inspecting the content of the Linux-assigned
 // fields in /sys/glass/gpio/gpiochipN/label fields. N is the number assigned.
 // For 2017.4 the default offsets were as below.
+#define GPIO_PS_BUTTON			"PS_BUTTON"
+#define GPIO_PS_LED_R			"PS_R"
+#define GPIO_PS_LED_G			"PS_G"
+#define GPIO_PL_LED_R			"PL_R"
+#define GPIO_PL_LED_G			"PL_G"
+#define GPIO_PL_SWITCH			"PL_SWITCH"
+#define GPIO_PL_MICROPHONE7		"PL_MIC7"
+#define GPIO_PL_MICROPHONE6		"PL_MIC6"
+#define GPIO_PL_MICROPHONE5		"PL_MIC5"
+#define GPIO_PL_MICROPHONE4		"PL_MIC4"
+#define GPIO_PL_MICROPHONE3		"PL_MIC3"
+#define GPIO_PL_MICROPHONE2		"PL_MIC2"
+#define GPIO_PL_MICROPHONE1		"PL_MIC1"
+#define GPIO_PL_MICROPHONE0		"PL_MIC0"
 
-int GPIO_OFFSET						= 903;
 int GPIO_PS_BUTTON_OFFSET			= 903; //MIO#0
 int GPIO_PS_LED_R_OFFSET			= 955; //MIO#52 (MIO#0 + 52)
 int GPIO_PS_LED_G_OFFSET			= 956; //MIO#53 (MIO#0 + 53)
@@ -688,21 +703,20 @@ int write_offset_file(void)
 
 void assign_offsets(void)
 {
-	GPIO_OFFSET						= iMIO0_Offset;
-	GPIO_PS_BUTTON_OFFSET			= iMIO0_Offset; //MIO#0
-	GPIO_PS_LED_R_OFFSET			= iMIO0_Offset + 52; //MIO#52
-	GPIO_PS_LED_G_OFFSET			= iMIO0_Offset + 53; //MIO#53
-	GPIO_PL_LED_G_OFFSET			= iAXI_MAX_Offset; //pl_led_2bits(1)
-	GPIO_PL_LED_R_OFFSET			= iAXI_MAX_Offset - 1; //pl_led_2bits(0)
-	GPIO_PL_SWITCH_OFFSET			= iAXI_MAX_Offset - 2; //pl_sw_1bit
-	GPIO_PL_MICROPHONE7_OFFSET		= iAXI_MAX_Offset - 3; //Bit 7 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE6_OFFSET		= iAXI_MAX_Offset - 4; //Bit 6 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE5_OFFSET		= iAXI_MAX_Offset - 5; //Bit 5 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE4_OFFSET		= iAXI_MAX_Offset - 6; //Bit 4 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE3_OFFSET		= iAXI_MAX_Offset - 7; //Bit 3 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE2_OFFSET		= iAXI_MAX_Offset - 8; //Bit 2 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE1_OFFSET		= iAXI_MAX_Offset - 9; //Bit 1 of AXI_GPIO to microphone
-	GPIO_PL_MICROPHONE0_OFFSET		= iAXI_MAX_Offset - 10; //Bit 0 of AXI_GPIO to microphone
+	GPIO_PS_BUTTON_OFFSET			= get_gpio_cpp(GPIO_PS_BUTTON); //ps_button_1bit
+	GPIO_PS_LED_R_OFFSET			= get_gpio_cpp(GPIO_PS_LED_R); //ps_led_2bits(0)
+	GPIO_PS_LED_G_OFFSET			= get_gpio_cpp(GPIO_PS_LED_G); //ps_led_2bits(1)
+	GPIO_PL_LED_G_OFFSET			= get_gpio_cpp(GPIO_PL_LED_G); //pl_led_2bits(1)
+	GPIO_PL_LED_R_OFFSET			= get_gpio_cpp(GPIO_PL_LED_R); //pl_led_2bits(0)
+	GPIO_PL_SWITCH_OFFSET			= get_gpio_cpp(GPIO_PL_SWITCH); //pl_sw_1bit
+	GPIO_PL_MICROPHONE7_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE7); //Bit 7 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE6_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE6); //Bit 6 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE5_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE5); //Bit 5 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE4_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE4); //Bit 4 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE3_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE3); //Bit 3 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE2_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE2); //Bit 2 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE1_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE1); //Bit 1 of AXI_GPIO to microphone
+	GPIO_PL_MICROPHONE0_OFFSET		= get_gpio_cpp(GPIO_PL_MICROPHONE0); //Bit 0 of AXI_GPIO to microphone
 } //assign_offsets()
 
 int get_i2c_file_name(char * i2c_filename, size_t len)
@@ -735,11 +749,7 @@ int main( int argc, char *argv[] )
 	bool bmicrophone_present = true;
 	char i2c_file_name[11];
 
-	if (get_gpio_base())
-	{
-		//write_offset_file();
-		assign_offsets();
-	}
+	assign_offsets();
 
 	printf("################################################################################\n");
 	printf("Testing the MiniZed GPIO and ST Micro LIS2DS12 I2C motion & temperature sensor\n");

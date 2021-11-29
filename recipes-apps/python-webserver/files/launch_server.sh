@@ -54,7 +54,8 @@
 cd /home/root/webserver
 
 echo "Export and initialize the GPIO"
-source ./setup_gpio.sh
+source /usr/local/bin/gpio/gpio_common.sh
+export_gpio_map
 
 if [ -f ./server.py ]; then
     echo "Start the Python webserver in the background"

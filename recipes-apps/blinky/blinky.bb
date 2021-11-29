@@ -17,6 +17,8 @@ S = "${WORKDIR}"
 
 FILES_${PN} += "/home/root/*"
 
+DEPENDS_append = "gpio-utils"
+
 do_compile() {
 	     oe_runmake
 }

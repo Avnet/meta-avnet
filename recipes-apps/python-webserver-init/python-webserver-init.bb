@@ -17,7 +17,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 inherit update-rc.d
 
 INITSCRIPT_NAME = "python-webserver-init"
-INITSCRIPT_PARAMS = "start 99 S ."
+INITSCRIPT_PARAMS = "start 95 S ."
 
 
 do_install() {

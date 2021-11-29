@@ -1,34 +1,24 @@
 #!/bin/sh -e
 
 ### BEGIN INIT INFO
-# Provides: WPA cleanup on Ultra96
+# Provides: BT/WIFI LED control for Ultra96
 # Required-Start:
 # Required-Stop:
 # Default-Start:S
 # Default-Stop:0 6
-# Short-Description: Deletes wpa files in /var/run/wpa_supplicant on reboot
+# Short-Description: Turns BT/WIFI LEDS on or off
 # Description:
 ### END INIT INFO
 
-SYS_GPIO_FOLDER=/sys/class/gpio
+source /usr/local/bin/gpio/gpio_common.sh
 LED_ON=1
 LED_OFF=0
 
-for gpiochip in `ls $SYS_GPIO_FOLDER | grep gpiochip`
-do
-	label=$(cat $SYS_GPIO_FOLDER/$gpiochip/label)
-	base=$(cat $SYS_GPIO_FOLDER/$gpiochip/base)
+BT_LED=$(get_gpio BT_LED)
+WIFI_LED=$(get_gpio WIFI_LED)
 
-	if [[ "$label" == *"a0050000.gpio"* ]]; then
-		((BT_LED=base+0))
-		((WIFI_LED=base+1))
-
-		echo "   WIFI LED GPIO = $WIFI_LED"
-		echo "   BT   LED GPIO = $BT_LED"
-   
-		break
-	fi
-done
+echo "   WIFI LED GPIO = $WIFI_LED"
+echo "   BT   LED GPIO = $BT_LED"
 
 if [ -z "$BT_LED" ]; then
 	echo "ERROR: /etc/init.d/ultra96-radio-leds.sh : Could not find axi gpio device with base address 0xa0050000 !"
@@ -37,70 +27,34 @@ fi
 
 DESC="ultra96-radio-leds.sh will turn the WiFi and Bluetooth LEDs on and off on Ultra96"
 
+set_leds() {
+    value=$1
+    # Set their direction to output
+    # Turn each of the LEDs
+    export_gpio $WIFI_LED out $value
+    export_gpio $BT_LED out $value
+
+    # Release the sysfs GPIOs
+    unexport_gpio $WIFI_LED
+    unexport_gpio $BT_LED
+}
+
 start ()
 {
-   echo -n "Turning Ultra96 WiFi & Bluetooth LEDs ON..."
-   cd $SYS_GPIO_FOLDER
-   
-   if [ ! -d ./gpio$WIFI_LED ] ; 
-   then
-      # Export the sysfs GPIO if necessary
-      echo $WIFI_LED > export
-   fi
+    echo -n "Turning Ultra96 WiFi & Bluetooth LEDs ON..."
+    set_leds $LED_ON
 
-   if [ ! -d ./gpio$BT_LED ]; 
-   then
-      # Export the sysfs GPIO if necessary
-      echo $BT_LED > export
-   fi
-
-   # Set their direction to output
-   echo out > gpio$WIFI_LED/direction
-   echo out > gpio$BT_LED/direction
-
-   # Turn each of the LEDs on
-   echo $LED_ON > gpio$WIFI_LED/value
-   echo $LED_ON > gpio$BT_LED/value
-
-   # Release the sysfs GPIOs
-   echo $WIFI_LED > unexport
-   echo $BT_LED > unexport
-
-	echo "done."
-	echo " "
+    echo "done."
+    echo " "
 }
 
 stop ()
 {
-   echo -n "Turning Ultra96 WiFi & Bluetooth LEDs OFF..."
-   cd $SYS_GPIO_FOLDER
+    echo -n "Turning Ultra96 WiFi & Bluetooth LEDs OFF..."
+    set_leds $LED_OFF
 
-   if [ ! -d ./gpio$WIFI_LED ] ; 
-   then
-      # Export the sysfs GPIO if necessary
-      echo $WIFI_LED > export
-   fi
-
-   if [ ! -d ./gpio$BT_LED ]; 
-   then
-      # Export the sysfs GPIO if necessary
-      echo $BT_LED > export
-   fi
-
-   # Set their direction to output
-   echo out > gpio$WIFI_LED/direction
-   echo out > gpio$BT_LED/direction
-
-   # Turn each of the LEDs off
-   echo $LED_OFF > gpio$WIFI_LED/value
-   echo $LED_OFF > gpio$BT_LED/value
-
-   # Release the sysfs GPIOs
-   echo $WIFI_LED > unexport
-   echo $BT_LED > unexport
-
-	echo "done."
-	echo " "
+    echo "done."
+    echo " "
 }
 
 case "$1" in

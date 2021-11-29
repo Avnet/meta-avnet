@@ -56,7 +56,9 @@ DAEMON=/home/root/blinky
 #This script launches the application that will blink an LED mapped to
 #the Zynq or ZynqMP PS MIO
 #In this case the PS LED is mapped to MIO26
-DAEMON_OPTS="-m 26"
+source /usr/local/bin/gpio/gpio_common.sh
+PS_LED1=$(get_gpio PS_LED1)
+DAEMON_OPTS="-g $PS_LED1"
 
 start ()
 {
@@ -65,7 +67,7 @@ echo " "
 echo "*********************************************************************"
 echo "***                                                               ***"
 echo "***   Avnet UltraZed Out Of Box PetaLinux Build V1.2              ***"
-echo "***   The PS LED is mapped to ZynqMP MIO26                        ***"
+echo "***   The PS LED is mapped to $PS_LED1                            ***"
 echo "***                                                               ***"
 echo "*********************************************************************"
 echo " "
