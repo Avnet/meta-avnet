@@ -6,10 +6,8 @@
 
 };
 
-/* 
- * Vitis interrupt connected at PS interrupt offset [1] (29+1=30)
- * This description may be missing/incorrect in the pl.dtsi, so we add/fix it here
-*/
+/* Vitis interrupt connected at PS interrupt offset [1] (29+1=30) */
+/* This description may be missing/incorrect in the pl.dtsi, so we add/fix it here */
 &axi_intc_0 {
    interrupts = <0 30 1>; 
 };

@@ -100,10 +100,12 @@
 
 };
 
+/* Vitis interrupt connected at PS interrupt offset [6] (89+6=95) */
+/* This description may be missing/incorrect in the pl.dtsi, so we add/fix it here */
 &axi_intc_0 {
    compatible = "xlnx,xps-intc-1.00.a";
    interrupt-parent = <&gic>;
-   interrupts = <0 95 1>; // vitis interrupt connected at PS interrupt offset [6] (89+6=95) 
+   interrupts = <0 95 1>; 
 };
 &amba_pl {
    zyxclmm_drm {

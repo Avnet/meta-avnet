@@ -152,6 +152,12 @@
    no-1-8-v;   /* for 1.0 silicon */
 };
 
+/* Vitis interrupt connected at PS interrupt offset [5] (89+5=94) */
+/* This description may be missing/incorrect in the pl.dtsi, so we add/fix it here */
+&axi_intc_0 {
+   interrupts = <0 94 1>; 
+};
+
 &amba_pl {
    zyxclmm_drm {
       compatible = "xlnx,zocl";
