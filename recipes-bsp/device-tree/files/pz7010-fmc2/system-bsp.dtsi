@@ -10,6 +10,8 @@
 /* This description may be missing/incorrect in the pl.dtsi, so we add/fix it here */
 &axi_intc_0 {
    interrupts = <0 30 1>; 
+   interrupt-names = "irq";
+   interrupt-parent = <&intc>;
 };
 
 &amba_pl {

@@ -15,7 +15,6 @@
    interrupts = <0 29 1>; 
    interrupt-names = "irq";
    interrupt-parent = <&intc>;
-   interrupts = <0 29 4>;
 };
 
 &amba_pl {
