@@ -80,9 +80,6 @@ IMAGE_INSTALL_append_uz7ev-evcc = "\
 IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
         blinky \
         blinky-init \
-        python-webserver \
-        python-webserver-init \
-        user-led-test \
         user-switch-test \
 "
 

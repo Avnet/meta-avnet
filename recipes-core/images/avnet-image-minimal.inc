@@ -111,6 +111,12 @@ IMAGE_INSTALL_append_uz7ev-evcc-hdmi-v-n = "\
         nvme-cli \
 "
 
+IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
+        python-webserver \
+        python-webserver-init \
+        user-led-test \
+"
+
 IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
         nvme-cli \
 "
