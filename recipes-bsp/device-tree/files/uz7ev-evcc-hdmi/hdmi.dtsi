@@ -71,28 +71,25 @@
     xlnx,video-width = <8>;
 };
 
-/ {
-    i2c_mux: amba {
-        i2c@ff030000 {
-            i2cswitch@70 {
-                i2c@0 {
+&i2c1 {
+    i2cswitch@70 {
+        i2c@0 {
+            /* idt8t49n241 i2c clock generator */
+            idt8t49n24x: clock-generator@6c {
+                status = "okay";
+                compatible = "idt,idt8t49n241";
+                #clock-cells = <1>;
+                reg = <0x6c>;
 
-                    /* idt8t49n241 i2c clock generator */
-                    idt8t49n24x: clock-generator@6c {
-                        status = "okay";
-                        compatible = "idt,idt8t49n241";
-                        #clock-cells = <1>;
-                        reg = <0x6c>;
-
-                        /* input clock(s); the XTAL is hard-wired on the ZCU104 board */
-                        clocks = <&refhdmi>;
-                        clock-names = "input-xtal";
-                    };
-                };
+                /* input clock(s); the XTAL is hard-wired on the ZCU104 board */
+                clocks = <&refhdmi>;
+                clock-names = "input-xtal";
             };
         };
     };
+};
 
+/ {
     hdmi_tx_clk: amba_pl@0 {
 
         /* 38.880MHz reference crystal for 8t49n241 clock for HDMI */
