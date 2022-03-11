@@ -1,0 +1,20 @@
+/include/ "system-conf.dtsi"
+/include/ "openamp.dtsi"
+
+#include "include/dt-bindings/input/input.h"
+#include "include/dt-bindings/interrupt-controller/irq.h"
+#include "include/dt-bindings/gpio/gpio.h"
+#include "include/dt-bindings/pinctrl/pinctrl-zynqmp.h"
+#include "include/dt-bindings/phy/phy.h"
+
+/ {
+   chosen {
+      bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M";
+   };
+
+   xlnk {
+      compatible = "xlnx,xlnk-1.0";
+   };
+
+};
+
