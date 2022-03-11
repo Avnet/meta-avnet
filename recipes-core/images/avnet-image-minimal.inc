@@ -121,6 +121,10 @@ IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
         nvme-cli \
 "
 
+IMAGE_INSTALL_remove_xbzu1-sbc = "\
+        pmic-prog \
+"
+
 IMAGE_INSTALL_append_minized-sbc = "\
         e2fsprogs \
         e2fsprogs-resize2fs \
