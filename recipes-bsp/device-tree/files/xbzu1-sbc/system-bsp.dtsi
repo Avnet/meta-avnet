@@ -1,6 +1,3 @@
-/include/ "system-conf.dtsi"
-/* /include/ "openamp.dtsi" */
-
 #include "include/dt-bindings/input/input.h"
 #include "include/dt-bindings/interrupt-controller/irq.h"
 #include "include/dt-bindings/gpio/gpio.h"
@@ -19,13 +16,18 @@
 };
 
 /* QSPI partitions are defined with petalinux-config and described in system.conf.dtsi */
-&flash0 {
-   compatible = "n25q128a11","jedec,spi-nor";
-   reg = <0x0>;
-   spi-tx-bus-width = <1>;
-   spi-rx-bus-width = <4>;
-   spi-max-frequency = <50000000>;
-   #address-cells = <1>;
-   #size-cells = <1>;
+&qspi { /* MIO 0-5 - U10 */
+   flash@0 { /* ISSI IS25WP256E */
+      compatible = "mt25qu256a", "jedec,spi-nor"; /* 32MB */
+      #address-cells = <1>;
+      #size-cells = <1>;
+      reg = <0>;
+      spi-tx-bus-width = <1>;
+      spi-rx-bus-width = <4>;
+      spi-max-frequency = <50000000>; /* 50MHz */
+   };
+
 };
+
+
 
