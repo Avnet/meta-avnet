@@ -72,7 +72,7 @@ IMAGE_INSTALL_remove_zynqmp = "\
         packagegroup-core-ssh-dropbear \
 "
 
-IMAGE_INSTALL_remove_xbzu1-sbc = "\
+IMAGE_INSTALL_remove_zub1cg-sbc = "\
         gpio-utils \
         packagegroup-petalinux-gstreamer \
         packagegroup-petalinux-matchbox \

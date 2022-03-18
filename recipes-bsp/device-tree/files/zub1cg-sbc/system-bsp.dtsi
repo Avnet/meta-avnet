@@ -6,7 +6,7 @@
 
 / {
    chosen {
-      bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk1p2 rw rootwait cma=512M";
+      bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M";
    };
 
    xlnk {
@@ -29,5 +29,12 @@
 
 };
 
-
+/* SD1 for SD card boot */
+/* SD1 with level shifter */
+/* only supports 3.3V, no level shifter */
+&sdhci1 {
+   status = "okay";
+   no-1-8-v;
+   disable-wp;
+};
 
