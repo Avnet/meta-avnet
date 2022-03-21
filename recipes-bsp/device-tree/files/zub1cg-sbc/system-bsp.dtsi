@@ -15,6 +15,16 @@
 
 };
 
+&gem2 {
+   status = "okay";
+   local-mac-address = [00 0a 35 00 02 90];
+   phy-mode = "rgmii-id";
+   phy-handle = <&phy0>;
+   phy0: phy@7 {
+      reg = <0x7>;
+   };
+};
+
 /* QSPI partitions are defined with petalinux-config and described in system.conf.dtsi */
 &qspi { /* MIO 0-5 - U10 */
    flash@0 { /* ISSI IS25WP256E */
