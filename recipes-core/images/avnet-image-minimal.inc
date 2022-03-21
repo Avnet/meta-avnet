@@ -101,6 +101,24 @@ IMAGE_INSTALL_append_uz = "\
         yavta \
 "
 
+IMAGE_INSTALL_append_zub1cg-sbc = "\
+        blinky \
+        blinky-init \
+        libdrm \
+        libdrm-kms \
+        libdrm-tests \
+        libstdc++ \
+        libv4l \
+        mac-eeprom-config \
+        mac-eeprom-config-init \
+        media-ctl \
+        python3 \
+        python3-core \
+        python3-dbus \
+        python3-pygobject \
+        yavta \
+"
+
 IMAGE_INSTALL_append_uz7ev-evcc = "\
         nvme-cli \
         user-led-test \

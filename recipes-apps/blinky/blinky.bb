@@ -11,7 +11,7 @@ SRC_URI = "file://linux_ps_led_blink.c \
 	   file://Makefile \
 		  "
 
-COMPATIBLE_MACHINE = "uz|pz"
+COMPATIBLE_MACHINE = "uz|pz|zub1cg-sbc"
 
 S = "${WORKDIR}"
 

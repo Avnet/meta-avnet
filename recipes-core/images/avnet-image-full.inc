@@ -72,21 +72,6 @@ IMAGE_INSTALL_remove_zynqmp = "\
         packagegroup-core-ssh-dropbear \
 "
 
-IMAGE_INSTALL_remove_zub1cg-sbc = "\
-        gpio-utils \
-        packagegroup-petalinux-gstreamer \
-        packagegroup-petalinux-matchbox \
-        packagegroup-petalinux-opencv-dev \
-        packagegroup-petalinux-opencv \
-        packagegroup-petalinux-python-modules \
-        packagegroup-petalinux-self-hosted \
-        packagegroup-petalinux-v4lutils \
-        packagegroup-petalinux-vitisai-dev \
-        packagegroup-petalinux-vitisai \
-        packagegroup-petalinux-x11 \
-        pciutils \
-"
-
 IMAGE_INSTALL_append_uz7ev-evcc = "\
         user-led-test \
         user-switch-test \
