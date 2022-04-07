@@ -11,10 +11,11 @@ HDMI_FILES = " \
 "
 
 QUADCAM_FILES = " \
-    file://isp_tune.sh;subdir=${FF} \
     file://launch_quad_cam_gstreamer.sh;subdir=${FF} \
+    file://launch_quad_cam_gstreamer_960x540.sh;subdir=${FF} \
     file://launch_one_cam_gstreamer.sh;subdir=${FF} \
     file://media_cfg.sh;subdir=${FF} \
+    file://media_cfg_960x540.sh;subdir=${FF} \
 "
 
 VCU_FILES = " \
