@@ -43,6 +43,7 @@ SRC_URI_uz7ev-evcc-quadcam-h-v = " \
     ${HDMI_FILES} \
     ${VCU_FILES} \
     file://launch_quad_cam_vcu_gstreamer.sh;subdir=${FF}  \
+    file://launch_quad_cam_vcu_gstreamer_960x540.sh;subdir=${FF}  \
 "
 
 do_install() {
