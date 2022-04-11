@@ -47,34 +47,34 @@ media-ctl -d $MEDIA_CTL_DEV -V "\"b01d0000.v_demosaic\":1 [fmt:RBG888_1X24/1920x
 media-ctl -d $MEDIA_CTL_DEV -V "\"b01f0000.v_demosaic\":0 [fmt:SGRBG8_1X8/1920x1080 field:none]"
 media-ctl -d $MEDIA_CTL_DEV -V "\"b01f0000.v_demosaic\":1 [fmt:RBG888_1X24/1920x1080 field:none]"
 
-#set csc 0 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0000000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0000000.v_proc_ss\":1 [fmt:RBG888_1X24/1920x1080 field:none]"
-
-#set csc 1 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0010000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0010000.v_proc_ss\":1 [fmt:RBG888_1X24/1920x1080 field:none]"
-
-#set csc 2 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0020000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0020000.v_proc_ss\":1 [fmt:RBG888_1X24/1920x1080 field:none]"
-
-#set csc 3 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0030000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0030000.v_proc_ss\":1 [fmt:RBG888_1X24/1920x1080 field:none]"
-
 #set scaler 0 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0080000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0080000.v_proc_ss\":1 [fmt:UYVY8_1X16/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0000000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0000000.v_proc_ss\":1 [fmt:RBG888_1X24/960x540 field:none]"
 
 #set scaler 1 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b00c0000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b00c0000.v_proc_ss\":1 [fmt:UYVY8_1X16/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0010000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0010000.v_proc_ss\":1 [fmt:RBG888_1X24/960x540 field:none]"
 
 #set scaler 2 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0100000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0100000.v_proc_ss\":1 [fmt:UYVY8_1X16/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0020000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0020000.v_proc_ss\":1 [fmt:RBG888_1X24/960x540 field:none]"
 
 #set scaler 3 node
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0140000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
-media-ctl -d $MEDIA_CTL_DEV -V "\"b0140000.v_proc_ss\":1 [fmt:UYVY8_1X16/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0030000.v_proc_ss\":0 [fmt:RBG888_1X24/1920x1080 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0030000.v_proc_ss\":1 [fmt:RBG888_1X24/960x540 field:none]"
+
+#set csc 0 node
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0080000.v_proc_ss\":0 [fmt:RBG888_1X24/960x540 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0080000.v_proc_ss\":1 [fmt:VYYUYY8_1X24/960x540 field:none]"
+
+#set csc 1 node
+media-ctl -d $MEDIA_CTL_DEV -V "\"b00c0000.v_proc_ss\":0 [fmt:RBG888_1X24/960x540 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b00c0000.v_proc_ss\":1 [fmt:VYYUYY8_1X24/960x540 field:none]"
+
+#set csc 2 node
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0100000.v_proc_ss\":0 [fmt:RBG888_1X24/960x540 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0100000.v_proc_ss\":1 [fmt:VYYUYY8_1X24/960x540 field:none]"
+
+#set csc 3 node
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0140000.v_proc_ss\":0 [fmt:RBG888_1X24/960x540 field:none]"
+media-ctl -d $MEDIA_CTL_DEV -V "\"b0140000.v_proc_ss\":1 [fmt:VYYUYY8_1X24/960x540 field:none]"

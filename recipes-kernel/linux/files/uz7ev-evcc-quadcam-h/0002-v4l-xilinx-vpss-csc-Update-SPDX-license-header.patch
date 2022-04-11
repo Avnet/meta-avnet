@@ -1,0 +1,32 @@
+From 0e88a99d0504943cfd7455573eec53063dacb7e8 Mon Sep 17 00:00:00 2001
+From: Vishal Sagar <vishal.sagar@xilinx.com>
+Date: Thu, 12 Aug 2021 19:06:17 +0530
+Subject: [PATCH 2/2] v4l: xilinx: vpss-csc: Update SPDX license header
+
+Update the license to SPDX header.
+
+Signed-off-by: Vishal Sagar <vishal.sagar@xilinx.com>
+---
+ drivers/media/platform/xilinx/xilinx-vpss-csc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/xilinx/xilinx-vpss-csc.c b/drivers/media/platform/xilinx/xilinx-vpss-csc.c
+index b9ee258d89e3..dda24a07e788 100644
+--- a/drivers/media/platform/xilinx/xilinx-vpss-csc.c
++++ b/drivers/media/platform/xilinx/xilinx-vpss-csc.c
+@@ -1,11 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
+ /*
+  * Xilinx VPSS Color Space Converter
+  *
+  * Copyright (C) 2017 Xilinx, Inc.
+  *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+  */
+ 
+ #include <linux/device.h>
+-- 
+2.17.1
+
