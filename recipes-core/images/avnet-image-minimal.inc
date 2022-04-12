@@ -109,6 +109,8 @@ IMAGE_INSTALL_append_zub1cg-sbc = "\
         libdrm-tests \
         libstdc++ \
         libv4l \
+        mac-eeprom-config \
+        mac-eeprom-config-init \
         media-ctl \
         python3 \
         python3-core \
