@@ -66,6 +66,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         xrt \
         xrt-dev \
         zocl \
+        spidev-test \
 "
 
 IMAGE_INSTALL_remove_zynqmp = "\

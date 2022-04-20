@@ -308,9 +308,9 @@
 
 &spi0 {
    num-cs = <1>;
-   spidev@0x00 {
-      compatible = "rohm,dh2228fv";
-      spi-max-frequency = <1000000>;
+   accel@0x00 {
+      compatible = "st,lsm6dsl";
+      spi-max-frequency = <10000000>;
       reg = <0>;
    };
 };
