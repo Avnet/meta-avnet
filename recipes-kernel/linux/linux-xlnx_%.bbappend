@@ -41,5 +41,6 @@ SRC_URI_append_uz7ev-evcc-quadcam-h = " \
         file://0013-media-i2c-mars-Wait-for-sometime-before-mars-sensor-.patch \
         file://0014-media-i2c-mars-Wait-for-correct-sensor-initializatio.patch \
         file://0015-media-i2c-max96705-fix-color-issue-due-to-bad-frame-.patch \
+        file://0016-media-i2c-update-mars-drivers-for-REV1-serializers.patch \
         file://0001-v4l-xilinx-multi-scaler-change-print-level-from-erro.patch \
 "
