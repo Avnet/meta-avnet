@@ -76,7 +76,7 @@
          reg = <0>;
          /* Ethernet MAC ID EEPROM */
          mac_eeprom@51 { /* U5 on UZ3EG IOCC & PCIEC and U7 on the UZ7EV EVCC */
-            compatible = "at,24c08";
+            compatible = "atmel,24c02";
             reg = <0x51>;
          };
 
@@ -98,7 +98,7 @@
 
          
          clock_eeprom@52 { /* U5 on the UZ7EV EVCC */
-            compatible = "at,24c08";
+            compatible = "atmel,24c02";
             reg = <0x52>;
          };
       };
