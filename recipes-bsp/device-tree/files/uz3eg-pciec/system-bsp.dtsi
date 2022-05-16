@@ -19,6 +19,10 @@
       compatible = "xlnx,xlnk-1.0";
    };
 
+   chosen {
+      xlnx,eeprom= &mac_eeprom;
+   };
+
    clock_5p49v5935_ref25: ref25m { /* 25MHz reference crystal (internal) - U5 */
       compatible = "fixed-clock";
       #clock-cells = <0>;
@@ -47,7 +51,6 @@
 
 &gem3 {
    status = "okay";
-   local-mac-address = [00 0a 35 00 02 90];
    phy-mode = "rgmii-id";
    phy-handle = <&phy0>;
    phy0: phy@9 {
@@ -69,7 +72,7 @@
          #size-cells = <0>;
          reg = <0>;
          /* Ethernet MAC ID EEPROM */
-         mac_eeprom@51 { /* U5 on UZ3EG IOCC & PCIEC and U7 on the UZ7EV EVCC */
+         mac_eeprom: mac_eeprom@51 { /* U5 on UZ3EG IOCC & PCIEC and U7 on the UZ7EV EVCC */
             compatible = "atmel,24c02";
             reg = <0x51>;
          };
