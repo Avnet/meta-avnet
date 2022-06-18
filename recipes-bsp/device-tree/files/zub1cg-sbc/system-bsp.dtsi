@@ -13,6 +13,33 @@
       compatible = "xlnx,xlnk-1.0";
    };
 
+   vdd_icm_fixed: vdd_icm_fixed {
+         compatible = "regulator-fixed";
+         regulator-name = "vdd_icm_fixed";
+         regulator-min-microvolt = <3300000>;
+         regulator-max-microvolt = <3300000>;
+         regulator-always-on;
+         regulator-boot-on;
+   };
+   
+   vddio_icm_fixed: vddio_icm_fixed {
+         compatible = "regulator-fixed";
+         regulator-name = "vddio_icm_fixed";
+         regulator-min-microvolt = <3300000>;
+         regulator-max-microvolt = <3300000>;
+         regulator-always-on;
+         regulator-boot-on;
+   };
+
+   vref_reg: vref_reg {
+         compatible = "regulator-fixed";
+         regulator-name = "vref_reg";
+         regulator-min-microvolt = <3300000>;
+         regulator-max-microvolt = <3300000>;
+         regulator-always-on;
+         regulator-boot-on;
+   };
+   
 };
 
 &gem2 {
@@ -48,3 +75,39 @@
    disable-wp;
 };
 
+
+&axi_quad_spi_0 {
+   #address-cells = <1>;
+   #size-cells = <0>;
+
+   invn_icm_spi: icm42688@0 {
+      compatible = "invensense,icm42688";
+      reg = <0>;
+      spi-max-frequency = <24000000>;
+      spi-cpol;
+      spi-cpha;
+      interrupt-parent = <&gic>;
+      interrupts = <0 94 1>; // 89+5
+   };
+
+   click_adc: mcp320x@1 {
+      compatible = "microchip,mcp3201";
+      spi-max-frequency = <1000000>;
+      reg = <1>;
+      vref-supply = <&vref_reg>;
+      #io-channel-cells = <1>;
+   };
+
+};
+
+&axi_iic_2 {
+   #address-cells = <1>;
+   #size-cells = <0>;
+   clock-frequency = <100000>;
+
+   invn_icp_i2c: inv-icp10100-i2c@63 {
+      compatible = "invensense,icp10100";
+      reg = <63>;
+   };
+
+};

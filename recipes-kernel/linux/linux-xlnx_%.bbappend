@@ -40,3 +40,9 @@ SRC_URI_append_uz7ev-evcc-quadcam-h = " \
                 file://0012-avt_multi_sensor_fmc-Add-dependency-on-REGULATOR.patch \
                 file://0013-max20087-Remove-unused-members.patch \
 "
+
+SRC_URI_append_zub1cg-sbc = " \
+                file://0001-iio-imu-inv_icm42600-fix-device_get_match_data-issue.patch \
+                file://0002-iio-imu-inv_icm42600-add-46288-support.patch \
+"
+
