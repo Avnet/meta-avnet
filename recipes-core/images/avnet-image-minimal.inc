@@ -98,8 +98,6 @@ IMAGE_INSTALL_append_uz = "\
         libdrm-tests \
         libstdc++ \
         libv4l \
-        mac-eeprom-config \
-        mac-eeprom-config-init \
         media-ctl \
         pciutils \
         performance-tests \
