@@ -147,8 +147,6 @@ IMAGE_INSTALL_append_pz = "\
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
         i2c-tools \
-        mac-eeprom-config-init \
-        mac-eeprom-config \
         parted \
         util-linux-mkfs \
 "
