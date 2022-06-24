@@ -10,7 +10,6 @@ COMPATIBLE_MACHINE = "u96v2-sbc"
 SRC_URI = "git://github.com/linux4sam/linux-at91.git;protocol=git;branch=${BRANCH};subpath=drivers/net/wireless/microchip/wilc1000 \
            file://0001-ultra96-modifications-15.5.patch \
            "
-SRC_URI[sha256sum] = "a9c0d5259265632da32b17248cab6cd2fdee1e1ea06ee45407b90980e6b80296"
 
 # Tag: wilc_linux_15_3_1
 SRCREV = "f828d684531f354f0ca6fcd2cdf12c8251410cba"
