@@ -60,7 +60,7 @@ IMAGE_INSTALL:append:zynqmp = "\
         packagegroup-petalinux-vitisai \
         packagegroup-petalinux-x11 \
         pciutils \
-        python-pyserial \
+        python3-pyserial \
         python3 \
         python3-pip \
         xrt \
