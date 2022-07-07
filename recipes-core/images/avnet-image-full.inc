@@ -90,7 +90,6 @@ IMAGE_INSTALL:append:uz7ev-evcc-hdmi = "\
 
 IMAGE_INSTALL:append:minized-sbc = "\
         bluez5 \
-        bluez5-doc \
         bluez5-obex \
         dialog-control \
         get-gpio-offsets \
