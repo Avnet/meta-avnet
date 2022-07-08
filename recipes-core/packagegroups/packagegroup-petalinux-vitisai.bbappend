@@ -1,3 +1,3 @@
-RDEPENDS_${PN}_remove = "\
+RDEPENDS:${PN}:remove = "\
     dnndk \
 "

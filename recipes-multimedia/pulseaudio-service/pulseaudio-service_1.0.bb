@@ -10,16 +10,16 @@ SRC_URI += "\
     file://pulseaudio.service \
     "
 
-SYSTEMD_SERVICE_${PN} = "pulseaudio.service"
+SYSTEMD_SERVICE:${PN} = "pulseaudio.service"
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     /etc/systemd/system/pulseaudio.service \
 "
 
 USERADD_PACKAGES = "pulseaudio-service"
-GROUPMEMS_PARAM_pulseaudio-service = " --add root --group audio"
+GROUPMEMS_PARAM:pulseaudio-service = " --add root --group audio"
 
-do_install_append() {
+do_install:append() {
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -d ${D}/etc/systemd/system
         install -m 0644 ${WORKDIR}/pulseaudio.service ${D}/etc/systemd/system/pulseaudio.service

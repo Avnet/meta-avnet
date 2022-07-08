@@ -1,2 +1,2 @@
-PACKAGECONFIG_append = " libav "
+PACKAGECONFIG:append = " libav "
 

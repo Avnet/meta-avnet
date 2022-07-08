@@ -12,7 +12,7 @@ SRC_URI = "file://python-webserver-init \
 
 S = "${WORKDIR}"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit update-rc.d
 
@@ -25,5 +25,5 @@ do_install() {
     install -m 0755 ${S}/python-webserver-init ${D}${sysconfdir}/init.d/python-webserver-init
 }
 
-FILES_${PN} += "${sysconfdir}/*"
+FILES:${PN} += "${sysconfdir}/*"
 

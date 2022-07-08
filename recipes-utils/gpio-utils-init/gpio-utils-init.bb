@@ -21,4 +21,4 @@ do_install() {
     install -m 0755 ${S}/gpio-utils-init ${D}${sysconfdir}/init.d
 }
 
-FILES_${PN} += "${sysconfdir}/init.d/gpio-utils-init"
+FILES:${PN} += "${sysconfdir}/init.d/gpio-utils-init"

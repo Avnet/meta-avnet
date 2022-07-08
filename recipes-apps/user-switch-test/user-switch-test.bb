@@ -15,9 +15,9 @@ SRC_URI = "file://linux_user_switch_test.c \
 
 S = "${WORKDIR}"
 
-FILES_${PN} += "/home/root/*"
+FILES:${PN} += "/home/root/*"
 
-DEPENDS_append = "gpio-utils"
+DEPENDS:append = "gpio-utils"
 
 do_compile() {
 	     oe_runmake

@@ -1,11 +1,11 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI_append = " file://main.conf \
+SRC_URI:append = " file://main.conf \
 "
 
-do_install_append () {
+do_install:append () {
     install -d ${D}${sysconfdir}/connman
     install -m 0755 ${WORKDIR}/main.conf ${D}${sysconfdir}/connman/
 }
 
-FILES_${PN} += "${sysconfdir}/main.conf"
+FILES:${PN} += "${sysconfdir}/main.conf"

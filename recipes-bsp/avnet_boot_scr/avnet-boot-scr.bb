@@ -10,20 +10,20 @@ INHIBIT_DEFAULT_DEPS = "1"
 
 COMPATIBLE_MACHINE = "minized-sbc|mz|pz|u96v2-sbc|uz"
 
-SRC_URI_minized-sbc = " \
+SRC_URI:minized-sbc = " \
             file://avnet_emmc.txt \
             file://avnet_jtag.txt \
             file://avnet_prog_emmc.txt \
             file://avnet_qspi.txt \
             "
 
-SRC_URI_mz = " \
+SRC_URI:mz = " \
             file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_qspi.txt \
             "
 
-SRC_URI_pz = " \
+SRC_URI:pz = " \
             file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_mmc.txt \
@@ -36,7 +36,7 @@ SRC_URI_u96v2-sbc = " \
             file://avnet_jtag.txt \
             "
 
-SRC_URI_uz = " \
+SRC_URI:uz = " \
             file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_mmc_ext4.txt \

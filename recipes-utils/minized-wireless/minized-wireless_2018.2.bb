@@ -36,14 +36,14 @@ do_install() {
 
 PACKAGES =+ "${PN}-mfgtest"
 
-FILES_${PN} = " \
+FILES:${PN} = " \
 	/lib/firmware/brcm/brcmfmac43430-sdio.bin \
 	/lib/firmware/brcm/brcmfmac43430-sdio.clm_blob \
 	/lib/firmware/brcm/brcmfmac43430-sdio.txt \
 	/etc/firmware/BCM43430A1.hcd \
 "
 
-FILES_${PN}-mfgtest = " \
+FILES:${PN}-mfgtest = " \
 	/usr/bin/wl \
 "
 

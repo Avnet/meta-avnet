@@ -20,7 +20,7 @@ COMPATIBLE_MACHINE = "minized-sbc|mz|pz|uz|u96v2-sbc"
 
 S = "${WORKDIR}"
 
-RDEPENDS_${PN} += "gpio-utils-init"
+RDEPENDS:${PN} += "gpio-utils-init"
 
 do_install() {
 
@@ -39,7 +39,7 @@ do_install() {
     install -m 0644 ${S}/gpio.h ${INC_DIR}
 }
 
-FILES_${PN} += " \
+FILES:${PN} += " \
     ${prefix}/local/bin/gpio/gpio_map.sh \
     ${prefix}/local/bin/gpio/gpio_common.sh \
     ${prefix}/local/bin/gpio/gpio_common.py \
