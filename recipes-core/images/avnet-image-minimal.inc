@@ -1,6 +1,11 @@
 require recipes-core/images/petalinux-image-common.inc
 
-# append what's already defined by petalinux (build/conf/plnxtool.conf)
+# append what is already defined by petalinux (build/conf/plnxtool.conf)
+# this will include what the user adds or removes via "petalinux-config -c rootfs"
+IMAGE_INSTALL_append= "\
+        ${IMAGE_INSTALL_pn-petalinux-image-minimal} \
+"
+
 IMAGE_INSTALL_append_zynq = "\
         haveged \
         mtd-utils \
@@ -10,10 +15,16 @@ IMAGE_INSTALL_append_zynq = "\
         udev-extraconf \
 "
 
-# remove unnecessary packages to fit in qspi
+# remove unnecessary packages found in
+# ${IMAGE_INSTALL_pn-petalinux-image-minimal} (build/conf/plnxtool.conf)
+# that make the OS image too large to fit in QSPI
 IMAGE_INSTALL_remove_zynq = "\
+        bridge-utils \
+        can-utils \
         htop \
         meson \
+        openssh-sftp-server \
+        pciutils \
 "
 
 IMAGE_INSTALL_append_zynqmp = "\
@@ -87,8 +98,6 @@ IMAGE_INSTALL_append_uz = "\
         libdrm-tests \
         libstdc++ \
         libv4l \
-        mac-eeprom-config \
-        mac-eeprom-config-init \
         media-ctl \
         pciutils \
         performance-tests \
@@ -160,8 +169,6 @@ IMAGE_INSTALL_append_pz = "\
         e2fsprogs-e2fsck \
         e2fsprogs-mke2fs \
         i2c-tools \
-        mac-eeprom-config-init \
-        mac-eeprom-config \
         parted \
         util-linux-mkfs \
 "

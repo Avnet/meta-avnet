@@ -56,8 +56,8 @@ do_configure_append_uz7ev-evcc-hdmi () {
 	fi
 }
 
-# For uz7ev-evcc-quadcam BSP only
-do_configure_append_uz7ev-evcc-quadcam () {
+# For uz7ev-evcc-quadcam-h BSP only
+do_configure_append_uz7ev-evcc-quadcam-h () {
 	if [ -e ${WORKDIR}/fmc-quad.dtsi ]; then
 		cp ${WORKDIR}/fmc-quad.dtsi ${DT_FILES_PATH}/fmc-quad.dtsi
 		echo '#include "fmc-quad.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts

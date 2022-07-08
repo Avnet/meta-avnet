@@ -1,0 +1,105 @@
+From 4d3b83e100e0c3fab7298b0ea70cb84df8c45990 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Mon, 2 May 2022 14:37:56 +0000
+Subject: [PATCH] media: i2c: update mars drivers for REV1 serializers
+
+The new REV1 serializers have the HIM pin high, so we have to setup the
+serializers and deserializer to HIM mode.
+
+The serializers can be set with HIM off or on (Rev0 or Rev1).
+HACK: To unify all serializers, we send a broadcast signal from the
+max9286 driver to force serializers to HIM ON
+
+A proper solution would need some rework in the drivers' initialization
+sequence
+(configure the max9286 with HIM off, probe the HIM off cameras to set
+them with HIM on, reconfigure the max9286 with HIM on, probe the
+remaining HIM on cameras)
+---
+ drivers/media/i2c/max9286.c  | 49 +++++++++++++++++++++++++++++++++++-
+ drivers/media/i2c/max96705.c |  2 +-
+ 2 files changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index ba6428ae99f9..874c5c320f9c 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -1032,6 +1032,8 @@ static void max9286_v4l2_unregister(struct max9286_priv *priv)
+ 
+ static int max9286_setup(struct max9286_priv *priv)
+ {
++	int ret;
++
+ 	/*
+ 	 * Link ordering values for all enabled links combinations. Orders must
+ 	 * be assigned sequentially from 0 to the number of enabled links
+@@ -1111,7 +1113,52 @@ static int max9286_setup(struct max9286_priv *priv)
+ 	 */
+ 	max9286_write(priv, 0x63, 0);
+ 	max9286_write(priv, 0x64, 0);
+-	max9286_write(priv, 0x1C, 0x06); //Reserved bytes [3:0] must be = 0x06
++	max9286_write(priv, 0x1C, 0x06); // HIM OFF on all links, Reserved bytes [3:0] must be = 0x06
++
++	/*
++	 * Wait for 2ms to allow the link to resynchronize after the
++	 * configuration change.
++	 */
++	usleep_range(2000, 5000);
++
++	/*
++	 * HACK: some serializers can be set with HIM off or on
++	 * To unify all serializers, we send a broadcast signal to force serializers to HIM ON
++	 */
++
++	max9286_write(priv, 0x0a, 0xff);
++
++	/*
++	 * We must sleep after any change to the forward or reverse channel
++	 * configuration.
++	 */
++	usleep_range(3000, 5000);
++
++	/* Create the dummy I2C client to send broadcast signal to all serializers */
++
++	struct i2c_client *broadcast = i2c_new_dummy_device(priv->client->adapter, 0x40);
++	if (IS_ERR(broadcast)) {
++		ret = PTR_ERR(broadcast);
++		return ret;
++	}
++
++	ret = i2c_smbus_write_byte_data(broadcast, 0x4d, 0xc0);
++	if (ret < 0)
++		dev_err(&priv->client->dev,
++			"%s: register 0x%02x write failed (%d)\n",
++			__func__, 0x4d, 0xc0);
++
++	i2c_unregister_device(broadcast);
++
++	max9286_write(priv, 0x1C, 0Xf6); // HIM ON on all links, Reserved bytes [3:0] must be = 0x06
++
++	/*
++	 * Wait for 2ms to allow the link to resynchronize after the
++	 * configuration change.
++	 */
++	usleep_range(2000, 5000);
++
++	max9286_reverse_channel_setup(priv, 170);
+ 
+ 	/*
+ 	 * Wait for 2ms to allow the link to resynchronize after the
+diff --git a/drivers/media/i2c/max96705.c b/drivers/media/i2c/max96705.c
+index cc47bfb1417e..991cdcece76a 100644
+--- a/drivers/media/i2c/max96705.c
++++ b/drivers/media/i2c/max96705.c
+@@ -206,7 +206,7 @@ int max96705_set_high_threshold(struct max96705_device *dev, bool enable)
+ 	}
+ 
+ 	retry = 5;
+-	write_cmd = 0x5F;
++	write_cmd = 0xAF;
+ 
+ 	while (retry--) {
+ 		ret = max96705_write(dev, 0x97, write_cmd);
+-- 
+2.17.1
+
