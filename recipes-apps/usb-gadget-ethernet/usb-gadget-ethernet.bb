@@ -17,5 +17,5 @@ do_install() {
 	     install -m 0755 usb_gadget_ethernet.sh ${D}/home/root
 }
 
-FILES_${PN} += "/home/root/usb_gadget_ethernet.sh \
+FILES:${PN} += "/home/root/usb_gadget_ethernet.sh \
                "

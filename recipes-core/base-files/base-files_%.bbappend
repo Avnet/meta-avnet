@@ -1,4 +1,4 @@
-do_install_append_uz7ev-evcc-hdmi () {
+do_install:append:uz7ev-evcc-hdmi () {
 	echo "alias ls='ls --color=auto'" >> ${D}${sysconfdir}/profile
 	echo "alias ll='ls --color=auto -l'" >> ${D}${sysconfdir}/profile
 	echo "alias la='ls --color=auto -la'" >> ${D}${sysconfdir}/profile

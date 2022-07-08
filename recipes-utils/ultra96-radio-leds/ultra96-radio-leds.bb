@@ -12,7 +12,7 @@ SRC_URI = "file://ultra96-radio-leds.sh \
 
 S = "${WORKDIR}"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit update-rc.d
 
@@ -24,4 +24,4 @@ do_install() {
     install -m 0755 ${S}/ultra96-radio-leds.sh ${D}${sysconfdir}/init.d/ultra96-radio-leds.sh
 }
 
-FILES_${PN} += "${sysconfdir}/*"
+FILES:${PN} += "${sysconfdir}/*"

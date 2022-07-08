@@ -1,6 +1,6 @@
 require recipes-core/images/avnet-image-minimal.inc
 
-IMAGE_INSTALL_append_zynq = "\
+IMAGE_INSTALL:append:zynq = "\
         bc \
         bonnie++ \
         bridge-utils \
@@ -33,7 +33,7 @@ IMAGE_INSTALL_append_zynq = "\
         zocl \
 "
 
-IMAGE_INSTALL_append_zynqmp = "\
+IMAGE_INSTALL:append:zynqmp = "\
         bridge-utils \
         cmake \
         dnf \
@@ -68,27 +68,27 @@ IMAGE_INSTALL_append_zynqmp = "\
         zocl \
 "
 
-IMAGE_INSTALL_remove_zynqmp = "\
+IMAGE_INSTALL:remove:zynqmp = "\
         packagegroup-core-ssh-dropbear \
 "
 
-IMAGE_INSTALL_append_uz7ev-evcc = "\
+IMAGE_INSTALL:append:uz7ev-evcc = "\
         user-led-test \
         user-switch-test \
 "
 
-IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
+IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         blinky \
         blinky-init \
         user-switch-test \
 "
 
-IMAGE_INSTALL_append_uz7ev-evcc-hdmi = "\
+IMAGE_INSTALL:append:uz7ev-evcc-hdmi = "\
         hdmi-utils \
         kernel-module-hdmi \
 "
 
-IMAGE_INSTALL_append_minized-sbc = "\
+IMAGE_INSTALL:append:minized-sbc = "\
         bluez5 \
         bluez5-doc \
         bluez5-obex \
@@ -116,28 +116,28 @@ IMAGE_INSTALL_append_minized-sbc = "\
         wpa-supplicant \
 "
 
-IMAGE_INSTALL_append_mz = "\
+IMAGE_INSTALL:append:mz = "\
 "
 
-IMAGE_INSTALL_append_pz = "\
+IMAGE_INSTALL:append:pz = "\
         haveged \
         pciutils \
         performance-tests \
         util-linux-mkfs \
 "
 
-COMMON_FEATURES_remove_zynqmp = "\
+COMMON_FEATURES:remove:zynqmp = "\
         ssh-server-dropbear \
 "
 
-COMMON_FEATURES_remove_zynq = "\
+COMMON_FEATURES:remove:zynq = "\
         ssh-server-dropbear \
 "
 
-COMMON_FEATURES_append_zynqmp = "\
+COMMON_FEATURES:append:zynqmp = "\
         ssh-server-openssh \
 "
 
-COMMON_FEATURES_append_zynq = "\
+COMMON_FEATURES:append:zynq = "\
         ssh-server-openssh \
 "

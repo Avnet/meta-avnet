@@ -19,4 +19,4 @@ do_install() {
     install -m 0755 ${S}/wilc* ${D}${base_libdir}/firmware/mchp
 }
 
-FILES_${PN} = "${base_libdir}/firmware/mchp/*"
+FILES:${PN} = "${base_libdir}/firmware/mchp/*"

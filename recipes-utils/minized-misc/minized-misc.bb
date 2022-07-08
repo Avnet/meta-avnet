@@ -2,7 +2,7 @@ DESCRIPTION = "Custom / Misc files for MiniZed"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-#FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+#FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "file://pulseaudio-bluetooth.conf \
             file://minized-mount.sh \
@@ -39,7 +39,7 @@ do_install() {
 	install -m 755 ${WORKDIR}/onetest.sh ${D}/usr/local/bin/
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     		/etc/dbus-1/system.d/pulseaudio-bluetooth.conf \
     		/etc/rcS.d/S99minized-mount.sh \
 		/usr/local/bin/wpa_supplicant.conf \

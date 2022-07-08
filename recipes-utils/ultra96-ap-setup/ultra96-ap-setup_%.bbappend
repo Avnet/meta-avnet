@@ -1,8 +1,8 @@
 LIC_FILES_CHKSUM = "file://wpa_ap.conf;md5=24ab6a95620be06cef908de36a5d01c3"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI_remove = " \
+SRC_URI:remove = " \
     file://ap.sh \
     "
 

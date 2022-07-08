@@ -19,5 +19,5 @@ do_install() {
 	     install -m 0755 ${S}/libsds_lib_dbg.so ${D}/${libdir}
 }
 
-FILES_${PN} += "${libdir}"
+FILES:${PN} += "${libdir}"
 FILES_SOLIBSDEV = ""
