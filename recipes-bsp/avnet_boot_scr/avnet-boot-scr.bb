@@ -8,7 +8,7 @@ inherit deploy nopackages plnx-deploy
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-COMPATIBLE_MACHINE = "minized-sbc|mz|pz|u96v2-sbc|uz"
+COMPATIBLE_MACHINE = "minized-sbc|mz|pz|u96v2-sbc|uz|zub1cg-sbc"
 
 SRC_URI_minized-sbc = " \
             file://avnet_emmc.txt \
@@ -40,6 +40,12 @@ SRC_URI_uz = " \
             file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_mmc_ext4.txt \
+            "
+
+SRC_URI_zub1cg-sbc = " \
+            file://avnet_jtag.txt \
+            file://avnet_jtag_tftp.txt \
+            file://avnet_qspi.txt \
             "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

@@ -44,3 +44,9 @@ SRC_URI_append_uz7ev-evcc-quadcam-h = " \
         file://0016-media-i2c-update-mars-drivers-for-REV1-serializers.patch \
         file://0001-v4l-xilinx-multi-scaler-change-print-level-from-erro.patch \
 "
+
+SRC_URI_append_zub1cg-sbc = " \
+                file://0001-iio-imu-inv_icm42600-fix-device_get_match_data-issue.patch \
+                file://0002-iio-imu-inv_icm42600-add-46288-support.patch \
+"
+

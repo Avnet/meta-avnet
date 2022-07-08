@@ -110,6 +110,24 @@ IMAGE_INSTALL_append_uz = "\
         yavta \
 "
 
+IMAGE_INSTALL_append_zub1cg-sbc = "\
+        blinky \
+        blinky-init \
+        libdrm \
+        libdrm-kms \
+        libdrm-tests \
+        libstdc++ \
+        libv4l \
+        mac-eeprom-config \
+        mac-eeprom-config-init \
+        media-ctl \
+        python3 \
+        python3-core \
+        python3-dbus \
+        python3-pygobject \
+        yavta \
+"
+
 IMAGE_INSTALL_append_uz7ev-evcc = "\
         nvme-cli \
         user-led-test \
@@ -128,6 +146,10 @@ IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
 
 IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
         nvme-cli \
+"
+
+IMAGE_INSTALL_remove_zub1cg-sbc = "\
+        pmic-prog \
 "
 
 IMAGE_INSTALL_append_minized-sbc = "\
