@@ -12,7 +12,6 @@ COMPATIBLE_MACHINE = "uz|pz|mz|minized-sbc"
 # Packages
 RDEPENDS:${PN} += "\
   python3-core \
-  python-core \
     "
 
 SRC_URI = "file://cgi.py \
