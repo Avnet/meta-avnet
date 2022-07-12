@@ -25,6 +25,6 @@ do_install() {
     install -m 0755 ${S}/blinky-init ${D}${sysconfdir}/init.d/blinky-init
 }
 
-FILES_${PN} += "${sysconfdir}/*"
+FILES:${PN} += "${sysconfdir}/*"
 
 

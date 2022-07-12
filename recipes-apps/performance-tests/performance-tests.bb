@@ -21,7 +21,7 @@ do_install() {
         install -m 0755 ${S}/sd-test.sh ${D}/home/root
 }
 
-FILES_${PN} += "/home/root/drive-test.sh \
+FILES:${PN} += "/home/root/drive-test.sh \
            /home/root/network-test.sh \
            /home/root/sd-test.sh \
                "

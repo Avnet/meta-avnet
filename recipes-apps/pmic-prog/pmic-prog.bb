@@ -14,8 +14,8 @@ COMPATIBLE_MACHINE = "uz|u96v2-sbc"
 
 SRC_URI = "git://github.com/Avnet/BSP-rootfs-sources.git;protocol=https;branch=${SRCBRANCH};subpath=${SUBPATH};"
 
-SRC_URI_append_uz = " file://pmic-configs/"
-SRC_URI_append_u96v2-sbc = " file://pmic-configs/"
+SRC_URI:append:uz = " file://pmic-configs/"
+SRC_URI:append_u96v2-sbc = " file://pmic-configs/"
 
 SRCREV = "${AUTOREV}"
 
@@ -25,18 +25,18 @@ S = "${WORKDIR}/${SUBPATH}"
 
 inherit pkgconfig cmake
 
-FILES_${PN} += "${ROOT_HOME}/${SUBPATH}/*"
+FILES:${PN} += "${ROOT_HOME}/${SUBPATH}/*"
 
 do_install() {
         install -d ${D}${ROOT_HOME}/${SUBPATH}
         install -m 0755 ${B}/pmic_prog ${D}${ROOT_HOME}/${SUBPATH}/
 }
 
-do_install_append_uz() {
+do_install:append:uz() {
         cp -r ${WORKDIR}/pmic-configs ${D}${ROOT_HOME}/${SUBPATH}/
 }
 
-do_install_append_u96v2-sbc() {
+do_install:append_u96v2-sbc() {
         cp -r ${WORKDIR}/pmic-configs ${D}${ROOT_HOME}/${SUBPATH}/
 }
 

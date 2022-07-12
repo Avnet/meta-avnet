@@ -24,21 +24,21 @@ VCU_FILES = " \
     file://hdmi_to_vcu_to_hdmi.sh;subdir=${FF} \
 "
 
-SRC_URI_uz7ev-evcc-hdmi = " \
+SRC_URI:uz7ev-evcc-hdmi = " \
     ${HDMI_FILES} \
 "
 
-SRC_URI_uz7ev-evcc-hdmi-v = " \
+SRC_URI:uz7ev-evcc-hdmi-v = " \
     ${HDMI_FILES} \
     ${VCU_FILES} \
 "
 
-SRC_URI_uz7ev-evcc-quadcam-h = " \
+SRC_URI:uz7ev-evcc-quadcam-h = " \
     ${QUADCAM_FILES} \
     ${HDMI_FILES} \
 "
 
-SRC_URI_uz7ev-evcc-quadcam-h-v = " \
+SRC_URI:uz7ev-evcc-quadcam-h-v = " \
     ${QUADCAM_FILES} \
     ${HDMI_FILES} \
     ${VCU_FILES} \
@@ -51,4 +51,4 @@ do_install() {
     install -m 777 ${WORKDIR}/${FF}/* ${D}/${ROOT_HOME}
 }
 
-FILES_${PN} = "${ROOT_HOME}/*"
+FILES:${PN} = "${ROOT_HOME}/*"

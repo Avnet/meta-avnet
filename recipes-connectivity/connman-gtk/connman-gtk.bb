@@ -18,6 +18,6 @@ S = "${WORKDIR}/git"
 EXTRA_OEMESON += " \
 "
 
-FILES_${PN} += " \
+FILES:${PN} += " \
     ${datadir}/ \
 "

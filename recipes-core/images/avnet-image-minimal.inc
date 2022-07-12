@@ -2,11 +2,11 @@ require recipes-core/images/petalinux-image-common.inc
 
 # append what is already defined by petalinux (build/conf/plnxtool.conf)
 # this will include what the user adds or removes via "petalinux-config -c rootfs"
-IMAGE_INSTALL_append= "\
-        ${IMAGE_INSTALL_pn-petalinux-image-minimal} \
+IMAGE_INSTALL:append= "\
+        ${IMAGE_INSTALL:pn-petalinux-image-minimal} \
 "
 
-IMAGE_INSTALL_append_zynq = "\
+IMAGE_INSTALL:append:zynq = "\
         haveged \
         mtd-utils \
         packagegroup-core-boot \
@@ -16,9 +16,9 @@ IMAGE_INSTALL_append_zynq = "\
 "
 
 # remove unnecessary packages found in
-# ${IMAGE_INSTALL_pn-petalinux-image-minimal} (build/conf/plnxtool.conf)
+# ${IMAGE_INSTALL:pn-petalinux-image-minimal} (build/conf/plnxtool.conf)
 # that make the OS image too large to fit in QSPI
-IMAGE_INSTALL_remove_zynq = "\
+IMAGE_INSTALL:remove:zynq = "\
         bridge-utils \
         can-utils \
         htop \
@@ -27,7 +27,7 @@ IMAGE_INSTALL_remove_zynq = "\
         pciutils \
 "
 
-IMAGE_INSTALL_append_zynqmp = "\
+IMAGE_INSTALL:append:zynqmp = "\
         bc \
         bonnie++ \
         coreutils \
@@ -65,7 +65,7 @@ IMAGE_INSTALL_append_zynqmp = "\
         watchdog-init \
 "
 
-IMAGE_INSTALL_append_u96v2-sbc = "\
+IMAGE_INSTALL:append_u96v2-sbc = "\
         bluez5 \
         connman-gtk \
         git \
@@ -90,7 +90,7 @@ IMAGE_INSTALL_append_u96v2-sbc = "\
         wilc \
 "
 
-IMAGE_INSTALL_append_uz = "\
+IMAGE_INSTALL:append:uz = "\
         blinky \
         blinky-init \
         libdrm \
@@ -110,27 +110,27 @@ IMAGE_INSTALL_append_uz = "\
         yavta \
 "
 
-IMAGE_INSTALL_append_uz7ev-evcc = "\
+IMAGE_INSTALL:append:uz7ev-evcc = "\
         nvme-cli \
         user-led-test \
         user-switch-test \
 "
 
-IMAGE_INSTALL_append_uz7ev-evcc-hdmi-v-n = "\
+IMAGE_INSTALL:append:uz7ev-evcc-hdmi-v-n = "\
         nvme-cli \
 "
 
-IMAGE_INSTALL_remove_uz7ev-evcc-hdmi = "\
+IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
         python-webserver-init \
         user-led-test \
 "
 
-IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
+IMAGE_INSTALL:append:uz7ev-evcc-nvme = "\
         nvme-cli \
 "
 
-IMAGE_INSTALL_append_minized-sbc = "\
+IMAGE_INSTALL:append:minized-sbc = "\
         e2fsprogs \
         e2fsprogs-resize2fs \
         e2fsprogs-e2fsck \
@@ -139,7 +139,7 @@ IMAGE_INSTALL_append_minized-sbc = "\
         util-linux-mkfs \
 "
 
-IMAGE_INSTALL_append_pz = "\
+IMAGE_INSTALL:append:pz = "\
         blinky-init \
         blinky \
         e2fsprogs \
@@ -151,19 +151,19 @@ IMAGE_INSTALL_append_pz = "\
         util-linux-mkfs \
 "
 
-IMAGE_INSTALL_remove_pz = "\
+IMAGE_INSTALL:remove:pz = "\
         haveged \
         hwcodecs \
 "
 
-COMMON_FEATURES_append_zynqmp = "\
+COMMON_FEATURES:append:zynqmp = "\
         debug-tweaks \
         hwcodecs \
         package-management \
         ssh-server-dropbear \
 "
 
-COMMON_FEATURES_append_zynq = "\
+COMMON_FEATURES:append:zynq = "\
         debug-tweaks \
         hwcodecs \
         ssh-server-dropbear \

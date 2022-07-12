@@ -13,7 +13,7 @@ SRC_URI = "file://dialog-control.cpp \
 
 S = "${WORKDIR}"
 
-DEPENDS_append = "gpio-utils"
+DEPENDS:append = "gpio-utils"
 
 do_compile() {
 	     oe_runmake

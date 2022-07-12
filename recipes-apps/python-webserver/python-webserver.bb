@@ -10,9 +10,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 COMPATIBLE_MACHINE = "uz|pz|mz|minized-sbc"
 
 # Packages
-RDEPENDS_${PN} += "\
+RDEPENDS:${PN} += "\
   python3-core \
-  python-core \
     "
 
 SRC_URI = "file://cgi.py \
@@ -29,37 +28,37 @@ SRC_URI = "file://cgi.py \
      file://pdfs/Delkin_Devices_Product_Line.pdf \
       "
 
-SRC_URI_append_uz = "\
+SRC_URI:append:uz = "\
      file://images/ultrazed.png \
       "
 
-SRC_URI_append_uz3eg-iocc = "\
+SRC_URI:append:uz3eg-iocc = "\
      file://pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf \
      file://pdfs/5080-PB-AES-ZU-IOCC-G-V2e.pdf \
       "
 
-SRC_URI_append_uz3eg-pciec = "\
+SRC_URI:append:uz3eg-pciec = "\
      file://pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf \
      file://pdfs/5081-PB-AES-ZU-PCIECC-G-V2d.pdf \
       "
 
-SRC_URI_append_uz7ev-evcc = "\
+SRC_URI:append:uz7ev-evcc = "\
      file://pdfs/5342-pb-ultrazed-ev-som-v1.pdf \
      file://pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf \
       "
 
-SRC_URI_append_pz = "\
+SRC_URI:append:pz = "\
      file://images/picozed.png \
      file://pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
      file://pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
       "
 
-SRC_URI_append_minized-sbc = "\
+SRC_URI:append:minized-sbc = "\
      file://images/minized.png \
      file://pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf \
       "
 
-SRC_URI_append_mz = "\
+SRC_URI:append:mz = "\
      file://images/microzed.png \
      file://pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf \
      file://pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf \
@@ -89,37 +88,37 @@ do_install() {
        install -m 0755 ${S}/pdfs/Delkin_Devices_Product_Line.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install_append_uz () {
+do_install:append:uz () {
        install -m 0755 ${S}/images/ultrazed.png ${D}/home/root/webserver/images
 }
 
-do_install_append_uz3eg-iocc () {
+do_install:append:uz3eg-iocc () {
        install -m 0755 ${S}/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/5080-PB-AES-ZU-IOCC-G-V2e.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install_append_uz3eg-pciec () {
+do_install:append:uz3eg-pciec () {
        install -m 0755 ${S}/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/5081-PB-AES-ZU-PCIECC-G-V2d.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install_append_uz7ev-evcc () {
+do_install:append:uz7ev-evcc () {
        install -m 0755 ${S}/pdfs/5342-pb-ultrazed-ev-som-v1.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install_append_pz () {
+do_install:append:pz () {
        install -m 0755 ${S}/images/picozed.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install_append_minized-sbc () {
+do_install:append:minized-sbc () {
        install -m 0755 ${S}/images/minized.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install_append_mz () {
+do_install:append:mz () {
        install -m 0755 ${S}/images/microzed.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
        install -m 0755 ${S}/pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
@@ -127,7 +126,7 @@ do_install_append_mz () {
        install -m 0755 ${S}/pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
 }
 
-FILES_${PN} += "/home/root/webserver/cgi.py \
+FILES:${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/index.html \
            /home/root/webserver/launch_server.sh \
            /home/root/webserver/server.py \
@@ -141,32 +140,32 @@ FILES_${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/pdfs/Delkin_Devices_Product_Line.pdf \
                "
 
-FILES_${PN}_append_uz = "\
+FILES:${PN}:append:uz = "\
            /home/root/webserver/images/ultrazed.png \
                "
 
-FILES_${PN}_append_uz3eg-iocc = "\
+FILES:${PN}:append:uz3eg-iocc = "\
            /home/root/webserver/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf \
            /home/root/webserver/pdfs/5080-PB-AES-ZU-IOCC-G-V2e.pdf \
                "
 
-FILES_${PN}_append_uz3eg-pciec = "\
+FILES:${PN}:append:uz3eg-pciec = "\
            /home/root/webserver/pdfs/5043-PB-AES-ZU3EG-1-SOM-G-V3.pdf \
            /home/root/webserver/pdfs/5081-PB-AES-ZU-PCIECC-G-V2d.pdf \
                "
 
-FILES_${PN}_append_uz7ev-evcc = "\
+FILES:${PN}:append:uz7ev-evcc = "\
            /home/root/webserver/pdfs/5342-pb-ultrazed-ev-som-v1.pdf \
            /home/root/webserver/pdfs/5342-pb-ultrazed-ev-starter-kit-v1.pdf \
                "
 
-FILES_${PN}_append_pz = "\
+FILES:${PN}:append:pz = "\
            /home/root/webserver/images/picozed.png \
            /home/root/webserver/pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
            /home/root/webserver/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
                "
 
-FILES_${PN}_append_mz = "\
+FILES:${PN}:append:mz = "\
            /home/root/webserver/images/microzed.png \
            /home/root/webserver/pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf \
            /home/root/webserver/pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf \
@@ -174,7 +173,7 @@ FILES_${PN}_append_mz = "\
            /home/root/webserver/pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf \
                "
 
-FILES_${PN}_append_minized-sbc = "\
+FILES:${PN}:append:minized-sbc = "\
            /home/root/webserver/images/minized.png \
            /home/root/webserver/pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf \
                "
