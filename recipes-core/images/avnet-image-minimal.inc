@@ -168,4 +168,19 @@ COMMON_FEATURES:append:zynq = "\
         hwcodecs \
         ssh-server-dropbear \
 "
-
+IMAGE_INSTALL:remove:mz = "\
+        hwcodecs \
+        u-boot-tools\
+        sudo \
+        tcf-agent \
+        zstd \
+        util-linux-sulogin \
+        nfs-utils \
+        ncurses-terminfo-base \
+        mtd-utils \
+        iperf3 \
+        e2fsprogs-mke2fs \
+        haveged \
+        bash \
+        ssh-server-dropbear \
+"

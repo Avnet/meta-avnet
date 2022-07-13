@@ -115,9 +115,6 @@ IMAGE_INSTALL:append:minized-sbc = "\
         wpa-supplicant \
 "
 
-IMAGE_INSTALL:append:mz = "\
-"
-
 IMAGE_INSTALL:append:pz = "\
         haveged \
         pciutils \
