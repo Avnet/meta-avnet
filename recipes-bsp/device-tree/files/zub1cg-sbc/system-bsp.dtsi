@@ -13,6 +13,10 @@
       compatible = "xlnx,xlnk-1.0";
    };
 
+   chosen {
+      xlnx,eeprom= &mac_eeprom;
+   };
+
    vdd_icm_fixed: vdd_icm_fixed {
          compatible = "regulator-fixed";
          regulator-name = "vdd_icm_fixed";
@@ -97,7 +101,6 @@
       vref-supply = <&vref_reg>;
       #io-channel-cells = <1>;
    };
-
 };
 
 &axi_iic_2 {
@@ -109,5 +112,14 @@
       compatible = "invensense,icp10100";
       reg = <63>;
    };
+};
 
+&i2c1 {
+   #address-cells = <1>;
+   #size-cells = <0>;
+   /* Ethernet MAC ID EEPROM */
+   mac_eeprom: mac_eeprom@58 { /* U7 */
+      compatible = "atmel,24c02";
+      reg = <0x58>;
+   };
 };
