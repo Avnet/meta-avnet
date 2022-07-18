@@ -119,7 +119,7 @@
    #size-cells = <0>;
    /* Ethernet MAC ID EEPROM */
    mac_eeprom: mac_eeprom@58 { /* U7 */
-      compatible = "atmel,24c02";
+      compatible = "atmel,24mac402";
       reg = <0x58>;
    };
 };
