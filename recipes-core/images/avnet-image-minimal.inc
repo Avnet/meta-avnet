@@ -65,7 +65,7 @@ IMAGE_INSTALL:append:zynqmp = "\
         watchdog-init \
 "
 
-IMAGE_INSTALL:append_u96v2-sbc = "\
+IMAGE_INSTALL:append:u96v2-sbc = "\
         bluez5 \
         connman-gtk \
         git \

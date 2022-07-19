@@ -32,7 +32,7 @@ SRC_URI:pz = " \
             file://avnet_qspi.txt \
             "
 
-SRC_URI_u96v2-sbc = " \
+SRC_URI:u96v2-sbc = " \
             file://avnet_jtag.txt \
             "
 
