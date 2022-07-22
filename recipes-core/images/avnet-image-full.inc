@@ -38,6 +38,10 @@ IMAGE_INSTALL:append:zynq = "\
         ncurses-terminfo-base \
 "
 
+# Removed packagegroup-petalinux-vitisai-dev packagegroup-petalinux-vitisai from zynqmp image install due to
+# the providing layer (meta-vitis-ai https://github.com/Xilinx/meta-vitis-ai) not being compatible with 2021.2 and
+# Yocto honister yet.
+
 IMAGE_INSTALL:append:zynqmp = "\
         bridge-utils \
         cmake \
@@ -61,8 +65,6 @@ IMAGE_INSTALL:append:zynqmp = "\
         packagegroup-petalinux-python-modules \
         packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-v4lutils \
-        packagegroup-petalinux-vitisai-dev \
-        packagegroup-petalinux-vitisai \
         packagegroup-petalinux-x11 \
         pciutils \
         python3-pyserial \
