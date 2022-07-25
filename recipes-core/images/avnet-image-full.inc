@@ -31,6 +31,11 @@ IMAGE_INSTALL:append:zynq = "\
         xrt \
         xrt-dev \
         zocl \
+        u-boot-tools \
+        tcf-agent \
+        nfs-utils \
+        util-linux-sulogin \
+        ncurses-terminfo-base \
 "
 
 IMAGE_INSTALL:append:zynqmp = "\
@@ -115,14 +120,9 @@ IMAGE_INSTALL:append:minized-sbc = "\
         wpa-supplicant \
 "
 
-IMAGE_INSTALL:append:mz = "\
-"
-
 IMAGE_INSTALL:append:pz = "\
-        haveged \
         pciutils \
         performance-tests \
-        util-linux-mkfs \
 "
 
 COMMON_FEATURES:remove:zynqmp = "\
@@ -139,4 +139,5 @@ COMMON_FEATURES:append:zynqmp = "\
 
 COMMON_FEATURES:append:zynq = "\
         ssh-server-openssh \
+        hwcodecs \
 "
