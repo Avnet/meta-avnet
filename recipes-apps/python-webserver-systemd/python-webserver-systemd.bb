@@ -9,11 +9,13 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "file://python-webserver.service"
 
+RDEPENDS:${PN} += "bash python3-core python-webserver gpio-utils-systemd"
+
 inherit systemd
 
 do_install() {
 	install -d ${D}/${systemd_system_unitdir}
-	install -m 0744 ${WORKDIR}/python-webserver.service ${D}${systemd_system_unitdir}/python-webserver.service
+	install -m 0644 ${WORKDIR}/python-webserver.service ${D}${systemd_system_unitdir}/python-webserver.service
 }
 
 SYSTEMD_SERVICE:${PN} = "python-webserver.service"
