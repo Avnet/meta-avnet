@@ -89,7 +89,7 @@ IMAGE_INSTALL:append:uz = "\
         pciutils \
         performance-tests \
         python-webserver \
-        python-webserver-init \
+        python-webserver-systemd \
         python3 \
         python3-core \
         python3-dbus \
@@ -109,7 +109,7 @@ IMAGE_INSTALL:append:uz7ev-evcc-hdmi-v-n = "\
 
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
-        python-webserver-init \
+        python-webserver-systemd \
         user-led-test \
 "
 
