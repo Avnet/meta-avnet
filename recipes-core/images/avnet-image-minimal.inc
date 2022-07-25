@@ -11,20 +11,7 @@ IMAGE_INSTALL:append:zynq = "\
         mtd-utils \
         packagegroup-core-boot \
         run-postinsts \
-        tcf-agent \
         udev-extraconf \
-"
-
-# remove unnecessary packages found in
-# ${IMAGE_INSTALL:pn-petalinux-image-minimal} (build/conf/plnxtool.conf)
-# that make the OS image too large to fit in QSPI
-IMAGE_INSTALL:remove:zynq = "\
-        bridge-utils \
-        can-utils \
-        htop \
-        meson \
-        openssh-sftp-server \
-        pciutils \
 "
 
 IMAGE_INSTALL:append:zynqmp = "\
@@ -151,11 +138,6 @@ IMAGE_INSTALL:append:pz = "\
         util-linux-mkfs \
 "
 
-IMAGE_INSTALL:remove:pz = "\
-        haveged \
-        hwcodecs \
-"
-
 COMMON_FEATURES:append:zynqmp = "\
         debug-tweaks \
         hwcodecs \
@@ -165,7 +147,8 @@ COMMON_FEATURES:append:zynqmp = "\
 
 COMMON_FEATURES:append:zynq = "\
         debug-tweaks \
-        hwcodecs \
         ssh-server-dropbear \
 "
-
+COMMON_FEATURES:remove:minized-sbc = "\
+        ssh-server-dropbear \
+"
