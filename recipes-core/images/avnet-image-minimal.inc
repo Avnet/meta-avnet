@@ -49,7 +49,6 @@ IMAGE_INSTALL:append:zynqmp = "\
         util-linux-fdisk \
         util-linux-mount \
         util-linux-mkfs \
-        watchdog-init \
 "
 
 IMAGE_INSTALL:append:u96v2-sbc = "\
