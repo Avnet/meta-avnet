@@ -11,10 +11,6 @@ SRC_URI:append:u96v2-sbc = "\
 	file://openamp.dtsi \
 "
 
-SRC_URI:append:uz3eg-pciec-netfmc = "\
-	file://netfmc.dtsi \
-"
-
 SRC_URI:append:uz7ev-evcc-hdmi = "\
 	file://hdmi.dtsi \
 "
@@ -37,14 +33,6 @@ do_configure:append:u96v2-sbc () {
 	if [ -e ${WORKDIR}/openamp.dtsi ]; then
 		cp ${WORKDIR}/openamp.dtsi ${DT_FILES_PATH}/openamp.dtsi
 		echo '#include "openamp.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
-	fi
-}
-
-# For uz3eg-pciec-netfmc BSP only
-do_configure:append:uz3eg-pciec-netfmc () {
-	if [ -e ${WORKDIR}/netfmc.dtsi ]; then
-		cp ${WORKDIR}/netfmc.dtsi ${DT_FILES_PATH}/netfmc.dtsi
-		echo '#include "netfmc.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
 	fi
 }
 
