@@ -49,7 +49,6 @@ IMAGE_INSTALL:append:zynqmp = "\
         util-linux-fdisk \
         util-linux-mount \
         util-linux-mkfs \
-        watchdog-init \
 "
 
 IMAGE_INSTALL:append:u96v2-sbc = "\
@@ -79,7 +78,7 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 
 IMAGE_INSTALL:append:uz = "\
         blinky \
-        blinky-init \
+        blinky-systemd \
         libdrm \
         libdrm-kms \
         libdrm-tests \
@@ -89,7 +88,7 @@ IMAGE_INSTALL:append:uz = "\
         pciutils \
         performance-tests \
         python-webserver \
-        python-webserver-init \
+        python-webserver-systemd \
         python3 \
         python3-core \
         python3-dbus \
@@ -109,7 +108,7 @@ IMAGE_INSTALL:append:uz7ev-evcc-hdmi-v-n = "\
 
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
-        python-webserver-init \
+        python-webserver-systemd \
         user-led-test \
 "
 

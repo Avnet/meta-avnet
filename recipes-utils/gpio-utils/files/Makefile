@@ -9,7 +9,7 @@ VERSION = $(MAJOR).$(MINOR)
 
 all: lib$(NAME).so
 lib$(NAME).so.$(VERSION): $(OUTS)
-	$(CC) $(LDFLAGS) $(OUTS) -shared -Wl,-soname,lib$(NAME).so.$(MAJOR) -o lib$(NAME).so.$(VERSION)
+	$(CC) $(CFlAGS) $(LDFLAGS) $(OUTS) -shared -Wl,-soname,lib$(NAME).so.$(MAJOR) -o lib$(NAME).so.$(VERSION)
 
 lib$(NAME).so: lib$(NAME).so.$(VERSION)
 	rm -f lib$(NAME).so.$(MAJOR) lib$(NAME).so
@@ -17,7 +17,7 @@ lib$(NAME).so: lib$(NAME).so.$(VERSION)
 	ln -s lib$(NAME).so.$(MAJOR) lib$(NAME).so
 
 %.o: %.cpp
-	$(CXX) $(LDFLAGS) -c -o $(NAME).o $(LIBSOURCES)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c -o $(NAME).o $(LIBSOURCES)
 
 clean:
 	rm -rf *.o *.so *.so.*

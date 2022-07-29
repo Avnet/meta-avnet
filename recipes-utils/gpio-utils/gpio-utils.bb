@@ -22,6 +22,8 @@ S = "${WORKDIR}"
 
 RDEPENDS:${PN} += "gpio-utils-init"
 
+CXXFLAGS:aarch64 = "-fPIC"
+
 do_install() {
 
     INSTALL_DIR=${D}${prefix}/local/bin/gpio
