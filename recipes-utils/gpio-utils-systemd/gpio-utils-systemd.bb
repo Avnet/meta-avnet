@@ -15,7 +15,7 @@ RDEPENDS:${PN} += "gpio-utils"
 
 do_install() {
 	install -d ${D}/${systemd_system_unitdir}
-	install -m 0744 ${WORKDIR}/gpio-utils.service ${D}${systemd_system_unitdir}/gpio-utils.service
+	install -m 0644 ${WORKDIR}/gpio-utils.service ${D}${systemd_system_unitdir}/gpio-utils.service
 }
 
 SYSTEMD_SERVICE:${PN} = "gpio-utils.service"

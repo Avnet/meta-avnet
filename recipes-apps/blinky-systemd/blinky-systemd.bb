@@ -19,7 +19,7 @@ RDEPENDS:${PN} += "blinky gpio-utils-systemd"
 
 do_install() {
 	install -d ${D}/${systemd_system_unitdir}
-	install -m 0744 ${WORKDIR}/blinky.service ${D}${systemd_system_unitdir}/blinky.service
+	install -m 0644 ${WORKDIR}/blinky.service ${D}${systemd_system_unitdir}/blinky.service
 
 	install -d ${D}/home/root/
 	install -m 0755 ${WORKDIR}/run-blinky.sh ${D}/home/root/run-blinky.sh
