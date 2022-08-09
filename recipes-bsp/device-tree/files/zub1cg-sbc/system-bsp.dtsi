@@ -103,6 +103,17 @@
    };
 };
 
+&axi_iic_0 {
+   #address-cells = <1>;
+   #size-cells = <0>;
+   clock-frequency = <100000>;
+
+   stts22htr: stts22htr@3f {
+      compatible = "st,stts22h";
+      reg = <0x3f>;
+   };
+};
+
 &axi_iic_2 {
    #address-cells = <1>;
    #size-cells = <0>;

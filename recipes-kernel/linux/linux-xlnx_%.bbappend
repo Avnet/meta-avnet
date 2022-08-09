@@ -48,5 +48,6 @@ SRC_URI_append_uz7ev-evcc-quadcam-h = " \
 SRC_URI_append_zub1cg-sbc = " \
                 file://0001-iio-imu-inv_icm42600-fix-device_get_match_data-issue.patch \
                 file://0002-iio-imu-inv_icm42600-add-46288-support.patch \
+                file://0001-drivers-iio-temperature-import-ssts22h-driver.patch \
 "
 
