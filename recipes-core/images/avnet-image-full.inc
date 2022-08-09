@@ -119,12 +119,6 @@ IMAGE_INSTALL_append_minized-sbc = "\
 IMAGE_INSTALL_append_mz = "\
 "
 
-IMAGE_INSTALL_append_zub1cg-sbc = "\
-        device-monitor \
-        icm42688-sysfs \
-        spidev-test \
-"
-
 IMAGE_INSTALL_append_pz = "\
         haveged \
         pciutils \
