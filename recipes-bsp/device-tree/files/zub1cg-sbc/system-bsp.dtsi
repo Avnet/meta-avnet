@@ -125,6 +125,15 @@
    };
 };
 
+&spi0 {
+   num-cs = <1>;
+   pressure@00 {
+      compatible = "st,lps22hh";
+      reg = <0>;
+      spi-max-frequency = <100000>;
+   };
+};
+
 &i2c1 {
    #address-cells = <1>;
    #size-cells = <0>;
