@@ -102,10 +102,6 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
         user-switch-test \
 "
 
-IMAGE_INSTALL:append:uz7ev-evcc-hdmi-v-n = "\
-        nvme-cli \
-"
-
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
         python-webserver-systemd \

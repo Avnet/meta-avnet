@@ -21,10 +21,6 @@ SRC_URI:append:uz7ev-evcc-nvme = " \
                 file://nvme.cfg \
 "
 
-SRC_URI:append:uz7ev-evcc-hdmi-v-n = " \
-                file://nvme.cfg \
-"
-
 SRC_URI:append:uz7ev-evcc-quadcam-h = " \
         file://0001-arm-zynq-Add-MAX20087-driver.patch \
         file://0002-max20087-Remove-unused-members.patch \
