@@ -15,11 +15,6 @@ SRC_URI:append:uz7ev-evcc-hdmi = "\
 	file://hdmi.dtsi \
 "
 
-SRC_URI:append:uz7ev-evcc-quadcam-h = "\
-	file://fmc-quad.dtsi \
-"	
-
-
 # For Avnet BSP only
 do_configure:append () {
 	if [ -e ${WORKDIR}/system-bsp.dtsi ]; then
@@ -41,13 +36,5 @@ do_configure:append:uz7ev-evcc-hdmi () {
 	if [ -e ${WORKDIR}/hdmi.dtsi ]; then
 		cp ${WORKDIR}/hdmi.dtsi ${DT_FILES_PATH}/hdmi.dtsi
 		echo '#include "hdmi.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
-	fi
-}
-
-# For uz7ev-evcc-quadcam-h BSP only
-do_configure:append:uz7ev-evcc-quadcam-h () {
-	if [ -e ${WORKDIR}/fmc-quad.dtsi ]; then
-		cp ${WORKDIR}/fmc-quad.dtsi ${DT_FILES_PATH}/fmc-quad.dtsi
-		echo '#include "fmc-quad.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
 	fi
 }

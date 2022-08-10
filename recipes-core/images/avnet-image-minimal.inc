@@ -102,10 +102,6 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
         user-switch-test \
 "
 
-IMAGE_INSTALL:append:uz7ev-evcc-hdmi-v-n = "\
-        nvme-cli \
-"
-
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
         python-webserver-systemd \
@@ -114,15 +110,6 @@ IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
 
 IMAGE_INSTALL:append:uz7ev-evcc-nvme = "\
         nvme-cli \
-"
-
-IMAGE_INSTALL:append:minized-sbc = "\
-        e2fsprogs \
-        e2fsprogs-resize2fs \
-        e2fsprogs-e2fsck \
-        e2fsprogs-mke2fs \
-        parted \
-        util-linux-mkfs \
 "
 
 IMAGE_INSTALL:append:pz = "\
@@ -146,8 +133,5 @@ COMMON_FEATURES:append:zynqmp = "\
 
 COMMON_FEATURES:append:zynq = "\
         debug-tweaks \
-        ssh-server-dropbear \
-"
-COMMON_FEATURES:remove:minized-sbc = "\
         ssh-server-dropbear \
 "
