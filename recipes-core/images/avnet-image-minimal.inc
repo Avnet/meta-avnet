@@ -116,15 +116,6 @@ IMAGE_INSTALL:append:uz7ev-evcc-nvme = "\
         nvme-cli \
 "
 
-IMAGE_INSTALL:append:minized-sbc = "\
-        e2fsprogs \
-        e2fsprogs-resize2fs \
-        e2fsprogs-e2fsck \
-        e2fsprogs-mke2fs \
-        parted \
-        util-linux-mkfs \
-"
-
 IMAGE_INSTALL:append:pz = "\
         blinky-init \
         blinky \
@@ -146,8 +137,5 @@ COMMON_FEATURES:append:zynqmp = "\
 
 COMMON_FEATURES:append:zynq = "\
         debug-tweaks \
-        ssh-server-dropbear \
-"
-COMMON_FEATURES:remove:minized-sbc = "\
         ssh-server-dropbear \
 "

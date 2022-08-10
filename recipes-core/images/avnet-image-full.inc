@@ -95,33 +95,6 @@ IMAGE_INSTALL:append:uz7ev-evcc-hdmi = "\
         kernel-module-hdmi \
 "
 
-IMAGE_INSTALL:append:minized-sbc = "\
-        bluez5 \
-        bluez5-obex \
-        dialog-control \
-        get-gpio-offsets \
-        glibc \
-        hostapd \
-        i2csensor \
-        libogg \
-        libpulse \
-        libpulsecommon \
-        libpulsecore \
-        libvorbis \
-        lis2ds \
-        minized-misc \
-        minized-wireless \
-        pulseaudio \
-        pulseaudio-misc \
-        pulseaudio-module-bluetooth-discover \
-        pulseaudio-module-bluetooth-policy \
-        pulseaudio-module-bluez5-device \
-        pulseaudio-module-bluez5-discover \
-        pulseaudio-module-switch-on-connect \
-        pulseaudio-server \
-        wpa-supplicant \
-"
-
 IMAGE_INSTALL:append:pz = "\
         pciutils \
         performance-tests \

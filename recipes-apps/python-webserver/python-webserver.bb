@@ -7,7 +7,7 @@ SECTION = "PETALINUX/apps"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-COMPATIBLE_MACHINE = "uz|pz|mz|minized-sbc"
+COMPATIBLE_MACHINE = "uz|pz|mz"
 
 # Packages
 RDEPENDS:${PN} += "\
@@ -52,12 +52,6 @@ SRC_URI:append:pz = "\
      file://pdfs/5048-PB-PDP-AES-Z7PZ-SOM-G-V2.pdf \
      file://pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf \
       "
-
-SRC_URI:append:minized-sbc = "\
-     file://images/minized.png \
-     file://pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf \
-      "
-
 SRC_URI:append:mz = "\
      file://images/microzed.png \
      file://pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf \
@@ -113,11 +107,6 @@ do_install:append:pz () {
        install -m 0755 ${S}/pdfs/PB-AES-PZCC-FMC-V2-G-V1.pdf ${D}/home/root/webserver/pdfs
 }
 
-do_install:append:minized-sbc () {
-       install -m 0755 ${S}/images/minized.png ${D}/home/root/webserver/images
-       install -m 0755 ${S}/pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf ${D}/home/root/webserver/pdfs
-}
-
 do_install:append:mz () {
        install -m 0755 ${S}/images/microzed.png ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/PB-AES-MBCC-FMC-G-V2-Product-Brief.pdf ${D}/home/root/webserver/pdfs
@@ -171,9 +160,4 @@ FILES:${PN}:append:mz = "\
            /home/root/webserver/pdfs/PB-AES-MBCC-IO-G-V2-Product-Brief.pdf \
            /home/root/webserver/pdfs/PB-AES-Z7MB-7Z010-G-V2.pdf \
            /home/root/webserver/pdfs/PB-ARDUINO-CC-V2-Product-Brief.pdf \
-               "
-
-FILES:${PN}:append:minized-sbc = "\
-           /home/root/webserver/images/minized.png \
-           /home/root/webserver/pdfs/5239-PB-XC7Z007S-1CLG225C-v12-PB.pdf \
                "
