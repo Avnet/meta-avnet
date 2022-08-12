@@ -130,6 +130,10 @@ IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
         nvme-cli \
 "
 
+IMAGE_INSTALL_append_zub1cg-sbc = "\
+        factest \
+"
+
 IMAGE_INSTALL_remove_zub1cg-sbc = "\
         pmic-prog \
 "
