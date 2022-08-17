@@ -24,11 +24,11 @@ BASE_CLICK_TEST_LEDS=$(get_gpiochip_base a0080000)
 # MIO GPIO
 BASE_ZYNQMP_GPIO=$(get_gpiochip_base zynqmp_gpio)
 
-# PS LEDs (PCB D9, D8, D7, D6)
-echo PS_LED1:$((BASE_ZYNQMP_GPIO + 7)):out:1 > $GPIO_CONF
-echo PS_LED2:$((BASE_ZYNQMP_GPIO + 24)):out:1 >> $GPIO_CONF
-echo PS_LED3:$((BASE_ZYNQMP_GPIO + 25)):out:1 >> $GPIO_CONF
-echo PS_LED4:$((BASE_ZYNQMP_GPIO + 33)):out:1 >> $GPIO_CONF
+# MIO LEDs (PCB D9, D8, D7, D6)
+echo MIO_LED_1:$((BASE_ZYNQMP_GPIO + 7)):out:1 > $GPIO_CONF
+echo MIO_LED_2:$((BASE_ZYNQMP_GPIO + 24)):out:1 >> $GPIO_CONF
+echo MIO_LED_3:$((BASE_ZYNQMP_GPIO + 25)):out:1 >> $GPIO_CONF
+echo MIO_LED_4:$((BASE_ZYNQMP_GPIO + 33)):out:1 >> $GPIO_CONF
 
 # PL RGB LEDs (PCB D4,D5)
 for i in $(seq 0 2); do
