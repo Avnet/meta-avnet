@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 #FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://minized-mount.sh \
+SRC_URI += " \
 	    file://wpa_supplicant.conf \
 	    file://wifi.sh \
 	    file://bt.sh \

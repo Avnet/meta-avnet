@@ -3,9 +3,9 @@
 source /etc/profile
 
 MEDIA_CTL_DEV="/dev/media1"
-VIDEO_DEV="/dev/video2"
+VIDEO_DEV="/dev/video4"
 
-#/etc/init.d/xserver-nodm stop
+systemctl stop xserver-nodm
 
 # Adjust alpha instead of killing x11
 modetest-hdmi -w 42:alpha:0

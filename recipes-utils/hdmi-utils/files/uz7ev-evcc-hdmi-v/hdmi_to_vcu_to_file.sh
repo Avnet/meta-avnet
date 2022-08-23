@@ -3,7 +3,7 @@
 source /etc/profile
 
 MEDIA_CTL_DEV="/dev/media1"
-VIDEO_DEV="/dev/video2"
+VIDEO_DEV="/dev/video4"
 
 FILE="./test.ts"
 
