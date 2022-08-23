@@ -18,3 +18,6 @@ ifup wlan0
 # Get IP address
 sleep 1
 udhcpc -i wlan0
+
+# Setup DNS
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
