@@ -19,6 +19,8 @@ SRC_URI = " file://factest.sh \
 			file://ethernet_test.sh \
 			file://usb_test.sh \
 			file://rtc_test.sh \
+			file://sysmon_test.sh \
+			file://sysmon.conf \
 			"
 
 S = "${WORKDIR}"
@@ -34,6 +36,8 @@ do_install() {
 		install -m 0755 ethernet_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 usb_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 rtc_test.sh ${D}/home/root/factest_scripts/
+		install -m 0755 sysmon_test.sh ${D}/home/root/factest_scripts/
+		install -m 0755 sysmon.conf ${D}/home/root/factest_scripts/
 }
 
 FILES_${PN} += "/home/root/factest.sh \
@@ -44,4 +48,6 @@ FILES_${PN} += "/home/root/factest.sh \
 				/home/root/factest_scripts/ethernet_test.sh \
 				/home/root/factest_scripts/usb_test.sh \
 				/home/root/factest_scripts/rtc_test.sh \
+				/home/root/factest_scripts/sysmon_test.sh \
+				/home/root/factest_scripts/sysmon.conf \
 				"
