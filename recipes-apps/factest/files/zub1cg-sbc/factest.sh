@@ -39,6 +39,7 @@ execute_script_test "Test Buttons and LEDs" $FACTEST_SCRIPTS_DIR/buttons_and_led
 execute_script_test "Test Click Module interface" $FACTEST_SCRIPTS_DIR/click_test.sh
 execute_script_test "Test SyZyGY interfaces" $FACTEST_SCRIPTS_DIR/szg_lb_test.sh
 execute_script_test "Test Internal Sensors" $FACTEST_SCRIPTS_DIR/internal_sensors_test.sh
+execute_script_test "Test SYSMON" $FACTEST_SCRIPTS_DIR/sysmon_test.sh
 execute_script_test "Test Ethernet Interface" $FACTEST_SCRIPTS_DIR/ethernet_test.sh
 execute_script_test "Test USB Interface" $FACTEST_SCRIPTS_DIR/usb_test.sh
 execute_script_test "Test RTC" $FACTEST_SCRIPTS_DIR/rtc_test.sh
