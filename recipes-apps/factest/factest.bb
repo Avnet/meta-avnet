@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 COMPATIBLE_MACHINE = "zub1cg-sbc"
 
-RDEPENDS_${PN} += "gpio-utils"
+RDEPENDS_${PN} += "gpio-utils bash"
 
 SRC_URI = " file://factest.sh \
 			file://szg_lb_test.sh \
@@ -21,6 +21,7 @@ SRC_URI = " file://factest.sh \
 			file://rtc_test.sh \
 			file://sysmon_test.sh \
 			file://sysmon.conf \
+			file://qspi_utils.sh \
 			"
 
 S = "${WORKDIR}"
@@ -38,6 +39,7 @@ do_install() {
 		install -m 0755 rtc_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 sysmon_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 sysmon.conf ${D}/home/root/factest_scripts/
+		install -m 0755 qspi_utils.sh ${D}/home/root/factest_scripts/
 }
 
 FILES_${PN} += "/home/root/factest.sh \
@@ -50,4 +52,5 @@ FILES_${PN} += "/home/root/factest.sh \
 				/home/root/factest_scripts/rtc_test.sh \
 				/home/root/factest_scripts/sysmon_test.sh \
 				/home/root/factest_scripts/sysmon.conf \
+				/home/root/factest_scripts/qspi_utils.sh \
 				"
