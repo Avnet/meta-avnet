@@ -1,0 +1,12 @@
+[Unit]
+Description=Delete wpa files in /var/run/wpa_supplicant
+Before=network.target
+Before=wpa_supplicant.service
+
+[Service]
+Type=oneshot
+ExecStop=rm -f /var/run/wpa_supplicant/*
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
