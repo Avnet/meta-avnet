@@ -38,6 +38,10 @@ IMAGE_INSTALL:append:zynq = "\
         ncurses-terminfo-base \
 "
 
+# Removed packagegroup-petalinux-vitisai-dev packagegroup-petalinux-vitisai from zynqmp image install due to
+# the providing layer (meta-vitis-ai https://github.com/Xilinx/meta-vitis-ai) not being compatible with 2021.2 and
+# Yocto honister yet.
+
 IMAGE_INSTALL:append:zynqmp = "\
         bridge-utils \
         cmake \
@@ -61,8 +65,6 @@ IMAGE_INSTALL:append:zynqmp = "\
         packagegroup-petalinux-python-modules \
         packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-v4lutils \
-        packagegroup-petalinux-vitisai-dev \
-        packagegroup-petalinux-vitisai \
         packagegroup-petalinux-x11 \
         pciutils \
         python3-pyserial \
@@ -84,40 +86,13 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
 
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         blinky \
-        blinky-init \
+        blinky-systemd \
         user-switch-test \
 "
 
 IMAGE_INSTALL:append:uz7ev-evcc-hdmi = "\
         hdmi-utils \
         kernel-module-hdmi \
-"
-
-IMAGE_INSTALL:append:minized-sbc = "\
-        bluez5 \
-        bluez5-obex \
-        dialog-control \
-        get-gpio-offsets \
-        glibc \
-        hostapd \
-        i2csensor \
-        libogg \
-        libpulse \
-        libpulsecommon \
-        libpulsecore \
-        libvorbis \
-        lis2ds \
-        minized-misc \
-        minized-wireless \
-        pulseaudio \
-        pulseaudio-misc \
-        pulseaudio-module-bluetooth-discover \
-        pulseaudio-module-bluetooth-policy \
-        pulseaudio-module-bluez5-device \
-        pulseaudio-module-bluez5-discover \
-        pulseaudio-module-switch-on-connect \
-        pulseaudio-server \
-        wpa-supplicant \
 "
 
 IMAGE_INSTALL:append:pz = "\

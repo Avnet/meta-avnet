@@ -49,7 +49,6 @@ IMAGE_INSTALL:append:zynqmp = "\
         util-linux-fdisk \
         util-linux-mount \
         util-linux-mkfs \
-        watchdog-init \
 "
 
 IMAGE_INSTALL:append:u96v2-sbc = "\
@@ -79,7 +78,7 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 
 IMAGE_INSTALL:append:uz = "\
         blinky \
-        blinky-init \
+        blinky-systemd \
         libdrm \
         libdrm-kms \
         libdrm-tests \
@@ -89,7 +88,7 @@ IMAGE_INSTALL:append:uz = "\
         pciutils \
         performance-tests \
         python-webserver \
-        python-webserver-init \
+        python-webserver-systemd \
         python3 \
         python3-core \
         python3-dbus \
@@ -103,27 +102,14 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
         user-switch-test \
 "
 
-IMAGE_INSTALL:append:uz7ev-evcc-hdmi-v-n = "\
-        nvme-cli \
-"
-
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
-        python-webserver-init \
+        python-webserver-systemd \
         user-led-test \
 "
 
 IMAGE_INSTALL:append:uz7ev-evcc-nvme = "\
         nvme-cli \
-"
-
-IMAGE_INSTALL:append:minized-sbc = "\
-        e2fsprogs \
-        e2fsprogs-resize2fs \
-        e2fsprogs-e2fsck \
-        e2fsprogs-mke2fs \
-        parted \
-        util-linux-mkfs \
 "
 
 IMAGE_INSTALL:append:pz = "\
@@ -147,8 +133,5 @@ COMMON_FEATURES:append:zynqmp = "\
 
 COMMON_FEATURES:append:zynq = "\
         debug-tweaks \
-        ssh-server-dropbear \
-"
-COMMON_FEATURES:remove:minized-sbc = "\
         ssh-server-dropbear \
 "
