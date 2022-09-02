@@ -21,6 +21,7 @@ SRC_URI = " file://factest.sh \
 			file://rtc_test.sh \
 			file://sysmon_test.sh \
 			file://sysmon.conf \
+			file://qspi_utils.sh \
 			"
 
 S = "${WORKDIR}"
@@ -38,6 +39,7 @@ do_install() {
 		install -m 0755 rtc_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 sysmon_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 sysmon.conf ${D}/home/root/factest_scripts/
+		install -m 0755 qspi_utils.sh ${D}/home/root/factest_scripts/
 }
 
 FILES:${PN} += "/home/root/factest.sh \
@@ -50,4 +52,5 @@ FILES:${PN} += "/home/root/factest.sh \
 				/home/root/factest_scripts/rtc_test.sh \
 				/home/root/factest_scripts/sysmon_test.sh \
 				/home/root/factest_scripts/sysmon.conf \
+				/home/root/factest_scripts/qspi_utils.sh \
 				"
