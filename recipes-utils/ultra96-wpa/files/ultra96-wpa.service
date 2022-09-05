@@ -6,6 +6,7 @@ Before=wpa_supplicant.service
 [Service]
 Type=oneshot
 ExecStop=rm -f /var/run/wpa_supplicant/*
+ExecStop=rm -f /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
 RemainAfterExit=yes
 
 [Install]
