@@ -16,7 +16,7 @@ SRC_URI = " \
     file://Makefile \
 	"
 
-COMPATIBLE_MACHINE = "mz|pz|uz|u96v2-sbc"
+COMPATIBLE_MACHINE = "mz|pz|uz|u96v2-sbc|zub1cg-sbc"
 
 S = "${WORKDIR}"
 
