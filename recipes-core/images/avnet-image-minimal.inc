@@ -124,11 +124,11 @@ IMAGE_INSTALL:append:pz = "\
         util-linux-mkfs \
 "
 
-IMAGE_INSTALL:append_zub1cg-sbc = "\
+IMAGE_INSTALL:append:zub1cg-sbc = "\
         factest \
 "
 
-IMAGE_INSTALL:remove_zub1cg-sbc = "\
+IMAGE_INSTALL:remove:zub1cg-sbc = "\
         pmic-prog \
 "
 

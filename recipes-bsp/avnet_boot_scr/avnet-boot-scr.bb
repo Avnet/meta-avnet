@@ -35,7 +35,7 @@ SRC_URI:uz = " \
             file://avnet_mmc_ext4.txt \
             "
 
-SRC_URI_zub1cg-sbc = " \
+SRC_URI:zub1cg-sbc = " \
             file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_qspi.txt \

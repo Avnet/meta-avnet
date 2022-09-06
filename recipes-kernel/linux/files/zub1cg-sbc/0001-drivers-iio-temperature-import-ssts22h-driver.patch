@@ -15,10 +15,10 @@ STMems_Linux_IIO_drivers, branch linux-4.19.y-gh
  create mode 100644 drivers/iio/temperature/stts22h.h
 
 diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
-index f1f2a1499c9e..bd965ce6ab9a 100644
+index f20ae3c963cb..9d2380fbc1de 100644
 --- a/drivers/iio/temperature/Kconfig
 +++ b/drivers/iio/temperature/Kconfig
-@@ -119,6 +119,16 @@ config TSYS02D
+@@ -128,6 +128,16 @@ config TSYS02D
  	  This driver can also be built as a module. If so, the module will
  	  be called tsys02d.
  
@@ -36,20 +36,20 @@ index f1f2a1499c9e..bd965ce6ab9a 100644
  	tristate "MAX31856 thermocouple sensor"
  	depends on SPI
 diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
-index 90c113115422..2b73d9adc303 100644
+index e3392c4b29b4..fbbe7592d4c3 100644
 --- a/drivers/iio/temperature/Makefile
 +++ b/drivers/iio/temperature/Makefile
-@@ -14,3 +14,4 @@ obj-$(CONFIG_TMP006) += tmp006.o
- obj-$(CONFIG_TMP007) += tmp007.o
+@@ -15,3 +15,4 @@ obj-$(CONFIG_TMP007) += tmp007.o
+ obj-$(CONFIG_TMP117) += tmp117.o
  obj-$(CONFIG_TSYS01) += tsys01.o
  obj-$(CONFIG_TSYS02D) += tsys02d.o
 +obj-$(CONFIG_IIO_STTS22H) += stts22h.o
 diff --git a/drivers/iio/temperature/stts22h.c b/drivers/iio/temperature/stts22h.c
 new file mode 100644
-index 000000000000..6304220abe29
+index 000000000000..8d5a52eb0ba9
 --- /dev/null
 +++ b/drivers/iio/temperature/stts22h.c
-@@ -0,0 +1,616 @@
+@@ -0,0 +1,612 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * STMicroelectronics stts22h temperature driver
@@ -575,13 +575,9 @@ index 000000000000..6304220abe29
 +    if (err < 0)
 +        return err;
 +
-+    buffer = devm_iio_kfifo_allocate(data->dev);
-+    if (!buffer)
-+        return -ENOMEM;
-+
-+    iio_device_attach_buffer(data->iio_devs, buffer);
-+    data->iio_devs->modes |= INDIO_BUFFER_SOFTWARE;
-+    data->iio_devs->setup_ops = &st_stts22h_buffer_ops;
++    err = devm_iio_kfifo_buffer_setup(data->dev, iio_dev, INDIO_BUFFER_SOFTWARE, &st_stts22h_buffer_ops);
++    if (err)
++        return err;
 +
 +    err = devm_iio_device_register(data->dev, data->iio_devs);
 +    if (err)

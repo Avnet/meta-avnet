@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 COMPATIBLE_MACHINE = "zub1cg-sbc"
 
-RDEPENDS_${PN} += "gpio-utils"
+RDEPENDS:${PN} += "gpio-utils bash"
 
 SRC_URI = " file://factest.sh \
 			file://szg_lb_test.sh \
@@ -40,7 +40,7 @@ do_install() {
 		install -m 0755 sysmon.conf ${D}/home/root/factest_scripts/
 }
 
-FILES_${PN} += "/home/root/factest.sh \
+FILES:${PN} += "/home/root/factest.sh \
 				/home/root/factest_scripts/szg_lb_test.sh \
 				/home/root/factest_scripts/click_test.sh \
 				/home/root/factest_scripts/internal_sensors_test.sh \

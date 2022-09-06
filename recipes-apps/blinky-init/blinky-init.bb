@@ -19,7 +19,7 @@ inherit update-rc.d
 INITSCRIPT_NAME = "blinky-init"
 INITSCRIPT_PARAMS = "start 99 S ."
 
-RDEPENDS_${PN} += "gpio-utils"
+RDEPENDS:${PN} += "gpio-utils"
 
 do_install() {
     install -d ${D}${sysconfdir}/init.d
