@@ -132,6 +132,7 @@ IMAGE_INSTALL_append_uz7ev-evcc-nvme = "\
 
 IMAGE_INSTALL_append_zub1cg-sbc = "\
         factest \
+        factest-init \
 "
 
 IMAGE_INSTALL_remove_zub1cg-sbc = "\
