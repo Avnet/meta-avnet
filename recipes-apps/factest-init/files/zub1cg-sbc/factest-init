@@ -1,0 +1,104 @@
+# ----------------------------------------------------------------------------
+#
+#        ** **        **          **  ****      **  **********  **********
+#       **   **        **        **   ** **     **  **              **
+#      **     **        **      **    **  **    **  **              **
+#     **       **        **    **     **   **   **  *********       **
+#    **         **        **  **      **    **  **  **              **
+#   **           **        ****       **     ** **  **              **
+#  **  .........  **        **        **      ****  **********      **
+#     ...........
+#                                     Reach Further
+#
+# ----------------------------------------------------------------------------
+# 
+#  This design is the property of Avnet.  Publication of this
+#  design is not authorized without written consent from Avnet.
+#  
+#  Product information is available at:
+#     https://avnet.me/zuboard-1cg
+# 
+#  Disclaimer:
+#     Avnet, Inc. makes no warranty for the use of this code or design.
+#     This code is provided  "As Is". Avnet, Inc assumes no responsibility for
+#     any errors, which may appear in this code, nor does it make a commitment
+#     to update the information contained herein. Avnet, Inc specifically
+#     disclaims any implied warranties of fitness for a particular purpose.
+#                      Copyright(c) 2022 Avnet, Inc.
+#                              All rights reserved.
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Create Date:         Sept 22, 2022
+#  Design Name:         ZUBoard-1CG
+#  Module Name:         factest-init.sh
+#  Project Name:        
+#  Target Devices:      Xilinx Zynq and Zynq UltraScale+ MPSoC
+#  Hardware Boards:     ZUBoard-1CG
+# 
+#  Tool versions:       Xilinx Vivado 2021.2
+# 
+#  Description:         Test Script for UltraZed-EG
+# 
+#  Dependencies:        
+#
+#  Revision:            Sept 22, 2022: 1.0 Initial version
+# 
+
+#  Create Date:         Sept 22, 2022
+#  Design Name:         Factory Test Application Daemon Launcher
+#  Module Name:         factest-init(.sh)
+#  Project Name:        Factory Test Application
+#  Target Devices:      Xilinx Zynq and Zynq UltraScale+ MPSoC
+#  Hardware Boards:     ZUBoard-1CG
+# 
+#  Tool versions:       Xilinx Vivado 2021.2
+# 
+#  Description:         Script to launch Factory Test App as a daemon
+# 
+#  Dependencies:        
+#
+#  Revision:            Sept 22, 2022: 1.0 Initial version
+
+
+
+
+# ----------------------------------------------------------------------------
+#!/bin/sh
+
+DAEMON=/home/root/factest-launcher.sh
+DAEMON_OPTS=
+
+start ()
+{
+echo " Starting ZUBoard-1CG Factory Test"
+#    start-stop-daemon -S -o --background -x $DAEMON -- $DAEMON_OPTS
+    start-stop-daemon -S -o -x $DAEMON -- $DAEMON_OPTS
+}
+
+stop ()
+{
+    echo " Stopping ZUBoard-1CG Factory Test"
+    start-stop-daemon -K -x $DAEMON
+}
+
+restart()
+{
+    stop
+    start
+}
+
+[ -e $DAEMON ] || exit 1
+    case "$1" in
+        start)
+            start; ;;
+        stop)
+            stop; ;;
+        restart)
+            restart; ;;
+        *)
+            echo "Usage: $0 {start|stop|restart}"
+            exit 1
+
+esac
+exit $?
