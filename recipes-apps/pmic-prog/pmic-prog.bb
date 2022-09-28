@@ -39,4 +39,3 @@ do_install:append:uz() {
 do_install:append:u96v2-sbc() {
         cp -r ${WORKDIR}/pmic-configs ${D}${ROOT_HOME}/${SUBPATH}/
 }
-

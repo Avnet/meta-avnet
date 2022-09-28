@@ -124,6 +124,27 @@ IMAGE_INSTALL:append:pz = "\
         util-linux-mkfs \
 "
 
+IMAGE_INSTALL:append:zub1cg-sbc = "\
+        factest \
+        blinky \
+        blinky-systemd \
+        libdrm \
+        libdrm-kms \
+        libdrm-tests \
+        libstdc++ \
+        libv4l \
+        media-ctl \
+        python3 \
+        python3-core \
+        python3-dbus \
+        python3-pygobject \
+        yavta \
+"
+
+IMAGE_INSTALL:remove:zub1cg-sbc = "\
+        pmic-prog \
+"
+
 COMMON_FEATURES:append:zynqmp = "\
         debug-tweaks \
         hwcodecs \
