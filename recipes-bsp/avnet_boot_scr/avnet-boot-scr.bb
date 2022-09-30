@@ -39,6 +39,7 @@ SRC_URI:zub1cg-sbc = " \
             file://avnet_jtag.txt \
             file://avnet_jtag_tftp.txt \
             file://avnet_qspi.txt \
+            file://avnet_mmc.txt \
             "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
