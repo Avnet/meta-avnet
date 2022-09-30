@@ -1,5 +1,9 @@
 require recipes-core/images/avnet-image-minimal.inc
 
-IMAGE_INSTALL:append:zub1cg-sbc = "\
+COMPATIBLE_MACHINE = "zub1cg-sbc"
+
+IMAGE_INSTALL:append = "\
         factest \
 "
+
+
