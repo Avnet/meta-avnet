@@ -125,7 +125,6 @@ IMAGE_INSTALL:append:pz = "\
 "
 
 IMAGE_INSTALL:append:zub1cg-sbc = "\
-        factest \
         blinky \
         blinky-systemd \
         libdrm \
