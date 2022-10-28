@@ -48,11 +48,13 @@
 #                       Jan 29, 2018: 1.1 Added option to infinitely loop
 #                                         the SOM-only tests
 #                       Sept 23,2022: 1.2 Modified for running ZUBoard-1CG Factory Tests
+#                       Oct 21,2022: 1.3 Added option to install software to flash
 # 
 # ----------------------------------------------------------------------------
 #!/bin/sh
 
 FACTORY_TEST_SCRIPT=/home/root/factest.sh
+FLASH_PROGRAMMING_SCRIPT=/home/root/flash-programming.sh
 
 # Show the factory test banner.
 echo " "
@@ -65,7 +67,8 @@ echo "***                                                            ***"
 echo "***    Please Press Key to Perform Desired Function Below:     ***"
 echo "***                                                            ***"
 echo "***    'f' - Factory Test                                      ***"
-echo "***    'i' - Run Unattended Factory Test in Infinite Loop     ***"
+echo "***    'i' - Run Unattended Factory Test in Infinite Loop      ***"
+echo "***    's' - Install Software to Flash Memory                  ***"
 echo "***    'x' - Linux Command Prompt                              ***"
 echo "***                                                            ***"
 echo "***    NOTE: Waiting will AUTO-INITIATE Factory Test           ***"
@@ -102,20 +105,19 @@ do
 		echo "******************************************************************"
 		echo " "
 		while true;
-        do
-          bash ${FACTORY_TEST_SCRIPT} -u
-        done
+		do
+			bash ${FACTORY_TEST_SCRIPT} -u
+		done
 		break
-	# Currently we dont
-	#elif [ "$answer" = "s" ]
-	#then
-	#	echo " "
-	#	echo "******************************************************************"
-	#	echo "*** Initiating Software Install to Flash Memory                ***"
-	#	echo "******************************************************************"
-	#	echo " "
-	#	source ${FLASH_PROGRAMMING_SCRIPT}
-	#	break
+	elif [ "$answer" = "s" ]
+	then
+		echo " "
+		echo "******************************************************************"
+		echo "*** Initiating Software Install to Flash Memory                ***"
+		echo "******************************************************************"
+		echo " "
+		source ${FLASH_PROGRAMMING_SCRIPT}
+		break
 	else
 		echo " "
 		echo "******************************************************************"

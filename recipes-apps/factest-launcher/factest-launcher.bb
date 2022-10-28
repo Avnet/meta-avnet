@@ -12,7 +12,7 @@ SRC_URI = "file://factest-launcher.sh \
 
 S = "${WORKDIR}"
 
-RDEPENDS_${PN} = "factest"
+RDEPENDS_${PN} = "factest oob-image"
 
 do_install() {
 	     install -d ${D}/home/root
