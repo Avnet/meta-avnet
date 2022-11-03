@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 COMPATIBLE_MACHINE = "zub1cg-sbc"
 
-RDEPENDS_${PN} += "gpio-utils bash"
+RDEPENDS_${PN} += "gpio-utils bash python3-ansi2html "
 
 SRC_URI = " file://factest.sh \
 			file://szg_lb_test.sh \
