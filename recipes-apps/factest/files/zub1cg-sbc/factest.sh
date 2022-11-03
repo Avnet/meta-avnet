@@ -16,6 +16,7 @@ fi
 
 FACTEST_SCRIPTS_DIR=/home/root/factest_scripts
 LOCAL_RESULTS_FILE=last_factest_results.log
+LOCAL_RESULTS_FILE_HTML=last_factest_results.html
 
 # In unattended mode we don't write the results to local file system
 # to prevent prevent this from filling up the disk
@@ -24,8 +25,6 @@ then
    LOCAL_RESULTS_FILE=/dev/null
 fi
 
-
-QSPI_RESULTS_FILE=factest_results.log
 source $FACTEST_SCRIPTS_DIR/qspi_utils.sh
 
 nb_passed=0
@@ -107,7 +106,7 @@ print_results () {
       cecho "CYAN" "\n--------- Running test suite in unattended mode ---------\n"
    else
       QSPI_STATUS=0
-      execute_command_test "QSPI TEST (mount user partition)" "qspi_mount_user_part"
+      execute_command_test "QSPI TEST (check user partition)" "qspi_check_user_part"
       if [[ $? -ne 0 ]]
       then
          QSPI_STATUS=1
@@ -135,7 +134,8 @@ then
    if [[ $QSPI_STATUS -eq 0 ]]
    then
       echo "Copying Test Results to QSPI"
-      copy_log_file_to_qspi $LOCAL_RESULTS_FILE $QSPI_RESULTS_FILE
+      cat $LOCAL_RESULTS_FILE | ansi2html > $LOCAL_RESULTS_FILE_HTML
+      copy_log_file_to_qspi $LOCAL_RESULTS_FILE_HTML
    else
       echo "QSPI TEST Failed, log file can be found on the sd card: /home/root/$LOCAL_RESULTS_FILE"
    fi
