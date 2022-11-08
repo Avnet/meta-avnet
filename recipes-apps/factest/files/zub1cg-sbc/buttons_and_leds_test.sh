@@ -53,7 +53,7 @@ setup_mio_switch_leds_process() {
    process_mio_sw_to_leds &
    PID=$!
 
-   read -p "Do you confirm that each MIO_SW dip switch (SW14) turns a MIO_LED on and off [Y/n] " -n 1 -r
+   read -p "Do you confirm that each MIO_SW dip switch (SW4) turns a MIO_LED on and off [Y/n] " -n 1 -r
    if [[ $REPLY =~ ^[Yy]$ ]]  || [[ -z $REPLY ]]
    then
       echo -e "\n\tyes\n"
