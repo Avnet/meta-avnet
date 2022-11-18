@@ -51,6 +51,13 @@ IMAGE_INSTALL:append:zynqmp = "\
         util-linux-mkfs \
 "
 
+IMAGE_INSTALL:append:mz7020-iocc = "\
+        packagegroup-core-ssh-dropbear \
+        nano \
+        iperf3 \
+        mtd-utils \
+"
+
 IMAGE_INSTALL:append:u96v2-sbc = "\
         bluez5 \
         connman-gtk \
