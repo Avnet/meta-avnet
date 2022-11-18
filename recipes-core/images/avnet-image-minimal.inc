@@ -52,7 +52,10 @@ IMAGE_INSTALL:append:zynqmp = "\
 "
 
 IMAGE_INSTALL:append:mz7020-iocc = "\
-        packagegroup-core-ssh-dropbear \
+        openssh \
+        openssh-scp \
+        openssh-sftp-server \
+        openssh-sshd \
         nano \
         iperf3 \
         mtd-utils \
