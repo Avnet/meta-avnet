@@ -2,10 +2,6 @@
 
 FACTEST_SCRIPTS_DIR=/home/root/factest_scripts
 
-#LOCAL_RESULTS_FILE=last_factest_results.log
-#QSPI_RESULTS_FILE=factest_results.log
-#source $FACTEST_SCRIPTS_DIR/qspi_utils.sh
-
 nb_passed=0
 nb_failed=0
 
@@ -21,26 +17,6 @@ cecho(){
     # printf "${(P)1}${2} ${NC}\n" # <-- zsh
     printf "${!1}${2} ${NC}" # <-- bash
 }
-
-#~ execute_command_test () {
-   #~ desc=$1
-   #~ command=$2
-
-   #~ cecho "CYAN" "\n--------- $desc ---------\n"
-   #~ $command
-   #~ status=$?
-
-   #~ if [ $status -ne 0 ]
-   #~ then
-      #~ nb_failed=$((nb_failed+1))
-      #~ cecho "RED" "\n--------- $desc - FAIL ---------"
-   #~ else
-      #~ nb_passed=$((nb_passed+1))
-      #~ cecho "GREEN" "\n--------- $desc - PASS ---------"
-   #~ fi
-
-   #~ return $status
-#~ }
 
 execute_script_test () {
    desc=$1
@@ -108,7 +84,7 @@ print_results () {
    echo " "
 }
 
- {
+{
    execute_script_test "Test Buttons and LEDs" $FACTEST_SCRIPTS_DIR/buttons_and_leds_test.sh
    BUTTONS_AND_LEDS_RESULT=$?
    
@@ -128,15 +104,7 @@ print_results () {
    PROGRAM_QSPI_RESULT=$?
 
    print_results
-#} > >(tee "$LOCAL_RESULTS_FILE") 2>&1
 }
 
 sync
 
-if [[ $QSPI_STATUS -eq 0 ]]
-then
-   echo "Copying Test Results to QSPI"
-   copy_log_file_to_qspi $LOCAL_RESULTS_FILE $QSPI_RESULTS_FILE
-else
-   echo "QSPI TEST Failed, log file can be found on the sd card: /home/root/$LOCAL_RESULTS_FILE"
-fi
