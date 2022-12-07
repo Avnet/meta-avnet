@@ -4,14 +4,14 @@ DEBUG=0
 
 source /usr/local/bin/gpio/gpio_common.sh
 
-function pmod_lb() {
+pmod_lb() {
    PMOD=$1
    COUNT=$2
    TEST_BIT=$3
    SYSFS_BASE=BASE_$PMOD
    echo "***"
    echo "*** Walking '${TEST_BIT}'s loopback test for ${PMOD} "
-   echo "*** Loop count is $COUNT"
+   #echo "*** Loop count is $COUNT"
    echo "*** Pmod $PMOD is at sysfs base ${!SYSFS_BASE}"
    #
    # Fill the PMOD_ARRAY loopback inputs before performing the test
@@ -47,9 +47,8 @@ function pmod_lb() {
          then
             if [ $BIT_UNDER_TEST -ne $TEST_BIT ]
             then
-               #~ if [ $ERROR_COUNT -gt 0 ]; then printf "\n"; fi
                echo "ERROR: bit $j of ${PMOD}_LB_I should be $TEST_BIT"
-               ERROR_COUNT=$((ERROR_COUNT+1))
+               error_count=$((error_count+1))
             fi
 
          # when the loop count from the outer loop does not match match the count from the inner loop
@@ -57,9 +56,8 @@ function pmod_lb() {
          else
             if [ $BIT_UNDER_TEST -ne $(($TEST_BIT-1)) ]
             then
-               #~ if [ $ERROR_COUNT -gt 0 ]; then printf "\n"; fi
                echo "ERROR: bit $j of ${PMOD}_LB_I should be $(($TEST_BIT-1))"
-               ERROR_COUNT=$((ERROR_COUNT+1))
+               error_count=$((error_count+1))
             fi
          fi
       done
@@ -78,8 +76,12 @@ function pmod_lb() {
       sleep 0.5
       
    done
+   
+   # reset the array of loopback inputs to empty it
+   PMOD_ARRAY=()
 
-   echo ""
+   # add a new line after the last printf
+   printf "\n"
 }
 
 #
@@ -272,17 +274,18 @@ done
 # Main while loop
 #
 echo "***"
+echo "*** Test Pmod GPIO loopback"
 echo "*** Write a '1' to each loopback output"
 echo "*** and read it back on the input."
 echo "***"
 
-ERROR_COUNT=0
+error_count=0
 
 #
 # Walking '1's loopback tests for Pmod I/O
 #
 TEST_BIT=1
-#~ # PMOD_JA
+# PMOD_JA
 pmod_lb PMOD_JA $PMOD_LOOP_CNT $TEST_BIT
    
 # PMOD_JB
@@ -323,22 +326,21 @@ pmod_lb PMOD_JZ $PMOD_JZ_LOOP_CNT $TEST_BIT
 TEST_BIT=1
 echo "***"
 echo "*** Walking '${TEST_BIT}'s loopback test for PMOD_MIO"
-echo "*** Loop count is $PMOD_LOOP_CNT"
+#echo "*** Loop count is $PMOD_LOOP_CNT"
 echo "*** Pmod PMOD_MIO is at sysfs base $BASE_PMOD_MIO"
 #
 # Fill the PMOD_ARRAY loopback inputs before performing the test
 #
 for (( i=0; i<$PMOD_LOOP_CNT; i++ ))
 do
-   PMOD_ARRAY[$i]=$(cat gpio$(($PMOD_MIO_LB_I + $i))/value)
+   PMOD_ARRAY[$i]=$(cat gpio${PMOD_MIO_LB_I[$i]}/value)
 done
 
 printf "*** Loopback input is: ${PMOD_ARRAY[*]}\r"
 if [ $DEBUG -eq 1 ]; then printf "\n"; fi
 
-for (( i=0; i<$COUNT; i++ ))
+for (( i=0; i<$PMOD_LOOP_CNT; i++ ))
 do
-
    if [ $DEBUG -eq 1 ]; then echo -e "DEBUG: Writing $TEST_BIT to output gpio $i (number ${PMOD_MIO_LB_O[$i]})"; fi
    # write the test bit to the gpio
    echo $TEST_BIT > gpio${PMOD_MIO_LB_O[$i]}/value
@@ -360,9 +362,9 @@ do
       then
          if [ $BIT_UNDER_TEST -ne $TEST_BIT ]
          then
-            #~ if [ $ERROR_COUNT -gt 0 ]; then printf "\n"; fi
+            #~ if [ $error_count -gt 0 ]; then printf "\n"; fi
             echo "ERROR: bit $j of PMOD_MIO_LB_I should be $TEST_BIT"
-            ERROR_COUNT=$((ERROR_COUNT+1))
+            error_count=$((error_count+1))
          fi
 
       # when the loop count from the outer loop does not match match the count from the inner loop
@@ -370,9 +372,9 @@ do
       else
          if [ $BIT_UNDER_TEST -ne $(($TEST_BIT-1)) ]
          then
-            #~ if [ $ERROR_COUNT -gt 0 ]; then printf "\n"; fi
+            #~ if [ $error_count -gt 0 ]; then printf "\n"; fi
             echo "ERROR: bit $j of PMOD_MIO_LB_I should be $(($TEST_BIT-1))"
-            ERROR_COUNT=$((ERROR_COUNT+1))
+            error_count=$((error_count+1))
          fi
       fi
    done
@@ -390,6 +392,12 @@ do
    # Sleep for 500ms 
    sleep 0.5
 done
+
+# reset the array of loopback inputs to empty it
+PMOD_ARRAY=()
+
+# add a new line after the last printf
+printf "\n"
 
 #
 # Unexport the loopback I/Os
@@ -443,10 +451,10 @@ done
 
 echo "***"
 echo "*** Done."
-echo "*** Number of errors = $ERROR_COUNT"
+echo "*** Number of errors = $error_count"
 echo "***"
 
-if [ $ERROR_COUNT -ne 0 ]
+if [ $error_count -ne 0 ]
 then
    exit 1
 fi

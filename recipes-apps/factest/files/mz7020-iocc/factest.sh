@@ -2,9 +2,9 @@
 
 FACTEST_SCRIPTS_DIR=/home/root/factest_scripts
 
-LOCAL_RESULTS_FILE=last_factest_results.log
-QSPI_RESULTS_FILE=factest_results.log
-source $FACTEST_SCRIPTS_DIR/qspi_utils.sh
+#LOCAL_RESULTS_FILE=last_factest_results.log
+#QSPI_RESULTS_FILE=factest_results.log
+#source $FACTEST_SCRIPTS_DIR/qspi_utils.sh
 
 nb_passed=0
 nb_failed=0
@@ -19,27 +19,28 @@ cecho(){
     NC="\033[0m" # No Color
 
     # printf "${(P)1}${2} ${NC}\n" # <-- zsh
-    printf "${!1}${2} ${NC}\n" # <-- bash
+    printf "${!1}${2} ${NC}" # <-- bash
 }
-execute_command_test () {
-   desc=$1
-   command=$2
 
-   cecho "CYAN" "\n--------- $desc ---------\n"
-   $command
-   status=$?
+#~ execute_command_test () {
+   #~ desc=$1
+   #~ command=$2
 
-   if [ $status -ne 0 ]
-   then
-      nb_failed=$((nb_failed+1))
-      cecho "RED" "\n--------- $desc - FAIL ---------"
-   else
-      nb_passed=$((nb_passed+1))
-      cecho "GREEN" "\n--------- $desc - PASS ---------"
-   fi
+   #~ cecho "CYAN" "\n--------- $desc ---------\n"
+   #~ $command
+   #~ status=$?
 
-   return $status
-}
+   #~ if [ $status -ne 0 ]
+   #~ then
+      #~ nb_failed=$((nb_failed+1))
+      #~ cecho "RED" "\n--------- $desc - FAIL ---------"
+   #~ else
+      #~ nb_passed=$((nb_passed+1))
+      #~ cecho "GREEN" "\n--------- $desc - PASS ---------"
+   #~ fi
+
+   #~ return $status
+#~ }
 
 execute_script_test () {
    desc=$1
@@ -63,34 +64,72 @@ execute_script_test () {
 
 print_results () {
    nb_test=$((nb_passed + nb_failed))
-      echo -e "\n\n-----------------------------------"
-      echo -e "------------- RESULTS -------------"
-      cecho "CYAN" " Ran:    $nb_test tests"
-      cecho "GREEN" " Passed: $nb_passed tests"
-      cecho "RED" " Failed: $nb_failed tests"
-      echo -e "-----------------------------------\n"
+   echo " "
+   echo "******************************************************************"
+   echo "***                                                            ***"
+   echo "***        MicroZed 7020 Factory Test V2.0 Complete            ***"
+   echo "***                                                            ***"
+
+   printf "*** GPIO LEDs and Switches Test: "
+   if [ $BUTTONS_AND_LEDS_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
+   printf "                         ***\n"
+
+   printf "*** Pmod Loopback Test: "
+   if [ $PMOD_LB_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
+   printf "                                  ***\n"
+   
+   printf "*** Zynq SysMon Test: "
+   if [ $SYSMON_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
+   printf "                                    ***\n"
+   
+   printf "*** Ethernet Ping Test: "
+   if [ $ETHERNET_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
+   printf "                                  ***\n"
+   
+   printf "*** USB Device File Write & Read Test: "
+   if [ $USB_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
+   printf "                   ***\n"
+   
+   printf "*** Program QSPI With Out-Of-Box OS Image: "
+   if [ $PROGRAM_QSPI_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
+   printf "               ***\n"
+
+   echo "***                                                            ***"
+   printf "*** "
+   cecho "YELLOW" "--- RESULTS SUMMARY ---"
+   printf "                                   ***\n"
+   printf "*** "
+   cecho "CYAN" "Ran: $nb_test tests, "
+   cecho "GREEN" "Passed: $nb_passed tests, "
+   cecho "RED" "Failed: $nb_failed tests"
+   printf "          ***\n"
+   echo "***                                                            ***"
+   echo "******************************************************************"
+   echo " "
 }
 
-
-{
-   QSPI_STATUS=0
-   execute_command_test "QSPI TEST (mount user partition)" "qspi_mount_user_part"
-   if [[ $? -ne 0 ]]
-   then
-      QSPI_STATUS=1
-   fi
-
+ {
    execute_script_test "Test Buttons and LEDs" $FACTEST_SCRIPTS_DIR/buttons_and_leds_test.sh
-   execute_script_test "Test Click Module interface" $FACTEST_SCRIPTS_DIR/click_test.sh
-   execute_script_test "Test SyZyGY interfaces" $FACTEST_SCRIPTS_DIR/szg_lb_test.sh
-   execute_script_test "Test Internal Sensors" $FACTEST_SCRIPTS_DIR/internal_sensors_test.sh
+   BUTTONS_AND_LEDS_RESULT=$?
+   
+   execute_script_test "Test Pmod interfaces" $FACTEST_SCRIPTS_DIR/pmod_lb_test.sh
+   PMOD_LB_RESULT=$?
+   
    execute_script_test "Test SYSMON" $FACTEST_SCRIPTS_DIR/sysmon_test.sh
+   SYSMON_RESULT=$?
+   
    execute_script_test "Test Ethernet Interface" $FACTEST_SCRIPTS_DIR/ethernet_test.sh
+   ETHERNET_RESULT=$?
+   
    execute_script_test "Test USB Interface" $FACTEST_SCRIPTS_DIR/usb_test.sh
-   execute_script_test "Test RTC" $FACTEST_SCRIPTS_DIR/rtc_test.sh
+   USB_RESULT=$?
+
+   execute_script_test "Program QSPI with OOB OS image" $FACTEST_SCRIPTS_DIR/program_oob_qspi.sh
+   PROGRAM_QSPI_RESULT=$?
 
    print_results
-} > >(tee "$LOCAL_RESULTS_FILE") 2>&1
+#} > >(tee "$LOCAL_RESULTS_FILE") 2>&1
+}
 
 sync
 

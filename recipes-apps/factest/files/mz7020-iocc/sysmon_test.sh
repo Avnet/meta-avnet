@@ -4,7 +4,7 @@ DEBUG=0
 
 CONF_FILE=/home/root/factest_scripts/sysmon.conf
 IIO_PATH=/sys/bus/iio/devices
-SYSMON_NAME="ams"
+SYSMON_NAME="xadc"
 
 get_iio_dev_by_name () {
    dev_name=$1
@@ -20,12 +20,12 @@ test_property () {
    prop_min=$5
    prop_max=$6
 
-   if [ $DEBUG -eq 1 ]; then echo "debug: testing property name= $prop_name, bank=$prop_bank, unit='$prop_unit', details='$prop_details', min=$prop_min, max=$prop_max"; fi
+   if [ $DEBUG -eq 1 ]; then echo "DEBUG: testing property name= $prop_name, bank=$prop_bank, unit='$prop_unit', details='$prop_details', min=$prop_min, max=$prop_max"; fi
 
    read_prop_raw=$(cat ${iio_dev_path}/${prop_name}_raw)
    if [ -z "$read_prop_raw" ]
    then
-      echo "error: could not read ${prop_name}_raw"
+      echo "ERROR: could not read ${prop_name}_raw"
       return 1
    fi
 
@@ -39,34 +39,34 @@ test_property () {
    read_prop_scale=$(cat ${iio_dev_path}/${prop_name}_scale)
    if [ -z "$read_prop_scale" ]
    then
-      echo "error: could not read ${prop_name}_scale"
+      echo "ERROR: could not read ${prop_name}_scale"
       return 1
    fi
 
-   if [ $DEBUG -eq 1 ]; then echo "debug: read property $prop_name: raw=$read_prop_raw, offset=$read_prop_offset, scale=$read_prop_scale"; fi
+   if [ $DEBUG -eq 1 ]; then echo "DEBUG: read property $prop_name: raw=$read_prop_raw, offset=$read_prop_offset, scale=$read_prop_scale"; fi
 
    prop_value="$(bc <<< "scale=2; $read_prop_scale * ($read_prop_raw + $read_prop_offset) / 1000")"
 
    # IF a MIN and a MAX is defined
    if [[ -n $prop_min  && -n $prop_max ]]
    then
-      printf "\n$prop_bank - $prop_details ($prop_name), computed value is $prop_value $prop_unit"
+      printf "\n$prop_bank - $prop_details ($prop_name) computed value is $prop_value $prop_unit"
       if [ 1 -eq "$(echo "${prop_value} < ${prop_min}" | bc)" ]
       then
-         echo -e "\n\terror: Low value $prop_value $prop_unit (< $prop_min)"
+         echo -e "\n\tERROR: Low value $prop_value $prop_unit (< $prop_min)"
          return 1
       fi
 
       if [ 1 -eq "$(echo "${prop_value} > ${prop_max}" | bc)" ]
       then
-         echo -e "\n\terror: High value $prop_value $prop_unit (> $prop_max)"
+         echo -e "\n\tERROR: High value $prop_value $prop_unit (> $prop_max)"
          return 1
       fi
 
       printf ", OK (between $prop_min and $prop_max)\n"
 
    else # No min or Max
-      printf "\n$prop_bank - $prop_details ($prop_name), computed value is $prop_value $prop_unit\n"
+      printf "\n$prop_bank - $prop_details ($prop_name) computed value is $prop_value $prop_unit\n"
    fi
 
    return 0
@@ -75,17 +75,18 @@ test_property () {
 prop_count=0
 error_count=0
 
+echo "***"
 echo "*** Test SYSMON properties"
 echo "***"
 
 get_iio_dev_by_name $SYSMON_NAME
 if [ -z "$iio_dev_path" ]
 then
-   echo "error: could not find iio device '$SYSMON_NAME'"
+   echo "ERROR: could not find iio device '$SYSMON_NAME'"
    exit 1
 fi
 
-if [ $DEBUG -eq 1 ]; then echo "debug: found SYSMON device: $iio_dev_path"; fi
+if [ $DEBUG -eq 1 ]; then echo "DEBUG: found SYSMON device: $iio_dev_path"; fi
 
 while IFS=$'\t' read -r bank name unit details min max
 do
@@ -96,7 +97,7 @@ do
       test_property "$bank" "$name" "$unit" "$details" "$min" "$max"|| status=$?
       if [ $status -ne 0 ]
       then
-            echo "error: reading property $name"
+            echo "ERROR: reading property $name"
             error_count=$((error_count+1))
       fi
    fi
