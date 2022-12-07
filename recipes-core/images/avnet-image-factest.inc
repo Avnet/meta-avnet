@@ -4,7 +4,12 @@ COMPATIBLE_MACHINE = "zub1cg-sbc"
 
 IMAGE_INSTALL:append = "\
         factest \
-        factest-init \
+        factest-launcher \
+"
+
+IMAGE_INSTALL:remove = "\
+        blinky \
+        blinky-systemd \
 "
 
 
