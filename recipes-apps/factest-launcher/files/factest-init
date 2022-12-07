@@ -16,7 +16,7 @@
 #  design is not authorized without written consent from Avnet.
 #  
 #  Product information is available at:
-#     https://avnet.me/zuboard-1cg
+#     https://avnet.me/
 # 
 #  Disclaimer:
 #     Avnet, Inc. makes no warranty for the use of this code or design.
@@ -28,42 +28,7 @@
 #                              All rights reserved.
 # 
 # ----------------------------------------------------------------------------
-# 
-#  Create Date:         Sept 22, 2022
-#  Design Name:         ZUBoard-1CG
-#  Module Name:         factest-init.sh
-#  Project Name:        
-#  Target Devices:      Xilinx Zynq and Zynq UltraScale+ MPSoC
-#  Hardware Boards:     ZUBoard-1CG
-# 
-#  Tool versions:       Xilinx Vivado 2021.2
-# 
-#  Description:         Test Script for UltraZed-EG
-# 
-#  Dependencies:        
-#
-#  Revision:            Sept 22, 2022: 1.0 Initial version
-# 
 
-#  Create Date:         Sept 22, 2022
-#  Design Name:         Factory Test Application Daemon Launcher
-#  Module Name:         factest-init(.sh)
-#  Project Name:        Factory Test Application
-#  Target Devices:      Xilinx Zynq and Zynq UltraScale+ MPSoC
-#  Hardware Boards:     ZUBoard-1CG
-# 
-#  Tool versions:       Xilinx Vivado 2021.2
-# 
-#  Description:         Script to launch Factory Test App as a daemon
-# 
-#  Dependencies:        
-#
-#  Revision:            Sept 22, 2022: 1.0 Initial version
-
-
-
-
-# ----------------------------------------------------------------------------
 #!/bin/sh
 
 DAEMON=/home/root/factest-launcher.sh
@@ -71,14 +36,14 @@ DAEMON_OPTS=
 
 start ()
 {
-echo " Starting ZUBoard-1CG Factory Test"
+echo " Starting Factory Test"
 #    start-stop-daemon -S -o --background -x $DAEMON -- $DAEMON_OPTS
     start-stop-daemon -S -o -x $DAEMON -- $DAEMON_OPTS
 }
 
 stop ()
 {
-    echo " Stopping ZUBoard-1CG Factory Test"
+    echo " Stopping Factory Test"
     start-stop-daemon -K -x $DAEMON
 }
 
