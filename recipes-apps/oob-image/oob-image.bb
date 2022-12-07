@@ -11,12 +11,12 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 COMPATIBLE_MACHINE = "zub1cg-sbc"
 
-RDEPENDS_${PN} += "bash"
+RDEPENDS:${PN} += "bash"
 
 SRC_URI = " file://flash-programming.sh \
 		"
 
-SRC_URI_append_zub1cg-sbc = " \
+SRC_URI:append:zub1cg-sbc = " \
 	https://github.com/Avnet/freertos-oob/releases/download/v1.1/BOOT.BIN;downloadfilename=BOOT.BIN \
 "
 
@@ -31,6 +31,6 @@ do_install() {
 		install -m 0444 BOOT.BIN ${D}/home/root/oob_image/
 }
 
-FILES_${PN} += "/home/root/flash-programming.sh \
+FILES:${PN} += "/home/root/flash-programming.sh \
 				/home/root/oob_image/BOOT.BIN \
 				"
