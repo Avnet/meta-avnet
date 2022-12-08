@@ -11,9 +11,8 @@ Type=oneshot
 TimeoutSec=0
 RemainAfterExit=yes
 # tell systemd to stop logging to the console, to prevent it's messages
-# with interfering with the Initial Setup TUI potentially running there
 ExecStartPre=/bin/kill -SIGRTMIN+21 1
-ExecStart=/home/root/factest-launcher.sh
+ExecStart=/etc/init.d/factest-launcher.init start
 #RemainAfterExit=yes
 StandardOutput=tty
 StandardInput=tty-force
