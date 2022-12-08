@@ -114,12 +114,6 @@ BASE_PMOD_JH=$(get_gpiochip_base 41270000)
 # axi_gpio_8 pmod_jk
 BASE_PMOD_JK=$(get_gpiochip_base 41280000)
 
-# axi_gpio_11 pmod_jy
-BASE_PMOD_JY=$(get_gpiochip_base 412b0000)
-
-# axi_gpio_12 pmod_jz
-BASE_PMOD_JZ=$(get_gpiochip_base 412c0000)
-
 # MIO GPIO
 BASE_ZYNQ_GPIO=$(get_gpiochip_base zynq_gpio)
 
@@ -187,16 +181,6 @@ PMOD_JH_LB_I=$(($BASE_PMOD_JH+$PMOD_LOOP_CNT))
 PMOD_JK_LB_O=$BASE_PMOD_JK
 PMOD_JK_LB_I=$(($BASE_PMOD_JK+$PMOD_LOOP_CNT))
 
-# axi_gpio_11 - Pmod JY (PL) loopback - address 0x412B_0000
-# the first 4 are outputs that are looped back into the next 4
-PMOD_JY_LB_O=$BASE_PMOD_JY
-PMOD_JY_LB_I=$(($BASE_PMOD_JY+$PMOD_LOOP_CNT))
-
-# axi_gpio_12 - Pmod JZ (PL) loopback - address 0x412C_0000
-# the first 3 are outputs that are looped back into the next 3
-PMOD_JZ_LB_O=$BASE_PMOD_JZ
-PMOD_JZ_LB_I=$(($BASE_PMOD_JZ+$PMOD_JZ_LOOP_CNT))
-
 # PS MIO - SOM Pmod J5 loopback
 BASE_PMOD_MIO=$BASE_ZYNQ_GPIO
 # PMOD_D0 PMOD_D1 PMOD_D2 PMOD_D3
@@ -207,7 +191,7 @@ PMOD_MIO_LB_I=($MIO0 $MIO9 $MIO14 $MIO15)
 cd /sys/class/gpio
 
 #
-# Export the PMOD_J<A-H>, PMOD_JK, PMOD_JY, and PMOD_MIO elements and set their direction
+# Export the PMOD_J<A-H>, PMOD_JK, and PMOD_MIO elements and set their direction
 #
 for (( i=0; i<$PMOD_LOOP_CNT; i++ ))
 do

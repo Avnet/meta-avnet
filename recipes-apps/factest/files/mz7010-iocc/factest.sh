@@ -43,7 +43,7 @@ print_results () {
    echo " "
    echo "******************************************************************"
    echo "***                                                            ***"
-   echo "***        MicroZed 7020 Factory Test V2.0 Complete            ***"
+   echo "***        MicroZed 7010 Factory Test V2.0 Complete            ***"
    echo "***                                                            ***"
 
    printf "*** GPIO LEDs and Switches Test: "
