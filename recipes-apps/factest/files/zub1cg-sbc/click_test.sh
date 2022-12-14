@@ -2,6 +2,20 @@
 
 DEBUG=0
 
+# Check if there are any switches such unattended mode
+unattended=0
+
+if [[ $# -gt 0 ]]
+then
+      for var in "$@"
+      do
+         if [[ $var -eq "-u" ]]
+         then
+            unattended=1
+         fi
+      done
+fi
+
 source /usr/local/bin/gpio/gpio_common.sh
 
 cd /sys/class/gpio
@@ -16,13 +30,19 @@ test_gpio () {
    if [ $DEBUG -eq 1 ]; then echo "debug: $gpio_name = gpio$gpio_nb"; fi
 
    export_gpio $gpio_nb "out" 1
-   read -p "Do you confirm gpio $gpio_name is ON [Y/n] " -n 1 -r
-   if [[ $REPLY =~ ^[Yy]$ ]]  || [[ -z $REPLY ]]
+   if [[ $unattended -eq 1 ]]
    then
-      echo -e "\n\tyes\n"
+         echo 1 > gpio$gpio_nb/value
+         sleep 1.0
    else
-      echo -e "\n\tno\n"
-      status=1
+      read -p "Do you confirm gpio $gpio_name is ON [Y/n] " -n 1 -r
+      if [[ $REPLY =~ ^[Yy]$ ]]  || [[ -z $REPLY ]]
+      then
+         echo -e "\n\tyes\n"
+      else
+         echo -e "\n\tno\n"
+         status=1
+      fi
    fi
 
    echo 0 > gpio$gpio_nb/value
