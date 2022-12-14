@@ -17,9 +17,10 @@ SRC_URI = " file://flash-programming.sh \
 		"
 
 SRC_URI:append:zub1cg-sbc = " \
-	https://github.com/Avnet/freertos-oob/releases/download/v1.1/BOOT.BIN;downloadfilename=BOOT.BIN \
+	https://github.com/Avnet/freertos-oob/releases/download/v1.1/BOOT.BIN;downloadfilename=BOOT.BIN;name=zu1-boot \
 "
-SRC_URI:zub1cg-sbc[sha256sum] = "74d4150bd945b24bdeae20b3ee77f532c4e3462bf5e1f36909e401cea889d124"
+
+SRC_URI[zu1-boot.sha256sum] = "74d4150bd945b24bdeae20b3ee77f532c4e3462bf5e1f36909e401cea889d124"
 
 SRC_URI:append:mz-iocc = " \
 	file://oob.zip \
