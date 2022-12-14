@@ -33,7 +33,6 @@ SRC_URI:append:zub1cg-sbc = "\
 # source files specific to the mz-iocc machines
 SRC_URI:append:mz-iocc = "\
 	file://pmod_lb_test.sh \
-	file://program_oob_qspi.sh \
 	"
 
 S = "${WORKDIR}"
@@ -59,7 +58,6 @@ do_install:append:zub1cg-sbc () {
 
 do_install:append:mz-iocc () {
 	install -m 0755 pmod_lb_test.sh ${D}/home/root/factest_scripts/
-	install -m 0755 program_oob_qspi.sh ${D}/home/root/factest_scripts/
 }
 
 FILES:${PN} += "\
@@ -81,5 +79,4 @@ FILES:${PN}:append:zub1cg-sbc = "\
 
 FILES:${PN}:append:mz-iocc = "\
 	/home/root/factest_scripts/pmod_lb_test.sh \
-	/home/root/factest_scripts/program_oob_qspi.sh \
 	"

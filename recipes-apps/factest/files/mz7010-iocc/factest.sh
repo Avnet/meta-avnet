@@ -65,10 +65,6 @@ print_results () {
    printf "*** USB Device File Write & Read Test: "
    if [ $USB_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
    printf "                   ***\n"
-   
-   printf "*** Program QSPI With Out-Of-Box OS Image: "
-   if [ $PROGRAM_QSPI_RESULT -eq 0 ]; then cecho "GREEN" "PASS"; else cecho "RED" "FAIL"; fi
-   printf "               ***\n"
 
    echo "***                                                            ***"
    printf "*** "
@@ -99,9 +95,6 @@ print_results () {
    
    execute_script_test "Test USB Interface" $FACTEST_SCRIPTS_DIR/usb_test.sh
    USB_RESULT=$?
-
-   execute_script_test "Program QSPI with OOB OS image" $FACTEST_SCRIPTS_DIR/program_oob_qspi.sh
-   PROGRAM_QSPI_RESULT=$?
 
    print_results
 }

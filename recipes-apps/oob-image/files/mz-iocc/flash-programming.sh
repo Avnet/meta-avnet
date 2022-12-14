@@ -31,7 +31,7 @@ prog_flash () {
    fi
 }
 
-OOB_PATH=/home/root/oob
+OOB_PATH=/home/root/oob_image
 BOOT_FILE=boot.bin
 KERNEL_FILE=uImage
 DTB_FILE=devicetree.dtb
