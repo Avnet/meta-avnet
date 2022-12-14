@@ -4,5 +4,11 @@ COMPATIBLE_MACHINE = "zub1cg-sbc|mz7020-iocc|mz7010-iocc"
 
 IMAGE_INSTALL:append = "\
         factest \
+        factest-launcher \
+"
+
+IMAGE_INSTALL:remove = "\
+        blinky \
+        blinky-systemd \
 "
 

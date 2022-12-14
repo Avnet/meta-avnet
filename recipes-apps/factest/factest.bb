@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 COMPATIBLE_MACHINE = "zub1cg-sbc|mz7020-iocc|mz7010-iocc"
 
-RDEPENDS:${PN} += "gpio-utils bash"
+RDEPENDS:${PN} += "gpio-utils bash python3-ansi2html "
 
 # common factest source files for all machines
 SRC_URI = "\
