@@ -56,30 +56,36 @@
 FACTORY_TEST_SCRIPT=/home/root/factest.sh
 FLASH_PROGRAMMING_SCRIPT=/home/root/flash-programming.sh
 
-# Show the factory test banner.
-echo " "
-echo "******************************************************************"
-echo "***                                                            ***"
-echo "***    Avnet ZUBoard-1CG Factory Test Launcher V1.0            ***"
-echo "***                                                            ***"
-echo "******************************************************************"
-echo "***                                                            ***"
-echo "***    Please Press Key to Perform Desired Function Below:     ***"
-echo "***                                                            ***"
-echo "***    'f' - Factory Test                                      ***"
-echo "***    'i' - Run Unattended Factory Test in Infinite Loop      ***"
-echo "***    's' - Install Software to Flash Memory                  ***"
-echo "***    'x' - Linux Command Prompt                              ***"
-echo "***                                                            ***"
-echo "***    NOTE: Waiting will AUTO-INITIATE Factory Test           ***"
-echo "***                                                            ***"
-echo "******************************************************************"
-echo " "
-
+sleep 1
 while :
 do
-	answer="c"
-	read -t 5 answer
+
+	# Show the factory test banner.
+	echo " "
+	echo "******************************************************************"
+	echo "***                                                            ***"
+	echo "***    Avnet ZUBoard-1CG Factory Test Launcher V1.0            ***"
+	echo "***                                                            ***"
+	echo "******************************************************************"
+	echo "***                                                            ***"
+	echo "***    Please Press Key to Perform Desired Function Below:     ***"
+	echo "***                                                            ***"
+	echo "***    'f' - Factory Test                                      ***"
+	echo "***    'i' - Run Unattended Factory Test in Infinite Loop      ***"
+	echo "***    's' - Install Software to Flash Memory                  ***"
+	echo "***    'x' - Linux Command Prompt                              ***"
+	echo "***                                                            ***"
+	echo "***    NOTE: Waiting will AUTO-INITIATE Factory Test           ***"
+	echo "***                                                            ***"
+	echo "******************************************************************"
+	echo " "
+
+
+	# clear stdin by reading it
+	read -t 0.3 -N 1000
+
+	answer=""
+	read -t 10 answer
 	if [ "$answer" = "x" ]
 	then
 		echo " "
@@ -96,7 +102,6 @@ do
 		echo "******************************************************************"
 		echo " "
 		bash ${FACTORY_TEST_SCRIPT}
-		break
 	elif [ "$answer" = "i" ]
 	then
 		echo " "
@@ -108,7 +113,6 @@ do
 		do
 			bash ${FACTORY_TEST_SCRIPT} -u
 		done
-		break
 	elif [ "$answer" = "s" ]
 	then
 		echo " "
@@ -117,7 +121,6 @@ do
 		echo "******************************************************************"
 		echo " "
 		source ${FLASH_PROGRAMMING_SCRIPT}
-		break
 	else
 		echo " "
 		echo "******************************************************************"
@@ -125,6 +128,5 @@ do
 		echo "******************************************************************"
 		echo " "
 		bash ${FACTORY_TEST_SCRIPT}
-		break
 	fi
 done
