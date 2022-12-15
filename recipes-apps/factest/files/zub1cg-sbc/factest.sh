@@ -15,8 +15,8 @@ then
 fi
 
 FACTEST_SCRIPTS_DIR=/home/root/factest_scripts
-LOCAL_RESULTS_FILE=last_factest_results.log
-LOCAL_RESULTS_FILE_HTML=last_factest_results.html
+LOCAL_RESULTS_FILE=/home/root/last_factest_results.log
+LOCAL_RESULTS_FILE_HTML=/home/root/last_factest_results.html
 
 # In unattended mode we don't write the results to local file system
 # to prevent prevent this from filling up the disk
@@ -137,6 +137,6 @@ then
       cat $LOCAL_RESULTS_FILE | ansi2html > $LOCAL_RESULTS_FILE_HTML
       copy_log_file_to_qspi $LOCAL_RESULTS_FILE_HTML
    else
-      echo "QSPI TEST Failed, log file can be found on the sd card: /home/root/$LOCAL_RESULTS_FILE"
+      echo "QSPI TEST Failed, log file can be found on the sd card: $LOCAL_RESULTS_FILE"
    fi
 fi
