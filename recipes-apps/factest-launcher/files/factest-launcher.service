@@ -12,7 +12,7 @@ TimeoutSec=0
 RemainAfterExit=yes
 # tell systemd to stop logging to the console, to prevent it's messages
 ExecStartPre=/bin/kill -SIGRTMIN+21 1
-ExecStart=/etc/init.d/factest-launcher.init start
+ExecStart=/etc/init.d/factest-launcher start
 #RemainAfterExit=yes
 StandardOutput=tty
 StandardInput=tty-force
