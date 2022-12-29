@@ -124,7 +124,7 @@ print_results () {
    execute_script_test "Test RTC" $FACTEST_SCRIPTS_DIR/rtc_test.sh
 
    print_results
-} > >(tee -a "$LOCAL_RESULTS_FILE") 2>&1
+} > >(tee "$LOCAL_RESULTS_FILE") 2>&1
 
 sync
 

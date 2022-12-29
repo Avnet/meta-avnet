@@ -42,10 +42,10 @@ MIO_SW_4_NB=`get_gpio MIO_SW_4`
 process_mio_sw_to_leds() {
    while :
    do
-      echo $(cat gpio$MIO_SW_1_NB/value) > gpio$MIO_LED_1_NB/value
-      echo $(cat gpio$MIO_SW_2_NB/value) > gpio$MIO_LED_2_NB/value
-      echo $(cat gpio$MIO_SW_3_NB/value) > gpio$MIO_LED_3_NB/value
-      echo $(cat gpio$MIO_SW_4_NB/value) > gpio$MIO_LED_4_NB/value
+      cat gpio$MIO_SW_1_NB/value > gpio$MIO_LED_1_NB/value
+      cat gpio$MIO_SW_2_NB/value > gpio$MIO_LED_2_NB/value
+      cat gpio$MIO_SW_3_NB/value > gpio$MIO_LED_3_NB/value
+      cat gpio$MIO_SW_4_NB/value > gpio$MIO_LED_4_NB/value
    done
 }
 

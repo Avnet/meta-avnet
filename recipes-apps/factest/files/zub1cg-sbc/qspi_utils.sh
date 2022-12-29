@@ -1,6 +1,7 @@
 #!/bin/sh
 
 USER_MTD_DEV=/dev/mtd1
+MAX_LOGFILE_SIZE=0x8000 #defined in freertos image
 
 qspi_erase_user_part ()
 {
@@ -31,8 +32,15 @@ copy_log_file_to_qspi () {
 
     # copying size of log file at the beginning of the user part
     size=`stat --printf="%s" $log_file`
+
+    if [[ $size -gt  $MAX_LOGFILE_SIZE ]]
+    then
+        echo "warning: log file size exceeds max size ($MAX_LOGFILE_SIZE) - file will be truncated"
+        size=$((MAX_LOGFILE_SIZE))
+    fi
+
     v=`awk -v n=$size  'BEGIN{printf "%08X", n;}'`
-    echo -n -e "\\x${v:6:2}\\x${v:4:2}\\x${v:2:2}\\x${v:0:2}" >> size.bin
+    echo -n -e "\\x${v:6:2}\\x${v:4:2}\\x${v:2:2}\\x${v:0:2}" > size.bin
     mtd_debug write $USER_MTD_DEV 0x0 0x4 size.bin
     if [[ $? -ne 0 ]]
     then
