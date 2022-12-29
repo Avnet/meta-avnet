@@ -23,6 +23,7 @@ StandardInput=tty-force
 ExecStartPost=/bin/kill -SIGRTMIN+20 1
 TimeoutSec=0
 RemainAfterExit=no
+IgnoreSIGPIPE=no
 
 [Install]
 WantedBy=graphical.target
