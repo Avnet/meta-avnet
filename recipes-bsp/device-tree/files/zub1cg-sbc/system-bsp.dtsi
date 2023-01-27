@@ -7,16 +7,23 @@
 / {
    chosen {
       bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M";
+      xlnx,eeprom= &mac_eeprom;
    };
 
    xlnk {
       compatible = "xlnx,xlnk-1.0";
    };
 
-   chosen {
-      xlnx,eeprom= &mac_eeprom;
+   aliases {
+      mmc0 = &sdhci1;
+      mmc1 = &sdhci0;
    };
 
+   gtr_clk0: gtr_clk0 { /* gtr_refclk0_dp - 135MHz */
+      compatible = "fixed-clock";
+      #clock-cells = <0>;
+      clock-frequency = <135000000>;
+   };
 };
 
 &gem2 {
@@ -80,4 +87,10 @@
       compatible = "atmel,24mac402";
       reg = <0x58>;
    };
+};
+
+&psgtr {
+   /* DP */
+   clocks = <&gtr_clk0>;
+   clock-names = "ref0";
 };
