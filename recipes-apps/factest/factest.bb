@@ -12,7 +12,7 @@ COMPATIBLE_MACHINE = "zub1cg-sbc"
 RDEPENDS_${PN} += "gpio-utils bash python3-ansi2html "
 
 SRC_URI = " file://factest.sh \
-			file://szg_lb_test.sh \
+			file://hsio_lb_test.sh \
 			file://click_test.sh \
 			file://internal_sensors_test.sh \
 			file://buttons_and_leds_test.sh \
@@ -30,7 +30,7 @@ do_install() {
 		install -d ${D}/home/root
 		install -m 0755 factest.sh ${D}/home/root
 		install -d ${D}/home/root/factest_scripts/
-		install -m 0755 szg_lb_test.sh ${D}/home/root/factest_scripts/
+		install -m 0755 hsio_lb_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 click_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 internal_sensors_test.sh ${D}/home/root/factest_scripts/
 		install -m 0755 buttons_and_leds_test.sh ${D}/home/root/factest_scripts/
@@ -43,7 +43,7 @@ do_install() {
 }
 
 FILES_${PN} += "/home/root/factest.sh \
-				/home/root/factest_scripts/szg_lb_test.sh \
+				/home/root/factest_scripts/hsio_lb_test.sh \
 				/home/root/factest_scripts/click_test.sh \
 				/home/root/factest_scripts/internal_sensors_test.sh \
 				/home/root/factest_scripts/buttons_and_leds_test.sh \

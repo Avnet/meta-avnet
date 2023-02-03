@@ -6,16 +6,16 @@ source /usr/local/bin/gpio/gpio_common.sh
 BASE_RGB_LED_0=$(get_gpiochip_base a0000000)
 # axi_gpio_1 rgb_led_1
 BASE_RGB_LED_1=$(get_gpiochip_base a0010000)
-# axi_gpio_2 szg_trx2_mio_lb
-BASE_SZG_TRX2_MIO_LB=$(get_gpiochip_base a0020000)
-# axi_gpio_3 szg_trx2_pl_lb
-BASE_SZG_TRX2_PL_LB=$(get_gpiochip_base a0030000)
-# axi_gpio_4 szg_std_lb
-BASE_SZG_STD_LB=$(get_gpiochip_base a0040000)
-# axi_gpio_5 szg_trx2_pl_pwr
-BASE_SZG_TRX2_PL_PWR=$(get_gpiochip_base a0050000)
-# axi_gpio_6 szg_std_pwr
-BASE_SZG_STD_PWR=$(get_gpiochip_base a0060000)
+# axi_gpio_2 hsio_trx2_mio_lb
+BASE_HSIO_TRX2_MIO_LB=$(get_gpiochip_base a0020000)
+# axi_gpio_3 hsio_trx2_pl_lb
+BASE_HSIO_TRX2_PL_LB=$(get_gpiochip_base a0030000)
+# axi_gpio_4 hsio_std_lb
+BASE_HSIO_STD_LB=$(get_gpiochip_base a0040000)
+# axi_gpio_5 hsio_trx2_pl_pwr
+BASE_HSIO_TRX2_PL_PWR=$(get_gpiochip_base a0050000)
+# axi_gpio_6 hsio_std_pwr
+BASE_HSIO_STD_PWR=$(get_gpiochip_base a0060000)
 # axi_gpio_7 pl_pb
 BASE_PL_PB=$(get_gpiochip_base a0070000)
 # axi_gpio_8 click_test_leds

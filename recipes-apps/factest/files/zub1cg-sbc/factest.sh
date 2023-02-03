@@ -116,7 +116,7 @@ print_results () {
 
    execute_script_test "Test Buttons and LEDs" $FACTEST_SCRIPTS_DIR/buttons_and_leds_test.sh
    execute_script_test "Test Click Module interface" $FACTEST_SCRIPTS_DIR/click_test.sh
-   execute_script_test "Test SyZyGY interfaces" $FACTEST_SCRIPTS_DIR/szg_lb_test.sh
+   execute_script_test "Test High Speed I/O (HSIO) interfaces" $FACTEST_SCRIPTS_DIR/hsio_lb_test.sh
    execute_script_test "Test Internal Sensors" $FACTEST_SCRIPTS_DIR/internal_sensors_test.sh
    execute_script_test "Test SYSMON" $FACTEST_SCRIPTS_DIR/sysmon_test.sh
    execute_script_test "Test Ethernet Interface" $FACTEST_SCRIPTS_DIR/ethernet_test.sh
