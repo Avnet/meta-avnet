@@ -27,7 +27,7 @@ SRC_URI:append:zub1cg-sbc = "\
 	file://click_test.sh \
 	file://internal_sensors_test.sh \
 	file://rtc_test.sh \
-	file://szg_lb_test.sh \
+	file://hsio_lb_test.sh \
 	"
 
 # source files specific to the mz-iocc machines
@@ -53,7 +53,7 @@ do_install:append:zub1cg-sbc () {
 	install -m 0755 click_test.sh ${D}/home/root/factest_scripts/
 	install -m 0755 internal_sensors_test.sh ${D}/home/root/factest_scripts/
 	install -m 0755 rtc_test.sh ${D}/home/root/factest_scripts/
-	install -m 0755 szg_lb_test.sh ${D}/home/root/factest_scripts/
+	install -m 0755 hsio_lb_test.sh ${D}/home/root/factest_scripts/
 }
 
 do_install:append:mz-iocc () {
@@ -74,7 +74,7 @@ FILES:${PN}:append:zub1cg-sbc = "\
 	/home/root/factest_scripts/click_test.sh \
 	/home/root/factest_scripts/internal_sensors_test.sh \
 	/home/root/factest_scripts/rtc_test.sh \
-	/home/root/factest_scripts/szg_lb_test.sh \
+	/home/root/factest_scripts/hsio_lb_test.sh \
 	"
 
 FILES:${PN}:append:mz-iocc = "\
