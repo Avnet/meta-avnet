@@ -1,11 +1,11 @@
 #@TYPE: Machine
-#@NAME: uz3eg-pciec
-#@DESCRIPTION: Machine support for UltraZed-EG with PCIEC.
+#@NAME: uz7ev-evcc
+#@DESCRIPTION: Generic support for UltraZed-EV with EVCC.
 #
 
-SOC_VARIANT = "eg"
+SOC_VARIANT = "ev"
 
-MACHINEOVERRIDES = "uz:uz3eg:${MACHINE}"
+MACHINEOVERRIDES =. "uz:uz7ev:uz7ev-evcc:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc

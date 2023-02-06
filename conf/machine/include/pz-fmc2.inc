@@ -1,9 +1,9 @@
 #@TYPE: Machine
-#@NAME: pz7030-fmc2
-#@DESCRIPTION: Machine support for Picozed 7030 with FMC2.
+#@NAME: pz-fmc2
+#@DESCRIPTION: Generic support for Picozed with FMC2.
 #
 
-MACHINEOVERRIDES = "pz:${MACHINE}"
+MACHINEOVERRIDES =. "pz:pz-fmc2:"
 
 require conf/machine/include/soc-zynq.inc
 require conf/machine/include/machine-xilinx-default.inc

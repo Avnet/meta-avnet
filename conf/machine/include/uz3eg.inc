@@ -1,11 +1,11 @@
 #@TYPE: Machine
 #@NAME: uz3eg-iocc
-#@DESCRIPTION: Machine support for UltraZed-EG with IOCC.
+#@DESCRIPTION: Generic support for UltraZed-EG.
 #
 
 SOC_VARIANT = "eg"
 
-MACHINEOVERRIDES = "uz:uz3eg:${MACHINE}"
+MACHINEOVERRIDES =. "uz:uz3eg:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc

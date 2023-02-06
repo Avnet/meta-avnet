@@ -1,9 +1,9 @@
 #@TYPE: Machine
-#@NAME: mz7010-iocc
-#@DESCRIPTION: Machine support for Microzed 7010 with I/O carrier.
+#@NAME: mz-som
+#@DESCRIPTION: Generic support for Microzed SOM.
 #
 
-MACHINEOVERRIDES = "mz:mz-iocc:${MACHINE}"
+MACHINEOVERRIDES =. "mz:mz-som:"
 
 require conf/machine/include/soc-zynq.inc
 require conf/machine/include/machine-xilinx-default.inc

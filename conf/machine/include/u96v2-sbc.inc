@@ -1,9 +1,9 @@
 #@TYPE: Machine
 #@NAME: u96v2-sbc
-#@DESCRIPTION: Machine support for Ultra96v2.
+#@DESCRIPTION: Generic support for Ultra96v2 SBC.
 #
 
-MACHINEOVERRIDES = "ultra96:ultra96-zynqmp:${MACHINE}"
+MACHINEOVERRIDES =. "ultra96:ultra96-zynqmp:u96v2-sbc:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc

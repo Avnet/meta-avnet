@@ -1,9 +1,9 @@
 #@TYPE: Machine
 #@NAME: zub1cg-sbc
-#@DESCRIPTION: Machine support for ZUBoard_1CG.
+#@DESCRIPTION: Generic support for ZUBoard_1CG SBC.
 #
 
-MACHINEOVERRIDES = "zub1cg:zub1cg-sbc:${MACHINE}"
+MACHINEOVERRIDES =. "zub1cg:zub1cg-sbc:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
@@ -37,9 +37,6 @@ IMAGE_BOOT_FILES = " \
                     boot.scr \
                     fitImage;image.ub \
                     "
-
-PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
-PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
 
 # deploy avnet-boot-scr scripts in images/linux/ folder
 EXTRA_FILESLIST:append = " ${DEPLOY_DIR_IMAGE}/avnet-boot/:avnet-boot/ "
