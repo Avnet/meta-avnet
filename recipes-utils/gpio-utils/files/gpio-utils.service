@@ -4,7 +4,7 @@ After=local-fs.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash /usr/local/bin/gpio/gpio_map.sh
+ExecStart=/etc/init.d/gpio-utils start
 
 [Install]
 WantedBy=multi-user.target

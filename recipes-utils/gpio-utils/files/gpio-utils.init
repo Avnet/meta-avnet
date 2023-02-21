@@ -1,4 +1,3 @@
-# [Re]generates the gpio conf
 #!/bin/sh
 
 # recreate the gpio map on [re]start
