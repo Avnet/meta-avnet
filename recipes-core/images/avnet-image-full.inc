@@ -86,7 +86,6 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
 
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         blinky \
-        blinky-systemd \
         user-switch-test \
 "
 

@@ -9,6 +9,5 @@ IMAGE_INSTALL:append = "\
 
 IMAGE_INSTALL:remove:zub1cg-sbc = "\
         blinky \
-        blinky-systemd \
 "
 

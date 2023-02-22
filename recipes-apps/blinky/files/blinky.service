@@ -4,8 +4,9 @@ Requires=gpio-utils.service
 After=gpio-utils.service
 
 [Service]
-Type=simple
-ExecStart=/bin/bash /home/root/run-blinky.sh
+Type=forking
+ExecStart=/etc/init.d/blinky start
+ExecStop=/etc/init.d/blinky stop
 StandardOutput=tty
 
 [Install]
