@@ -23,7 +23,6 @@ IMAGE_INSTALL:append:zynq = "\
 	openssh-sftp-server \
 	openssh-sshd \
 	python-webserver \
-	python-webserver-init \
 	python3 \
 	python3-core \
 	python3-dbus \
@@ -130,7 +129,6 @@ IMAGE_INSTALL:append:uz = "\
 	media-ctl \
 	performance-tests \
 	python-webserver \
-	python-webserver-systemd \
 	python3 \
 	python3-core \
 	python3-dbus \
@@ -151,7 +149,6 @@ IMAGE_INSTALL:append:uz7ev-evcc-hdmi = "\
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
 	blinky \
 	python-webserver \
-	python-webserver-systemd \
 	user-led-test \
 	user-switch-test \
 "

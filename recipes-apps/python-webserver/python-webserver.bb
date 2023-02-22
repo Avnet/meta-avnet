@@ -11,8 +11,10 @@ COMPATIBLE_MACHINE = "uz|pz|mz"
 
 # Packages
 RDEPENDS:${PN} += "\
+  bash \
   python3-core \
-    "
+  gpio-utils \
+  "
 
 SRC_URI = "file://cgi.py \
      file://index.html \
@@ -26,6 +28,8 @@ SRC_URI = "file://cgi.py \
      file://images/favicon.ico \
      file://images/board.jpg \
      file://pdfs/Delkin_Devices_Product_Line.pdf \
+     file://python-webserver.init \
+     file://python-webserver.service \
       "
 
 SRC_URI:append:uz = "\
@@ -62,6 +66,16 @@ SRC_URI:append:mz = "\
 
 S = "${WORKDIR}"
 
+inherit systemd update-rc.d
+
+INITSCRIPT_PACKAGES = "${PN}"
+INITSCRIPT_NAME = "python-webserver"
+INITSCRIPT_PARAMS:${PN} = "start 95 S ."
+
+SYSTEMD_PACKAGES="${PN}"
+SYSTEMD_SERVICE:${PN}="python-webserver.service"
+SYSTEMD_AUTO_ENABLE:${PN}="enable"
+
 do_install() {
        install -d ${D}/home/root/webserver
        install -d ${D}/home/root/webserver/css
@@ -80,6 +94,13 @@ do_install() {
        install -m 0755 ${S}/images/favicon.ico ${D}/home/root/webserver/images
        install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/Delkin_Devices_Product_Line.pdf ${D}/home/root/webserver/pdfs
+
+	install -d ${D}${sysconfdir}/init.d
+	install -m 0755 ${S}/python-webserver.init ${D}${sysconfdir}/init.d/python-webserver
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
+		install -d ${D}${systemd_system_unitdir}
+		install -m 0644 ${WORKDIR}/python-webserver.service ${D}${systemd_system_unitdir}
+	fi
 }
 
 do_install:append:uz () {
@@ -127,6 +148,8 @@ FILES:${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/images/favicon.ico \
            /home/root/webserver/images/board.jpg \
            /home/root/webserver/pdfs/Delkin_Devices_Product_Line.pdf \
+           ${sysconfdir}/* \
+           ${systemd_system_unitdir}/* \
                "
 
 FILES:${PN}:append:uz = "\

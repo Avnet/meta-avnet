@@ -20,7 +20,6 @@ IMAGE_INSTALL:append:zynq = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
-        python-webserver-init \
         python-webserver \
         python3 \
         python3-core \

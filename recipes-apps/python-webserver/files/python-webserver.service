@@ -1,0 +1,13 @@
+[Unit]
+Description=Python Webserver
+Requires=network-online.target gpio-utils.service
+After=network-online.target gpio-utils.service
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/python-webserver start
+ExecStop=/etc/init.d/python-webserver stop
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
