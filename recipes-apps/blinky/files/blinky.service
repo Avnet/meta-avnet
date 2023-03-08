@@ -1,0 +1,13 @@
+[Unit]
+Description=Blinky Sample Application
+Requires=gpio-utils.service
+After=gpio-utils.service
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/blinky start
+ExecStop=/etc/init.d/blinky stop
+StandardOutput=tty
+
+[Install]
+WantedBy=multi-user.target

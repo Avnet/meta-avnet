@@ -20,7 +20,6 @@ IMAGE_INSTALL:append:zynq = "\
         openssh-scp \
         openssh-sftp-server \
         openssh-sshd \
-        python-webserver-init \
         python-webserver \
         python3 \
         python3-core \
@@ -86,7 +85,6 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
 
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         blinky \
-        blinky-systemd \
         user-switch-test \
 "
 

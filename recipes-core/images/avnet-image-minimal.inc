@@ -78,7 +78,6 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 
 IMAGE_INSTALL:append:uz = "\
         blinky \
-        blinky-systemd \
         libdrm \
         libdrm-kms \
         libdrm-tests \
@@ -88,7 +87,6 @@ IMAGE_INSTALL:append:uz = "\
         pciutils \
         performance-tests \
         python-webserver \
-        python-webserver-systemd \
         python3 \
         python3-core \
         python3-dbus \
@@ -104,7 +102,6 @@ IMAGE_INSTALL:append:uz7ev-evcc = "\
 
 IMAGE_INSTALL:remove:uz7ev-evcc-hdmi = "\
         python-webserver \
-        python-webserver-systemd \
         user-led-test \
 "
 
@@ -113,7 +110,6 @@ IMAGE_INSTALL:append:uz7ev-evcc-nvme = "\
 "
 
 IMAGE_INSTALL:append:pz = "\
-        blinky-init \
         blinky \
         e2fsprogs \
         e2fsprogs-resize2fs \
@@ -126,7 +122,6 @@ IMAGE_INSTALL:append:pz = "\
 
 IMAGE_INSTALL:append:zub1cg-sbc = "\
         blinky \
-        blinky-systemd \
         libdrm \
         libdrm-kms \
         libdrm-tests \
