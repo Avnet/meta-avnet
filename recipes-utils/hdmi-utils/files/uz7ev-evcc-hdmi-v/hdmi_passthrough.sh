@@ -10,8 +10,8 @@ systemctl stop xserver-nodm
 # Adjust alpha instead of killing x11
 modetest-hdmi -w 42:alpha:0
 
-media-ctl -d $MEDIA_CTL_DEV -V '"b0080000.v_proc_ss":0 [fmt:RBG888_1X24/3840x2160 field:none]'
-media-ctl -d $MEDIA_CTL_DEV -V '"b0080000.v_proc_ss":1 [fmt:UYVY8_1X16/3840x2160 field:none]'
+media-ctl -d $MEDIA_CTL_DEV -V '"b0000000.v_proc_ss":0 [fmt:RBG888_1X24/3840x2160 field:none]'
+media-ctl -d $MEDIA_CTL_DEV -V '"b0000000.v_proc_ss":1 [fmt:UYVY8_1X16/3840x2160 field:none]'
 
 sleep 1
 
