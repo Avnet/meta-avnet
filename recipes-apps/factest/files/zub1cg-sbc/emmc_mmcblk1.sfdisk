@@ -1,0 +1,6 @@
+label: dos
+unit: sectors
+sector-size: 512
+
+/dev/mmcblk1p1 : start=        2048, size=     2097152, type=c, bootable
+/dev/mmcblk1p2 : start=     2099200, size=    60061696, type=83
