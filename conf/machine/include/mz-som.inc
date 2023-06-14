@@ -23,7 +23,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += "device-tree"
 
 EXTRA_IMAGEDEPENDS += " \
         virtual/bootloader \
-        u-boot-zynq-scr \
+        u-boot-xlnx-scr \
         virtual/fsbl \
         avnet-boot-scr \
         "

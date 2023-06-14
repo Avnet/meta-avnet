@@ -24,7 +24,7 @@ SERIAL_CONSOLES ?= "115200;ttyPS0"
 EXTRA_IMAGEDEPENDS += " \
 		arm-trusted-firmware \
 		virtual/bootloader \
-		u-boot-zynq-scr \
+		u-boot-xlnx-scr \
 		virtual/fsbl \
 		virtual/pmu-firmware \
 		avnet-boot-scr \
