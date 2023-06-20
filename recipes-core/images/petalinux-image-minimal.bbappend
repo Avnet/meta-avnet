@@ -182,6 +182,13 @@ IMAGE_INSTALL:append:zub1cg-sbc = "\
 	yavta \
 "
 
+IMAGE_INSTALL:append:zub1cg-sbc-m2-wifi = "\
+	iw \
+	kernel-module-lwb-backports-summit \
+	lwbplus-firmware \
+	sterling-supplicant-lwb \
+"
+
 IMAGE_INSTALL:remove:zub1cg-sbc = "\
 	pmic-prog \
 "
