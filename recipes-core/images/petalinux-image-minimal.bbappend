@@ -187,6 +187,8 @@ IMAGE_INSTALL:append:zub1cg-sbc-m2-wifi = "\
 	kernel-module-lwb-backports-summit \
 	lwbplus-firmware \
 	sterling-supplicant-lwb \
+	bluez5 \
+	brcm-patchram-plus \
 "
 
 IMAGE_INSTALL:remove:zub1cg-sbc = "\

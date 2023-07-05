@@ -26,6 +26,10 @@
    };
 };
 
+&uart1 {
+	/delete-property/ cts-override ;
+};
+
 &gem2 {
    status = "okay";
    /* local-mac-address = [00 0a 35 00 02 90]; */
