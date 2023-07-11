@@ -1,0 +1,25 @@
+From 789583e5b4ac5f84d650369f36d54288733e8f54 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Wed, 12 Jul 2023 12:59:27 +0000
+Subject: [PATCH] Add missing header for LIBAVCODEC_VERSION_INT
+
+Fixing build issue when using packageconfig libav (-DWITH_FFMPEG)
+
+Corresponds to commit
+https://github.com/opencv/opencv/commit/496eed950f6d0e7fd92619d47e3cec8f06e96ace
+---
+ modules/videoio/src/ffmpeg_codecs.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/modules/videoio/src/ffmpeg_codecs.hpp b/modules/videoio/src/ffmpeg_codecs.hpp
+index 61788e0345..faad2596ed 100644
+--- a/modules/videoio/src/ffmpeg_codecs.hpp
++++ b/modules/videoio/src/ffmpeg_codecs.hpp
+@@ -60,6 +60,7 @@ extern "C" {
+ #include <errno.h>
+ #endif
+ 
++#include <libavcodec/version.h>
+ #include <libavformat/avformat.h>
+ 
+ #ifdef __cplusplus
