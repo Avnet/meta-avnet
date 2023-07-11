@@ -79,7 +79,6 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 IMAGE_INSTALL:append:uz = "\
         blinky \
         libdrm \
-        libdrm-kms \
         libdrm-tests \
         libstdc++ \
         libv4l \
@@ -123,7 +122,6 @@ IMAGE_INSTALL:append:pz = "\
 IMAGE_INSTALL:append:zub1cg-sbc = "\
         blinky \
         libdrm \
-        libdrm-kms \
         libdrm-tests \
         libstdc++ \
         libv4l \
