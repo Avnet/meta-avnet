@@ -35,5 +35,7 @@ IMAGE_BOOT_FILES = " \
                     fitImage;image.ub \
                     "
 
+WKS_FILES = "petalinux-image-minimal.wks"
+
 # deploy avnet-boot-scr scripts in images/linux/ folder
 EXTRA_FILESLIST:append = " ${DEPLOY_DIR_IMAGE}/avnet-boot/:avnet-boot/ "

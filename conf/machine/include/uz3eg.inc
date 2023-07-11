@@ -37,6 +37,8 @@ IMAGE_BOOT_FILES = " \
                     fitImage;image.ub \
                     "
 
+WKS_FILES = "petalinux-image-minimal.wks"
+
 PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
 PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
 
