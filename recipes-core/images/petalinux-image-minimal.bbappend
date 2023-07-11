@@ -31,9 +31,6 @@ IMAGE_INSTALL:append:zynq = "\
 	udev-extraconf \
 	usbutils \
 	util-linux-sulogin \
-	xrt \
-	xrt-dev \
-	zocl \
 "
 
 IMAGE_INSTALL:append:zynqmp = "\
