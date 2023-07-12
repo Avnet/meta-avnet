@@ -1,0 +1,74 @@
+From 3d750d5adbb927eae8de36a4ef6b3e74fed173e5 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Wed, 12 Jul 2023 14:47:08 +0000
+Subject: [PATCH] hwmon:(pmbus) Add support Infineon IR38062, IR38063
+
+add IR38062, IR38063 support in IR38064 driver
+---
+ Documentation/hwmon/ir38064.rst | 16 ++++++++++++++++
+ drivers/hwmon/pmbus/Kconfig     |  2 +-
+ drivers/hwmon/pmbus/ir38064.c   |  4 ++++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/hwmon/ir38064.rst b/Documentation/hwmon/ir38064.rst
+index e1148f21ea2a..cda5fc8c1eed 100644
+--- a/Documentation/hwmon/ir38064.rst
++++ b/Documentation/hwmon/ir38064.rst
+@@ -11,6 +11,22 @@ Supported chips:
+     Datasheet: Publicly available at the Infineon website
+       https://www.infineon.com/dgdl/Infineon-IR38060M-DS-v03_16-EN.pdf?fileId=5546d4625c167129015c3291ea9a4cee
+ 
++  * Infineon IR38062
++
++    Prefix: 'ir38062'
++    Addresses scanned: -
++
++    Datasheet: Publicly available at the Infineon webiste
++      https://www.infineon.com/dgdl/Infineon-IR38062M-DS-v03_14-EN.pdf?fileId=5546d462533600a4015355d1717617a8
++
++  * Infineon IR38063
++
++    Prefix: 'ir38063'
++    Addresses scanned: -
++
++    Datasheet: Publicly available at the Infineon webiste
++      https://www.infineon.com/dgdl/Infineon-IR38063M-DS-v03_15-EN.pdf?fileId=5546d4625c167129015c3291f5104cf0
++
+   * Infineon IR38064
+ 
+     Prefix: 'ir38064'
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 2114d7fea183..a49683bfe8e3 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -136,7 +136,7 @@ config SENSORS_IR38064
+ 	tristate "Infineon IR38064 and compatibles"
+ 	help
+ 	  If you say yes here you get hardware monitoring support for Infineon
+-	  IR38060, IR38064, IR38164 and IR38263.
++	  IR38060, IR38062, IR38063, IR38064, IR38164 and IR38263.
+ 
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called ir38064.
+diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
+index 09276e397194..675e55489a68 100644
+--- a/drivers/hwmon/pmbus/ir38064.c
++++ b/drivers/hwmon/pmbus/ir38064.c
+@@ -54,6 +54,8 @@ static int ir38064_probe(struct i2c_client *client)
+ 
+ static const struct i2c_device_id ir38064_id[] = {
+ 	{"ir38060", 0},
++	{"ir38062", 0},
++	{"ir38063", 0},
+ 	{"ir38064", 0},
+ 	{"ir38164", 0},
+ 	{"ir38263", 0},
+@@ -64,6 +66,8 @@ MODULE_DEVICE_TABLE(i2c, ir38064_id);
+ 
+ static const struct of_device_id __maybe_unused ir38064_of_match[] = {
+ 	{ .compatible = "infineon,ir38060" },
++	{ .compatible = "infineon,ir38062" },
++	{ .compatible = "infineon,ir38063" },
+ 	{ .compatible = "infineon,ir38064" },
+ 	{ .compatible = "infineon,ir38164" },
+ 	{ .compatible = "infineon,ir38263" },
