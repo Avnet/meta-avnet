@@ -8,10 +8,6 @@ SRC_URI = "git://github.com/Avnet/BSP-rootfs-sources.git;protocol=https;branch=$
        file://ultra96-startup-commands.sh \
        "
 
-RDEPENDS:${PN}:remove = "\
-    chromium-x11 \
-"
-
 RDEPENDS:${PN}:append = "\
      connman connman-client connman-tools \
 "
@@ -21,7 +17,6 @@ SRCREV = "${AUTOREV}"
 SRCBRANCH ?= "master"
 SUBPATH = "ultra96-startup-pages"
 S = "${WORKDIR}/${SUBPATH}"
-
 
 do_install () {
     install -d ${D}${datadir}/ultra96-startup-pages
