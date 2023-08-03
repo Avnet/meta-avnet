@@ -299,6 +299,10 @@
    maximum-speed = "super-speed";
 };
 
+&usb1 {
+	reset-gpios = <&modepin_gpio 1 GPIO_ACTIVE_LOW>;
+};
+
 &dwc3_1 {
    dr_mode = "host";
    phy-names = "usb3-phy";
