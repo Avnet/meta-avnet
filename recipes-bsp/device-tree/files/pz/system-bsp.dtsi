@@ -5,7 +5,7 @@
    };
 
    chosen {
-      xlnx,eeprom= &mac_eeprom;
+      nvmem = &mac_eeprom;
    };
 
 };
@@ -35,8 +35,13 @@
 &axi_iic_0 {
    /* Ethernet MAC ID EEPROM */
    mac_eeprom: mac_eeprom@51 {
-      compatible = "atmel,24c02";
-      reg = <0x51>;
+    #address-cells = <1>;
+    #size-cells = <1>;
+    compatible = "atmel,24c02";
+    reg = <0x51>;
+    mac_address: mac-address@FA {
+	reg = <0xFA 0x06>;
+    };
    };
 };
 
@@ -44,6 +49,8 @@
     status = "okay";
     phy-handle = <&phy0>;
     phy-mode = "rgmii-id";
+    nvmem-cells = <&mac_address>;
+    nvmem-cell-names = "mac-address";
     phy0: phy@0 {
       compatible = "marvell,88E1510";
       device_type = "ethernet-phy";
