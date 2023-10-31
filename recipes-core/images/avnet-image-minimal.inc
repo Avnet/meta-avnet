@@ -148,3 +148,10 @@ COMMON_FEATURES:append:zynq = "\
         debug-tweaks \
         ssh-server-dropbear \
 "
+
+IMAGE_INSTALL:append:auboard15p = "\
+        evtest \
+        libgpiod \
+        libgpiod-tools \
+        i2c-tools \
+"
