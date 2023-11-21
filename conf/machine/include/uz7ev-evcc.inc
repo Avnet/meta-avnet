@@ -10,6 +10,7 @@ MACHINEOVERRIDES =. "uz:uz7ev:uz7ev-evcc:"
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
 
+MACHINE_HWCODECS = ""
 MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost"
 
 EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
