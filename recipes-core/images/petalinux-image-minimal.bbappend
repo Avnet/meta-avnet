@@ -184,13 +184,11 @@ IMAGE_INSTALL:append:zub1cg-sbc = "\
 
 IMAGE_INSTALL:append:zub1cg-sbc-m2-wifi = "\
 	iw \
-	kernel-module-lwb-backports-summit \
-	lwbplus-firmware \
-	sterling-supplicant-lwb \
 	connman \
 	connman-client \
 	bluez5 \
-	brcm-patchram-plus \
+	mwifiex \
+	mwifiex-fw \
 "
 
 IMAGE_INSTALL:remove:zub1cg-sbc = "\

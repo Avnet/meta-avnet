@@ -5,7 +5,7 @@ auto lo
 iface lo inet loopback
 
 # Wireless interfaces
-iface wlan0 inet dhcp
+iface mlan0 inet dhcp
 	wireless_mode managed
 	wireless_essid any
 	wpa-driver nl80211
