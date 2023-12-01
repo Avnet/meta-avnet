@@ -1,0 +1,23 @@
+From edb44358f678180559cc6bc650ac9b8818b25b06 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Wed, 29 Nov 2023 18:13:40 +0000
+Subject: [PATCH] makefile: add modules_install
+
+---
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index bde631b..25f106c 100644
+--- a//Makefile
++++ b/Makefile
+@@ -585,6 +585,9 @@ else
+ default:
+ 	$(MAKE) -C $(KERNELDIR) M=$(PWD) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) modules
+ 
++modules_install:
++	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install
++
+ endif
+ 
+ ###############################################################
