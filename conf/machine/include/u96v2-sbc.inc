@@ -8,7 +8,7 @@ MACHINEOVERRIDES =. "ultra96:ultra96-zynqmp:u96v2-sbc:"
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost usbgadget wifi bluetooth"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget wifi bluetooth"
 
 UBOOT_MACHINE = "xilinx_zynqmp_virt_defconfig"
 # prevent U-Boot from deploying the boot.bin
