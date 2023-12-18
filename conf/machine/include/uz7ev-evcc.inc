@@ -50,3 +50,5 @@ EXTRA_IMAGEDEPENDS:remove = "qemu-devicetrees"
 PACKAGE_FEED_URIS = "http://petalinux.xilinx.com/sswreleases/sswboardfeeds/"
 PACKAGE_FEED_BASE_PATHS = "zzsoc"
 PACKAGE_FEED_ARCHS = "all aarch64 plnx_aarch64"
+
+CONFIG_SUBSYSTEM_ETHERNET_PSU_ETHERNET_3_MAC=""
