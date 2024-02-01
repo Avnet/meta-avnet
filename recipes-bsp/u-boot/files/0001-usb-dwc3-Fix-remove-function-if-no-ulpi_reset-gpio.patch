@@ -1,0 +1,30 @@
+From 213019a3964695996104bdf3f949863c2feac731 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Thu, 3 Aug 2023 00:48:28 +0000
+Subject: [PATCH 1/1] usb: dwc3: Fix remove function if no ulpi_reset gpio
+
+As ulpi_reset gpio is now optional, check if it is declared before
+triggering reset
+
+Signed-off-by: Thomas Nizan <tnizan@witekio.com>
+---
+ drivers/usb/dwc3/dwc3-generic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-generic.c b/drivers/usb/dwc3/dwc3-generic.c
+index 069931cf9b..11569b8095 100644
+--- a/drivers/usb/dwc3/dwc3-generic.c
++++ b/drivers/usb/dwc3/dwc3-generic.c
+@@ -132,7 +132,8 @@ static int dwc3_generic_remove(struct udevice *dev,
+ 	struct dwc3 *dwc3 = &priv->dwc3;
+ 
+ 	if (CONFIG_IS_ENABLED(DM_GPIO) &&
+-	    device_is_compatible(dev->parent, "xlnx,zynqmp-dwc3")) {
++	    device_is_compatible(dev->parent, "xlnx,zynqmp-dwc3") &&
++		priv->ulpi_reset.dev) {
+ 		struct gpio_desc *ulpi_reset = &priv->ulpi_reset;
+ 
+ 		dm_gpio_free(ulpi_reset->dev, ulpi_reset);
+-- 
+2.34.1
+
