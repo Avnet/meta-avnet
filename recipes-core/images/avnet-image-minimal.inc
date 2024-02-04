@@ -154,4 +154,6 @@ IMAGE_INSTALL:append:auboard15p = "\
         libgpiod \
         libgpiod-tools \
         i2c-tools \
+        iperf3 \
+        memtester \
 "

@@ -19,13 +19,14 @@
    };
 };
 
-&axi_iic_0 {
-    status = "okay";
-    pinctrl-names = "default";
-
-    eeprom: eeprom@50 {
-        compatible = "24c128";
-        reg = <0x50>;
-        pagesize = <64>;
-    };
+&axi_ethernetlite_0 {
+	phy-handle = <&phy0>;
+	axi_ethernetlite_0_mdio: mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		phy0: phy@1 {
+			device_type = "ethernet-phy";
+			reg = <1>;
+		};
+	};
 };
