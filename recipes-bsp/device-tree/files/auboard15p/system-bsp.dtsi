@@ -4,19 +4,40 @@
 #include "include/dt-bindings/gpio/gpio.h"
 
 / {
-   model = "Avnet AUBoard 15P (MicroBlaze)";
+	model = "Avnet AUBoard 15P (MicroBlaze)";
 
-   leds {
-      compatible = "gpio-leds";
-      pinctrl-names = "default";
-      status = "okay";
-   };
+	leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		status = "okay";
 
-   keys {
-      compatible = "gpio-keys";
-      pinctrl-names = "default";
-      status = "okay";
-   };
+		led0 {
+			label = "heartbeat";
+			gpios = <&axi_gpio_0 0 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+		};
+		led1 {
+			label = "led1";
+			gpios = <&axi_gpio_0 1 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		led2 {
+			label = "led2";
+			gpios = <&axi_gpio_0 2 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		led3 {
+			label = "led3";
+			gpios = <&axi_gpio_0 3 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+	};
+
+	keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "default";
+		status = "okay";
+	};
 };
 
 &axi_ethernetlite_0 {
