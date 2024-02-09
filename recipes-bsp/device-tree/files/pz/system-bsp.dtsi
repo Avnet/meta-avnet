@@ -104,5 +104,5 @@
 
 &usb0 {
     dr_mode = "otg";
-    usb-phy = <&usb0>;
+    usb-phy = <&usb_phy0>;
 };
