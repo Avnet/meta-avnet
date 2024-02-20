@@ -31,6 +31,38 @@
 			gpios = <&axi_gpio_0 3 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
+
+		rgb_led1_r {
+			label = "rgb_led1_r";
+			gpios = <&axi_gpio_0 4 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		rgb_led1_g {
+			label = "rgb_led1_g";
+			gpios = <&axi_gpio_0 5 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		rgb_led1_b {
+			label = "rgb_led1_b";
+			gpios = <&axi_gpio_0 6 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+
+		rgb_led2_r {
+			label = "rgb_led2_r";
+			gpios = <&axi_gpio_0 7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		rgb_led2_g {
+			label = "rgb_led2_g";
+			gpios = <&axi_gpio_0 8 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		rgb_led2_b {
+			label = "rgb_led2_b";
+			gpios = <&axi_gpio_0 9 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
 	};
 
 	keys {
