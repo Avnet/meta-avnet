@@ -83,3 +83,58 @@
 		};
 	};
 };
+
+&axi_iic_0 {
+    status = "okay";
+    pinctrl-names = "default";
+
+    mac_eeprom@58 {
+        compatible = "atmel,24mac402";
+        reg = <0x58>;
+        pagesize = <256>;
+    };
+
+    i2c-mux@70 {
+        compatible = "nxp,pca9544";
+		#address-cells = <1>;
+		#size-cells = <0>;
+        reg = <0x70>;
+
+		i2c@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+		};
+		i2c@1 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <1>;
+		};
+		i2c@2 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <2>;
+		};
+		i2c@3 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <3>;
+
+			temp-sensor@3c {
+				compatible = "st,stts22h";
+				reg = <0x3c>;
+			};
+		};
+    };
+};
+
+&axi_iic_1 {
+    status = "okay";
+    pinctrl-names = "default";
+
+    clk_eeprom@50 {
+        compatible = "microchip,24aa025", "atmel,24c02";
+        reg = <0x50>;
+        pagesize = <16>;
+    };
+};
