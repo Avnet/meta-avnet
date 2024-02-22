@@ -69,6 +69,27 @@
 		compatible = "gpio-keys";
 		pinctrl-names = "default";
 		status = "okay";
+
+		key1 {
+			label = "key1";
+			linux,code = <BTN_0>;
+			gpios = <&axi_gpio_2 0 GPIO_ACTIVE_LOW>;
+		};
+		key2 {
+			label = "key2";
+			linux,code = <BTN_1>;
+			gpios = <&axi_gpio_2 1 GPIO_ACTIVE_LOW>;
+		};
+		key3 {
+			label = "key3";
+			linux,code = <BTN_2>;
+			gpios = <&axi_gpio_2 2 GPIO_ACTIVE_LOW>;
+		};
+		key4 {
+			label = "key4";
+			linux,code = <BTN_3>;
+			gpios = <&axi_gpio_2 3 GPIO_ACTIVE_LOW>;
+		};
 	};
 };
 
