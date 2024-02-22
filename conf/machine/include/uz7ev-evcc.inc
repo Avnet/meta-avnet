@@ -10,8 +10,7 @@ MACHINEOVERRIDES =. "uz:uz7ev:uz7ev-evcc:"
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_HWCODECS = ""
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost"
 
 EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
 
@@ -51,3 +50,5 @@ EXTRA_IMAGEDEPENDS:remove = "qemu-devicetrees"
 PACKAGE_FEED_URIS = "http://petalinux.xilinx.com/sswreleases/sswboardfeeds/"
 PACKAGE_FEED_BASE_PATHS = "zzsoc"
 PACKAGE_FEED_ARCHS = "all aarch64 plnx_aarch64"
+
+CONFIG_SUBSYSTEM_ETHERNET_PSU_ETHERNET_3_MAC=""

@@ -8,7 +8,7 @@ MACHINEOVERRIDES =. "pz:pz-fmc2:"
 require conf/machine/include/soc-zynq.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost usbgadget"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget"
 
 EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
 
