@@ -141,9 +141,9 @@
 			#size-cells = <0>;
 			reg = <3>;
 
-			temp-sensor@3c {
+			temp-sensor@3f {
 				compatible = "st,stts22h";
-				reg = <0x3c>;
+				reg = <0x3f>;
 			};
 		};
     };
@@ -152,6 +152,11 @@
 &axi_iic_1 {
     status = "okay";
     pinctrl-names = "default";
+
+    versaclk: versaclk@9 {
+        compatible = "renesas,rc31008a";
+        reg = <0x09>;
+    };
 
     clk_eeprom@50 {
         compatible = "microchip,24aa025", "atmel,24c02";
