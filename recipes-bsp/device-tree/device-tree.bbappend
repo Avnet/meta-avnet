@@ -1,5 +1,13 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+# https://github.com/Xilinx/meta-xilinx/commit/b0efcddc5b3a35d143614698a39ecb5a9d134aac removed kernel include path
+# However media is not included in their copy of dtb bindings
+KERNEL_INCLUDE = " \
+        ${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts \
+        ${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/* \
+        ${STAGING_KERNEL_DIR}/scripts/dtc/include-prefixes \
+        "
+
 # Remove avnet-ultra96-rev1 dependency
 YAML_DT_BOARD_FLAGS:u96v2-sbc ?= "{BOARD template}"
 
