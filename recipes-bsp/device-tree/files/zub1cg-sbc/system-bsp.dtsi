@@ -24,6 +24,10 @@
       #clock-cells = <0>;
       clock-frequency = <135000000>;
    };
+   pmu {
+      /delete-property/ interrupt-affinity;
+		interrupt-affinity = <&cpu0>, <&cpu1>;
+   };
 };
 
 &gem2 {

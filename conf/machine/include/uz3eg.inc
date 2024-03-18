@@ -10,7 +10,7 @@ MACHINEOVERRIDES =. "uz:uz3eg:"
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost"
 
 EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
 
@@ -24,7 +24,7 @@ SERIAL_CONSOLES ?= "115200;ttyPS0"
 EXTRA_IMAGEDEPENDS += " \
 		arm-trusted-firmware \
 		virtual/bootloader \
-		u-boot-zynq-scr \
+		u-boot-xlnx-scr \
 		virtual/fsbl \
 		virtual/pmu-firmware \
 		avnet-boot-scr \
@@ -36,6 +36,8 @@ IMAGE_BOOT_FILES = " \
                     avnet-boot/avnet_mmc_ext4.scr;boot.scr \
                     fitImage;image.ub \
                     "
+
+WKS_FILES = "petalinux-image-minimal.wks"
 
 PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
 PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"

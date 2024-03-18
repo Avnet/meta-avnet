@@ -8,7 +8,7 @@ MACHINEOVERRIDES =. "mz:mz-som:"
 require conf/machine/include/soc-zynq.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost usbgadget"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget"
 
 EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
 
@@ -23,7 +23,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += "device-tree"
 
 EXTRA_IMAGEDEPENDS += " \
         virtual/bootloader \
-        u-boot-zynq-scr \
+        u-boot-xlnx-scr \
         virtual/fsbl \
         avnet-boot-scr \
         "
@@ -34,6 +34,8 @@ IMAGE_BOOT_FILES = " \
                     boot.scr \
                     fitImage;image.ub \
                     "
+
+WKS_FILES = "petalinux-image-minimal.wks"
 
 # deploy avnet-boot-scr scripts in images/linux/ folder
 EXTRA_FILESLIST:append = " ${DEPLOY_DIR_IMAGE}/avnet-boot/:avnet-boot/ "

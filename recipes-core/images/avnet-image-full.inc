@@ -27,9 +27,6 @@ IMAGE_INSTALL:append:zynq = "\
         python3-pygobject \
         sbc \
         usbutils \
-        xrt \
-        xrt-dev \
-        zocl \
         u-boot-tools \
         tcf-agent \
         nfs-utils \

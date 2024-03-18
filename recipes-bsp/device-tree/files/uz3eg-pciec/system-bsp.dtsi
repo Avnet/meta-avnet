@@ -20,7 +20,7 @@
    };
 
    chosen {
-      xlnx,eeprom= &mac_eeprom;
+      nvmem= &mac_eeprom;
    };
 
    clock_5p49v5935_ref25: ref25m { /* 25MHz reference crystal (internal) - U5 */
@@ -53,6 +53,8 @@
    status = "okay";
    phy-mode = "rgmii-id";
    phy-handle = <&phy0>;
+   nvmem-cells = <&mac_address>;
+   nvmem-cell-names = "mac-address";
    phy0: phy@9 {
       reg = <0x9>;
       ti,rx-internal-delay = <0x5>;
@@ -73,8 +75,13 @@
          reg = <0>;
          /* Ethernet MAC ID EEPROM */
          mac_eeprom: mac_eeprom@51 { /* U5 on UZ3EG IOCC & PCIEC and U7 on the UZ7EV EVCC */
+            #address-cells = <1>;
+            #size-cells = <1>;
             compatible = "atmel,24c02";
             reg = <0x51>;
+            mac_address: mac-address@FA {
+	            reg = <0xFA 0x06>;
+            };
          };
 
          vc5: clock-generator@6a { /* IDT (Renesas) 5P49V5935 I2C clock generator */

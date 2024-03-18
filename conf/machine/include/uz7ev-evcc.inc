@@ -10,7 +10,7 @@ MACHINEOVERRIDES =. "uz:uz7ev:uz7ev-evcc:"
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost"
 
 EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
 
@@ -24,7 +24,7 @@ SERIAL_CONSOLES ?= "115200;ttyPS0"
 EXTRA_IMAGEDEPENDS += " \
 		arm-trusted-firmware \
 		virtual/bootloader \
-		u-boot-zynq-scr \
+		u-boot-xlnx-scr \
 		virtual/fsbl \
 		virtual/pmu-firmware \
 		avnet-boot-scr \
@@ -37,6 +37,8 @@ IMAGE_BOOT_FILES = " \
                     fitImage;image.ub \
                     "
 
+WKS_FILES = "petalinux-image-minimal.wks"
+
 PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
 PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
 
@@ -48,3 +50,5 @@ EXTRA_IMAGEDEPENDS:remove = "qemu-devicetrees"
 PACKAGE_FEED_URIS = "http://petalinux.xilinx.com/sswreleases/sswboardfeeds/"
 PACKAGE_FEED_BASE_PATHS = "zzsoc"
 PACKAGE_FEED_ARCHS = "all aarch64 plnx_aarch64"
+
+CONFIG_SUBSYSTEM_ETHERNET_PSU_ETHERNET_3_MAC=""

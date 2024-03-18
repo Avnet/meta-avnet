@@ -8,7 +8,7 @@ MACHINEOVERRIDES =. "ultra96:ultra96-zynqmp:u96v2-sbc:"
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
 
-MACHINE_FEATURES = "rtc ext2 ext3 vfat usbhost usbgadget wifi bluetooth"
+MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget wifi bluetooth"
 
 UBOOT_MACHINE = "xilinx_zynqmp_virt_defconfig"
 # prevent U-Boot from deploying the boot.bin
@@ -22,7 +22,7 @@ PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
 EXTRA_IMAGEDEPENDS += " \
 		arm-trusted-firmware \
 		virtual/bootloader \
-		u-boot-zynq-scr \
+		u-boot-xlnx-scr \
 		virtual/fsbl \
 		virtual/pmu-firmware \
 		avnet-boot-scr \
@@ -34,6 +34,8 @@ IMAGE_BOOT_FILES = " \
                     boot.scr \
                     fitImage;image.ub \
                     "
+
+WKS_FILES = "petalinux-image-minimal.wks"
 
 # deploy avnet-boot-scr scripts in images/linux/ folder
 EXTRA_FILESLIST:append = " ${DEPLOY_DIR_IMAGE}/avnet-boot/:avnet-boot/ "
