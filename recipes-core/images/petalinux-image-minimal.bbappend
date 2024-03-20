@@ -116,6 +116,20 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 	wilc \
 "
 
+IMAGE_INSTALL:remove:u96v2-sbc-factest = "\
+	openamp-fw-echo-testd \
+	openamp-fw-mat-muld \
+	openamp-fw-rpc-demo \
+	packagegroup-petalinux-openamp \
+	packagegroup-petalinux-ultra96-webapp \
+	ultra96-radio-leds \
+"
+
+IMAGE_INSTALL:append:u96v2-sbc-factest = "\
+	factest \
+	factest-launcher \
+"
+
 IMAGE_INSTALL:append:uz = "\
 	blinky \
 	libdrm \
