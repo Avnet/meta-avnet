@@ -7,7 +7,7 @@ SRC_URI:append = "\
 	file://system-bsp.dtsi \
 "
 
-SRC_URI:append:u96v2-sbc = "\
+SRC_URI:append:u96v2-sbc-base = "\
 	file://openamp.dtsi \
 "
 
@@ -23,8 +23,8 @@ do_configure:append () {
 	fi
 }
 
-# For Ultra96-SBC BSP only
-do_configure:append:u96v2-sbc () {
+# For Ultra96-SBC-base BSP only
+do_configure:append:u96v2-sbc-base () {
 	if [ -e ${WORKDIR}/openamp.dtsi ]; then
 		cp ${WORKDIR}/openamp.dtsi ${DT_FILES_PATH}/openamp.dtsi
 		echo '#include "openamp.dtsi"' >> ${DT_FILES_PATH}/${BASE_DTS}.dts
