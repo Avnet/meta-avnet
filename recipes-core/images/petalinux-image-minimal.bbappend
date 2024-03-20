@@ -97,14 +97,10 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 	git \
 	iw \
 	libftdi \
-	openamp-fw-echo-testd \
-	openamp-fw-mat-muld \
-	openamp-fw-rpc-demo \
 	packagegroup-base-extended \
 	packagegroup-petalinux \
 	packagegroup-petalinux-96boards-sensors \
 	packagegroup-petalinux-benchmarks \
-	packagegroup-petalinux-openamp \
 	packagegroup-petalinux-ultra96-webapp \
 	packagegroup-petalinux-utils \
 	ultra96-ap-setup \
@@ -114,6 +110,13 @@ IMAGE_INSTALL:append:u96v2-sbc = "\
 	usb-gadget-ethernet \
 	wilc3000-fw \
 	wilc \
+"
+
+IMAGE_INSTALL:append:u96v2-sbc-base = "\
+	packagegroup-petalinux-openamp \
+	openamp-fw-echo-testd \
+	openamp-fw-mat-muld \
+	openamp-fw-rpc-demo \
 "
 
 IMAGE_INSTALL:append:uz = "\
