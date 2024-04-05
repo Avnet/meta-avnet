@@ -4,6 +4,7 @@ Description=factest-launcher
 Wants=getty-pre.target
 # prevent getty from running on any consoles before we are done
 Before=getty-pre.target
+After=network.target
 
 
 [Service]
