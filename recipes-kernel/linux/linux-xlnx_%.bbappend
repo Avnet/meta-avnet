@@ -15,3 +15,7 @@ SRC_URI:append:uz7ev-evcc-nvme = " \
 SRC_URI:append:zub1cg-sbc = " \
                 file://0001-drivers-iio-temperature-import-ssts22h-driver.patch \
 "
+
+SRC_URI:append:zub1cg-sbc-trifecta = " \
+                file://m2-wifi.cfg \
+"
