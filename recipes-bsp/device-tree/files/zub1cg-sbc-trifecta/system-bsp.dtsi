@@ -87,3 +87,7 @@
    clocks = <&gtr_clk0>;
    clock-names = "ref1";
 };
+
+&uart1 {
+	/delete-property/ cts-override ;
+};
