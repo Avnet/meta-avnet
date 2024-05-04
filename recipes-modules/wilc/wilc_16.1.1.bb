@@ -7,7 +7,7 @@ inherit module
 
 COMPATIBLE_MACHINE = "u96v2-sbc"
 
-SRC_URI = "git://github.com/linux4sam/linux-at91.git;protocol=git;branch=${BRANCH};subpath=drivers/net/wireless/microchip/wilc1000 \
+SRC_URI = "git://github.com/linux4sam/linux-at91.git;protocol=http;branch=${BRANCH};subpath=drivers/net/wireless/microchip/wilc1000 \
            file://0001-ultra96-modifications-16.1.patch \
            "
 
