@@ -1,5 +1,4 @@
 /include/ "system-conf.dtsi"
-/include/ "openamp.dtsi"
 
 #include "include/dt-bindings/input/input.h"
 #include "include/dt-bindings/interrupt-controller/irq.h"
