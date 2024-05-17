@@ -7,3 +7,4 @@ require conf/machine/zynqmp-generic.conf
 
 MACHINEOVERRIDES =. "zub1cg:zub1cg-sbc:"
 
+WKS_FILES = "avnet-image-dev.wks"
