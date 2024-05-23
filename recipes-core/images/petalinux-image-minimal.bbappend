@@ -195,6 +195,10 @@ IMAGE_INSTALL:remove:zub1cg-sbc = "\
 	pmic-prog \
 "
 
+IMAGE_INSTALL:remove:k24 = "\
+	pmic-prog \
+"
+
 IMAGE_INSTALL:append:zub1cg-sbc-trifecta = "\
  	bluez5 \
  	connman \
