@@ -18,7 +18,7 @@ SRC_URI = " \
     file://gpio-utils.service \
 	"
 
-COMPATIBLE_MACHINE = "mz|pz|uz|u96v2-sbc|zub1cg-sbc"
+COMPATIBLE_MACHINE = "mz|pz|uz|u96v2-sbc|zub1cg-sbc|k24-iocc"
 
 S = "${WORKDIR}"
 
