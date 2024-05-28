@@ -199,6 +199,11 @@ IMAGE_INSTALL:remove:k24 = "\
 	pmic-prog \
 "
 
+IMAGE_INSTALL:append:k24-iocc-factest = "\
+	factest \
+	factest-launcher \
+"
+
 IMAGE_INSTALL:append:zub1cg-sbc-trifecta = "\
  	bluez5 \
  	connman \
