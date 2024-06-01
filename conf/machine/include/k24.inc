@@ -7,22 +7,7 @@ SOC_VARIANT = "eg"
 
 MACHINEOVERRIDES =. "k24:"
 
-require conf/machine/include/soc-zynqmp.inc
-require conf/machine/include/machine-xilinx-default.inc
-
-MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget"
-
-EXTRA_IMAGEDEPENDS += "libyaml-native python3-cython-native python3-pyyaml-native"
-
-UBOOT_MACHINE = "xilinx_zynqmp_virt_defconfig"
-
-# prevent U-Boot from deploying the boot.bin
-SPL_BINARY = ""
-
-SERIAL_CONSOLES ?= "115200;ttyPS0"
-
-PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
-PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
+require conf/machine/include/k24-sm.inc
 
 EXTRA_IMAGEDEPENDS += " \
 		arm-trusted-firmware \
