@@ -202,6 +202,7 @@ IMAGE_INSTALL:remove:k24 = "\
 IMAGE_INSTALL:append:k24-iocc-factest = "\
 	factest \
 	factest-launcher \
+	oob-image \
 "
 
 IMAGE_INSTALL:append:zub1cg-sbc-trifecta = "\
