@@ -2,8 +2,8 @@
 
 DEBUG=0
 
-BOARD_IP=192.168.2.10
-TEST_COMPUTER_IP=192.168.2.1
+BOARD_IP=192.168.2.1
+TEST_COMPUTER_IP=192.168.2.10
 
 # Mac address prefix from https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-8807-SEEPROM-AT24MAC402-602-Datasheet.pdf
 MAC_ADDR_PREFIX="fc:c2:3d:"
