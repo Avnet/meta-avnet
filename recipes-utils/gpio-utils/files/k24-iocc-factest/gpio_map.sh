@@ -18,6 +18,10 @@ BASE_HSIO_TXR2_IN2=$(get_gpiochip_base a0050000)
 BASE_HSIO_TXR2_OUT1=$(get_gpiochip_base a0060000)
 # hsio_txr2_out2
 BASE_HSIO_TXR2_OUT2=$(get_gpiochip_base a0070000)
+# pl_pmod_1 (in)
+BASE_PL_PMOD_1=$(get_gpiochip_base a0080000)
+# pl_pmod_2 (out)
+BASE_PL_PMOD_2=$(get_gpiochip_base a0090000)
 
 # MIO GPIO
 BASE_ZYNQMP_GPIO=$(get_gpiochip_base zynqmp_gpio)
@@ -83,4 +87,14 @@ done
 # HSIO TXR2 OUT 2 (PCB J2)
 for i in $(seq 0 8); do
     echo HSIO_TXR2_OUT2_$i:$((BASE_HSIO_TXR2_OUT2 + i)):out:0 >> $GPIO_CONF
+done
+
+# PMOD IN (PCB J3)
+for i in $(seq 0 3); do
+    echo PMOD_IN_$i:$((BASE_PL_PMOD_1 + i)):in >> $GPIO_CONF
+done
+
+# PMOD OUT (PCB J3)
+for i in $(seq 0 3); do
+    echo PMOD_OUT_$i:$((BASE_PL_PMOD_2 + i)):out:0 >> $GPIO_CONF
 done
