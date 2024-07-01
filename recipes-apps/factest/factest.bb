@@ -51,6 +51,7 @@ SRC_URI:append:k24-iocc-factest = "\
 	file://click_test.sh;subdir=${SCRIPT_LOC}  \
 	file://ethernet_test.sh;subdir=${SCRIPT_LOC}  \
 	file://hsio_lb_test.sh;subdir=${SCRIPT_LOC}  \
+	file://pmod_lb_test.sh;subdir=${SCRIPT_LOC}  \
 	file://qspi_utils.sh;subdir=${SCRIPT_LOC}  \
 	file://rtc_test.sh;subdir=${SCRIPT_LOC}  \
 	file://usb_test.sh;subdir=${SCRIPT_LOC}  \
