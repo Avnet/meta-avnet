@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 
 
-COMPATIBLE_MACHINE = "zub1cg-sbc|mz-iocc"
+COMPATIBLE_MACHINE = "zub1cg-sbc|mz-iocc|k24-iocc"
 
 RDEPENDS:${PN} += "bash"
 
@@ -26,6 +26,12 @@ SRC_URI[zu1-boot.sha256sum] = "1738635584d692b2095c800969a07f551bd4170b331d6b6cc
 SRC_URI:append:mz-iocc = " \
 	file://oob.zip \
 "
+
+SRC_URI:append:k24-iocc = " \
+	https://github.com/Avnet/freertos-oob/releases/download/v1.5/BOOT.BIN;downloadfilename=BOOT.BIN;name=k24-boot \
+"
+SRC_URI[k24-boot.sha256sum] = "8e63947d994ad312becef81eb327db9ea65e06bef9bb201f857cb60fd95ffd56"
+
 
 
 S = "${WORKDIR}"
@@ -49,6 +55,10 @@ do_install:append:mz-iocc () {
 	install -m 0755 ${S}/uramdisk.image.gz ${D}/home/root/oob_image/
 }
 
+do_install:append:k24-iocc () {
+		install -m 0444 BOOT.BIN ${D}/home/root/oob_image/
+}
+
 FILES:${PN} += "\
 	/home/root/flash-programming.sh \
 "
@@ -64,4 +74,8 @@ FILES:${PN}:append:mz-iocc = "\
 	/home/root/oob_image/system.bit.bin \
 	/home/root/oob_image/uImage \
 	/home/root/oob_image/uramdisk.image.gz \
+"
+
+FILES:${PN}:append:k24-iocc = "\
+	/home/root/oob_image/BOOT.BIN \
 "

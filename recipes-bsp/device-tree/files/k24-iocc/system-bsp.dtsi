@@ -1,0 +1,87 @@
+#include "include/dt-bindings/input/input.h"
+#include "include/dt-bindings/interrupt-controller/irq.h"
+#include "include/dt-bindings/gpio/gpio.h"
+#include "include/dt-bindings/pinctrl/pinctrl-zynqmp.h"
+#include "include/dt-bindings/phy/phy.h"
+
+/ {
+   chosen {
+      bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M";
+      nvmem = &mac_eeprom;
+   };
+
+   xlnk {
+      compatible = "xlnx,xlnk-1.0";
+   };
+
+   aliases {
+      mmc0 = &sdhci1;
+      mmc1 = &sdhci0;
+   };
+
+   pmu {
+      /delete-property/ interrupt-affinity;
+      interrupt-affinity = <&cpu0>, <&cpu1>;
+   };
+};
+
+&gem2 {
+   status = "okay";
+   phy-mode = "rgmii-id";
+   nvmem-cells = <&mac_address>;
+   nvmem-cell-names = "mac-address";
+   phy-handle = <&phy0>;
+   phy0: phy@7 {
+      reg = <0x7>;
+      ti,rx-internal-delay = <0x5>;
+      ti,tx-internal-delay = <0x5>;
+      ti,fifo-depth = <0x1>;
+   };
+};
+
+/* QSPI partitions are defined with petalinux-config and described in system.conf.dtsi */
+&qspi { /* MIO 0-5 - U143 */
+   flash0: flash@0 { /* MT25QU512A */
+      compatible = "mt25qu512a", "jedec,spi-nor"; /* 64MB */
+      #address-cells = <1>;
+      #size-cells = <1>;
+      reg = <0>;
+      spi-tx-bus-width = <4>;
+      spi-rx-bus-width = <4>;
+      spi-max-frequency = <40000000>; /* 40MHz */
+   };
+};
+
+/* SD1 for SD card boot */
+/* SD1 with level shifter */
+/* only supports 3.3V, no level shifter */
+&sdhci1 {
+   status = "okay";
+   no-1-8-v;
+   disable-wp;
+};
+
+&i2c1 {
+   #address-cells = <1>;
+   #size-cells = <0>;
+
+   /* Ethernet MAC ID EEPROM */
+   mac_eeprom: mac_eeprom@5a { /* U11 */
+      #address-cells = <1>;
+      #size-cells = <1>;
+      compatible = "atmel,24mac402";
+      reg = <0x5a>;
+
+      mac_address: mac-address@9A {
+         reg = <0x9A 0x06>;
+      };
+   };
+
+   /* I2C Switch */
+   i2c-mux@71 { /* U10 */
+      compatible = "nxp,pca9544";
+      #address-cells = <1>;
+      #size-cells = <0>;
+      reg = <0x71>;
+   };
+};

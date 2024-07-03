@@ -67,7 +67,7 @@ SFDISK_FILE="/home/root/factest_scripts/emmc_mmcblk1.sfdisk"
 emmc_umount_all_parts
 
 # Wipe existing partitions
-if ! ls ${EMMC_DEV}p* > /dev/null 2>&1; then
+if ls ${EMMC_DEV}p* > /dev/null 2>&1; then
    wipefs -a ${EMMC_DEV}p*
 fi
 
