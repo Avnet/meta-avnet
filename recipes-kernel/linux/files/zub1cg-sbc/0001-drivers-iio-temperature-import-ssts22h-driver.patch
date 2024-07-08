@@ -1,4 +1,4 @@
-From c9f8bcfd2c27a2de21d7a9aa595dc69cb4c534ca Mon Sep 17 00:00:00 2001
+From 462b65adcdbfd1efc7da904b6babc7b4a0664fe3 Mon Sep 17 00:00:00 2001
 From: Thomas Nizan <tnizan@witekio.com>
 Date: Tue, 9 Aug 2022 14:40:24 +0000
 Subject: [PATCH] drivers: iio: temperature: import ssts22h driver
@@ -10,19 +10,19 @@ modified for 6.1 kernel
 ---
  drivers/iio/temperature/Kconfig   |  10 +
  drivers/iio/temperature/Makefile  |   1 +
- drivers/iio/temperature/stts22h.c | 626 ++++++++++++++++++++++++++++++
+ drivers/iio/temperature/stts22h.c | 625 ++++++++++++++++++++++++++++++
  drivers/iio/temperature/stts22h.h | 104 +++++
- 4 files changed, 741 insertions(+)
+ 4 files changed, 740 insertions(+)
  create mode 100644 drivers/iio/temperature/stts22h.c
  create mode 100644 drivers/iio/temperature/stts22h.h
 
 diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
-index e8ed849e3b76..eb24a5a97de4 100644
+index ed384f33e0c7..4671bc210bb6 100644
 --- a/drivers/iio/temperature/Kconfig
 +++ b/drivers/iio/temperature/Kconfig
-@@ -128,6 +128,16 @@ config TSYS02D
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tsys02d.
+@@ -138,6 +138,16 @@ config MAX30208
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called max30208.
  
 +config IIO_STTS22H
 +	tristate "STTS22H ST MEMS temperature sensor"
@@ -38,20 +38,20 @@ index e8ed849e3b76..eb24a5a97de4 100644
  	tristate "MAX31856 thermocouple sensor"
  	depends on SPI
 diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
-index dd08e562ffe0..c815f438d78c 100644
+index dfec8c6d3019..87157d90e2f7 100644
 --- a/drivers/iio/temperature/Makefile
 +++ b/drivers/iio/temperature/Makefile
-@@ -16,3 +16,4 @@ obj-$(CONFIG_TMP007) += tmp007.o
+@@ -17,3 +17,4 @@ obj-$(CONFIG_TMP007) += tmp007.o
  obj-$(CONFIG_TMP117) += tmp117.o
  obj-$(CONFIG_TSYS01) += tsys01.o
  obj-$(CONFIG_TSYS02D) += tsys02d.o
 +obj-$(CONFIG_IIO_STTS22H) += stts22h.o
 diff --git a/drivers/iio/temperature/stts22h.c b/drivers/iio/temperature/stts22h.c
 new file mode 100644
-index 000000000000..d0befd88dc0a
+index 000000000000..5ac6aeeffab9
 --- /dev/null
 +++ b/drivers/iio/temperature/stts22h.c
-@@ -0,0 +1,626 @@
+@@ -0,0 +1,625 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * STMicroelectronics stts22h temperature driver
@@ -531,8 +531,7 @@ index 000000000000..d0befd88dc0a
 +	.postdisable = st_stts22h_postdisable,
 +};
 +
-+static int st_stts22h_probe(struct i2c_client *client,
-+			    const struct i2c_device_id *id)
++static int st_stts22h_probe(struct i2c_client *client)
 +{
 +	struct st_stts22h_data *data;
 +#if LINUX_VERSION_CODE < KERNEL_VERSION(5,13,0)
@@ -789,3 +788,6 @@ index 000000000000..cdd25d193bac
 +};
 +
 +#endif /* ST_STTS22H_H */
+-- 
+2.37.6
+
