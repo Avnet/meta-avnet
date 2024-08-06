@@ -1,0 +1,26 @@
+From 59121c378569fe84edb79ba84e7f113a0ee557f0 Mon Sep 17 00:00:00 2001
+From: Thomas Nizan <tnizan@witekio.com>
+Date: Mon, 29 Jul 2024 19:10:29 +0000
+Subject: [PATCH 3/3] drivers: clk: idt: fix idt24x probe function
+
+---
+ drivers/clk/idt/clk-idt8t49n24x.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/clk/idt/clk-idt8t49n24x.c b/drivers/clk/idt/clk-idt8t49n24x.c
+index a0c7af30399d..4075ae5228ee 100644
+--- a/drivers/clk/idt/clk-idt8t49n24x.c
++++ b/drivers/clk/idt/clk-idt8t49n24x.c
+@@ -428,8 +428,7 @@ static struct clk_hw *of_clk_idt24x_get(
+  *
+  * Return: 0 for success.
+  */
+-static int idt24x_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int idt24x_probe(struct i2c_client *client)
+ {
+ 	struct clk_idt24x_chip *chip;
+ 	struct clk_init_data init;
+-- 
+2.37.6
+
