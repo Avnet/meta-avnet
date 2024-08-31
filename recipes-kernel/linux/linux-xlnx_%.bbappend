@@ -15,6 +15,7 @@ SRC_URI:append:uz7ev-evcc-hdmi = " \
 
 SRC_URI:append:uz7ev-evcc-nvme = " \
                 file://nvme.cfg \
+                file://0001-pci-controller-pcie-xilinx-dma-pl-enable-clocks.patch \
 "
 
 SRC_URI:append:zub1cg-sbc = " \
