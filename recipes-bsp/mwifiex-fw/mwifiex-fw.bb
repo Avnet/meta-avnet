@@ -3,8 +3,8 @@ LICENSE = "CLOSED"
 
 SRC_URI = "git://github.com/nxp-imx/imx-firmware.git;protocol=git;branch=${BRANCH}"
 
-SRCREV = "b6f070e3d4cab23932d9e6bc29e3d884a7fd68f4"
-BRANCH = "lf-5.15.52_2.1.0"
+SRCREV = "2afa15e77f0b58eade42b4f59c9215339efcca66"
+BRANCH = "lf-6.6.3_1.0.0"
 
 S = "${WORKDIR}/git"
 

@@ -12,10 +12,13 @@
     };
 };
 
+&hdmi_tx_v_mix_0 {
+    /delete-property/ xlnx,bridge;
+};
+
 /* HDMI TX */
 &xx_mix_masterhdmi_tx_v_mix_0 {
     /delete-property/ xlnx,layer-primary;
-    xlnx,vformat = "BG24";
 };
 &xx_mix_overlay_1hdmi_tx_v_mix_0 {
     xlnx,layer-max-width = <3840>;
@@ -46,6 +49,9 @@
     xlnx,layer-primary;
 };
 
+&amba_pl {
+    /delete-node/ v_tc_hdmi_tx_v_hdmi_tx_ss_0@0xa0070000;
+};
 
 &hdmi_tx_v_hdmi_tx_ss_0 {
     clock-names = "s_axi_cpu_aclk", "link_clk", "s_axis_audio_aclk", "video_clk", "s_axis_video_aclk", "txref-clk", "retimer-clk";

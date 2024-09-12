@@ -1,0 +1,2371 @@
+From 05b226f948dadd1cc8c27429f151cdb582212c7a Mon Sep 17 00:00:00 2001
+From: David Cater <david.cater@idt.com>
+Date: Fri, 17 Jan 2020 09:33:02 -0800
+Subject: [PATCH 2/3] clk: Add ccf driver for IDT 8T49N24x UFT
+
+This is a common clock framework driver that supports the 8T49N241 chip.
+No other chips in the family are currently supported. The driver
+supports setting the rate for all four outputs on the chip and
+automatically calculating/setting the appropriate VCO value.
+
+The driver can read a full register map from the device tree,
+and will use that register map to initialize the attached part (via I2C)
+when the system boots. Any configuration not supported by the common
+clock framework must be done via the full register map, including
+optimized settings.
+
+All outputs are currently assumed to be LVDS, unless overridden in the
+full register map in the DT.
+
+Signed-off-by: David Cater <david.cater@idt.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Dylan Yip <dylan.yip@xilinx.com>
+State: pending
+[michals: Squashed with
+clk: idt: Fix i2cwritebulk() failure
+v6.1 -  i2c: Make remove callback return void
+]
+---
+ drivers/clk/Kconfig                       |  21 +
+ drivers/clk/Makefile                      |   1 +
+ drivers/clk/idt/Makefile                  |   3 +
+ drivers/clk/idt/clk-idt8t49n24x-core.c    | 933 ++++++++++++++++++++++
+ drivers/clk/idt/clk-idt8t49n24x-core.h    | 272 +++++++
+ drivers/clk/idt/clk-idt8t49n24x-debugfs.c | 375 +++++++++
+ drivers/clk/idt/clk-idt8t49n24x-debugfs.h |  21 +
+ drivers/clk/idt/clk-idt8t49n24x.c         | 640 +++++++++++++++
+ 8 files changed, 2266 insertions(+)
+ create mode 100644 drivers/clk/idt/Makefile
+ create mode 100644 drivers/clk/idt/clk-idt8t49n24x-core.c
+ create mode 100644 drivers/clk/idt/clk-idt8t49n24x-core.h
+ create mode 100644 drivers/clk/idt/clk-idt8t49n24x-debugfs.c
+ create mode 100644 drivers/clk/idt/clk-idt8t49n24x-debugfs.h
+ create mode 100644 drivers/clk/idt/clk-idt8t49n24x.c
+
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index a71d3b38a09a..26c5e3b7280e 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -170,6 +170,27 @@ config COMMON_CLK_BM1880
+ 	help
+ 	  This driver supports the clocks on Bitmain BM1880 SoC.
+ 
++config COMMON_CLK_IDT8T49N24X
++	tristate "Clock driver for IDT 8T49N24x"
++	depends on I2C
++	depends on OF
++	select REGMAP_I2C
++	help
++	  This driver supports the IDT 8T49N24x universal frequency translator
++	  product family.  The only chip in the family that is currently
++	  supported is the 8T49N241. The driver supports setting the rate for
++	  all four outputs on the chip and automatically calculating/setting
++	  the appropriate VCO value.
++
++	  The driver can read a full register map from the DT,
++	  and will use that register map to initialize the attached part
++	  (via I2C) when the system boots. Any configuration not supported
++	  by the common clock framework must be done via the full register
++	  map, including optimized settings.
++
++	  All outputs are currently assumed to be LVDS, unless overridden
++	  in the full register map in the DT.
++
+ config COMMON_CLK_SI5324
+ 	tristate "Clock driver for SiLabs 5324 and compatible devices"
+ 	depends on I2C
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index 2204d04973f7..b62a5772b766 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -95,6 +95,7 @@ obj-y					+= bcm/
+ obj-$(CONFIG_ARCH_BERLIN)		+= berlin/
+ obj-$(CONFIG_ARCH_DAVINCI)		+= davinci/
+ obj-$(CONFIG_ARCH_HISI)			+= hisilicon/
++obj-$(CONFIG_COMMON_CLK_IDT8T49N24X)	+= idt/
+ obj-y					+= imgtec/
+ obj-y					+= imx/
+ obj-y					+= ingenic/
+diff --git a/drivers/clk/idt/Makefile b/drivers/clk/idt/Makefile
+new file mode 100644
+index 000000000000..4cf2b6e4801d
+--- /dev/null
++++ b/drivers/clk/idt/Makefile
+@@ -0,0 +1,3 @@
++obj-y += clk-idt8t49n24x-core.o
++obj-y += clk-idt8t49n24x-debugfs.o
++obj-y += clk-idt8t49n24x.o
+diff --git a/drivers/clk/idt/clk-idt8t49n24x-core.c b/drivers/clk/idt/clk-idt8t49n24x-core.c
+new file mode 100644
+index 000000000000..ad23014e708f
+--- /dev/null
++++ b/drivers/clk/idt/clk-idt8t49n24x-core.c
+@@ -0,0 +1,933 @@
++// SPDX-License-Identifier: GPL-2.0
++/* clk-idt8t49n24x-core.c - Program 8T49N24x settings via I2C (common code)
++ *
++ * Copyright (C) 2018, Integrated Device Technology, Inc. <david.cater@idt.com>
++ *
++ * See https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
++ * This program is distributed "AS IS" and  WITHOUT ANY WARRANTY;
++ * including the implied warranties of MERCHANTABILITY, FITNESS FOR
++ * A PARTICULAR PURPOSE, or NON-INFRINGEMENT.
++ */
++
++#include <linux/i2c.h>
++#include <linux/regmap.h>
++
++#include "clk-idt8t49n24x-core.h"
++
++/*
++ * In Timing Commander, Q0 is changed from 25MHz to Q0 75MHz, the following
++ * changes occur:
++ *
++ * 2 bytes change in EEPROM data string.
++ *
++ * DSM_INT R0025[0],R0026[7:0] : 35 => 30
++ * NS2_Q0 R0040[7:0],R0041[7:0] : 14 => 4
++ *
++ * In EEPROM
++ * 1. R0026
++ * 2. R0041
++ *
++ * Note that VCO_Frequency (metadata) also changed (3500 =>3000).
++ * This reflects a change to DSM_INT.
++ *
++ * Note that the Timing Commander code has workarounds in the workflow scripts
++ * to handle dividers for the 8T49N241 (because the development of that GUI
++ * predates chip override functionality). That affects NS1_Qx (x in 1-3)
++ * and NS2_Qx. NS1_Qx contains the upper bits of NS_Qx, and NS2_Qx contains
++ * the lower bits. That is NOT the case for Q0, though. In that case NS1_Q0
++ * is the 1st stage output divider (/5, /6, /4) and NS2_Q0 is the 16-bit
++ * second stage (with actual divide being twice the value stored in the
++ * register).
++ *
++ * NS1_Q0 R003F[1:0]
++ */
++
++#define IDT24x_VCO_MIN			2999997000u
++#define IDT24x_VCO_MAX			4000004000u
++#define IDT24x_VCO_OPT			3500000000u
++#define IDT24x_MIN_INT_DIVIDER		6
++#define IDT24x_MIN_NS1			4
++#define IDT24x_MAX_NS1			6
++
++static u8 q0_ns1_options[3] = { 5, 6, 4 };
++
++/**
++ * bits_to_shift - num bits to shift given specified mask
++ * @mask:	32-bit word input to count zero bits on right
++ *
++ * Given a bit mask indicating where a value will be stored in
++ * a register, return the number of bits you need to shift the value
++ * before ORing it into the register value.
++ *
++ * Return: number of bits to shift
++ */
++int bits_to_shift(unsigned int mask)
++{
++	/* the number of zero bits on the right */
++	unsigned int c = 32;
++
++	mask &= ~mask + 1;
++	if (mask)
++		c--;
++	if (mask & 0x0000FFFF)
++		c -= 16;
++	if (mask & 0x00FF00FF)
++		c -= 8;
++	if (mask & 0x0F0F0F0F)
++		c -= 4;
++	if (mask & 0x33333333)
++		c -= 2;
++	if (mask & 0x55555555)
++		c -= 1;
++	return c;
++}
++
++/*
++ * TODO: Consider replacing this with regmap_multi_reg_write, which
++ * supports introducing a delay after each write. Experiment to see if
++ * the writes succeed consistently when using that API.
++ */
++static int regmap_bulk_write_with_retry(
++	struct regmap *map, unsigned int offset, u8 val[],
++	int val_count, int max_attempts)
++{
++	int err = 0;
++	int count = 1;
++
++	do {
++		err = regmap_bulk_write(map, offset, val, val_count);
++		if (err == 0)
++			return 0;
++
++		usleep_range(100, 200);
++	} while (count++ <= max_attempts);
++	return err;
++}
++
++static int regmap_write_with_retry(
++	struct regmap *map, unsigned int offset, unsigned int val,
++	int max_attempts)
++{
++	int err = 0;
++	int count = 1;
++
++	do {
++		err = regmap_write(map, offset, val);
++		if (err == 0)
++			return 0;
++		usleep_range(100, 200);
++	} while (count++ <= max_attempts);
++	return err;
++}
++
++/*
++ * TODO: Consider using regmap_multi_reg_write instead. Explore
++ * use of regmap to configure WRITE_BLOCK_SIZE, and using the delay
++ * mechanism in regmap_multi_reg_write instead of retrying multiple
++ * times (regmap_bulk_write_with_retry).
++ */
++int i2cwritebulk(
++	struct i2c_client *client, struct regmap *map,
++	unsigned int reg, u8 val[], size_t val_count)
++{
++	char dbg[128];
++	u8 block[WRITE_BLOCK_SIZE];
++	unsigned int block_offset = reg;
++	int x;
++	int err = 0;
++	int currentOffset = 0;
++
++	dev_dbg(&client->dev, "I2C->0x%04x : [hex] . First byte: %02x, Second byte: %02x",
++		reg, reg >> 8, reg & 0xFF);
++	dbg[0] = 0;
++
++	for (x = 0; x < val_count; x++) {
++		char data[4];
++
++		block[currentOffset++] = val[x];
++		sprintf(data, "%02x ", val[x]);
++		strcat(dbg, data);
++		if (x > 0 && (x + 1) % WRITE_BLOCK_SIZE == 0) {
++			dev_dbg(&client->dev, "%s", dbg);
++			dbg[0] = '\0';
++			sprintf(dbg,
++				"(loop) calling regmap_bulk_write @ 0x%04x [%d bytes]",
++				block_offset, WRITE_BLOCK_SIZE);
++			dev_dbg(&client->dev, "%s", dbg);
++			dbg[0] = '\0';
++			err = regmap_bulk_write_with_retry(
++				map, block_offset, block, WRITE_BLOCK_SIZE, 5);
++			if (err != 0)
++				break;
++			block_offset += WRITE_BLOCK_SIZE;
++			currentOffset = 0;
++		}
++	}
++	if (err == 0 && currentOffset > 0) {
++		dev_dbg(&client->dev, "%s", dbg);
++		dev_dbg(&client->dev, "(final) calling regmap_bulk_write @ 0x%04x [%d bytes]",
++			block_offset, currentOffset);
++		err = regmap_bulk_write_with_retry(
++			map, block_offset, block, currentOffset, 5);
++	}
++
++	return err;
++}
++
++static int i2cwrite(
++	struct i2c_client *client, struct regmap *map,
++	unsigned int reg, unsigned int val)
++{
++	int err;
++
++	dev_dbg(&client->dev, "I2C->0x%x : [hex] %x", reg, val);
++	err = regmap_write_with_retry(map, reg, val, 5);
++	usleep_range(100, 200);
++	return err;
++}
++
++static int i2cwritewithmask(
++	struct i2c_client *client, struct regmap *map, unsigned int reg,
++	u8 val, u8 original, u8 mask)
++{
++	return i2cwrite(client, map, reg,
++		((val << bits_to_shift(mask)) & mask) | (original & ~mask));
++}
++
++int idt24x_get_offsets(
++	u8 output_num,
++	struct clk_register_offsets *offsets)
++{
++	switch (output_num) {
++	case 0:
++		offsets->oe_offset = IDT24x_REG_OUTEN;
++		offsets->oe_mask = IDT24x_REG_OUTEN0_MASK;
++		offsets->dis_mask = IDT24x_REG_Q0_DIS_MASK;
++		offsets->ns1_offset = IDT24x_REG_NS1_Q0;
++		offsets->ns1_offset_mask = IDT24x_REG_NS1_Q0_MASK;
++		offsets->ns2_15_8_offset = IDT24x_REG_NS2_Q0_15_8;
++		offsets->ns2_7_0_offset = IDT24x_REG_NS2_Q0_7_0;
++		break;
++	case 1:
++		offsets->oe_offset = IDT24x_REG_OUTEN;
++		offsets->oe_mask = IDT24x_REG_OUTEN1_MASK;
++		offsets->dis_mask = IDT24x_REG_Q1_DIS_MASK;
++		offsets->n_17_16_offset = IDT24x_REG_N_Q1_17_16;
++		offsets->n_17_16_mask = IDT24x_REG_N_Q1_17_16_MASK;
++		offsets->n_15_8_offset = IDT24x_REG_N_Q1_15_8;
++		offsets->n_7_0_offset = IDT24x_REG_N_Q1_7_0;
++		offsets->nfrac_27_24_offset = IDT24x_REG_NFRAC_Q1_27_24;
++		offsets->nfrac_27_24_mask =
++			IDT24x_REG_NFRAC_Q1_27_24_MASK;
++		offsets->nfrac_23_16_offset = IDT24x_REG_NFRAC_Q1_23_16;
++		offsets->nfrac_15_8_offset = IDT24x_REG_NFRAC_Q1_15_8;
++		offsets->nfrac_7_0_offset = IDT24x_REG_NFRAC_Q1_7_0;
++		break;
++	case 2:
++		offsets->oe_offset = IDT24x_REG_OUTEN;
++		offsets->oe_mask = IDT24x_REG_OUTEN2_MASK;
++		offsets->dis_mask = IDT24x_REG_Q2_DIS_MASK;
++		offsets->n_17_16_offset = IDT24x_REG_N_Q2_17_16;
++		offsets->n_17_16_mask = IDT24x_REG_N_Q2_17_16_MASK;
++		offsets->n_15_8_offset = IDT24x_REG_N_Q2_15_8;
++		offsets->n_7_0_offset = IDT24x_REG_N_Q2_7_0;
++		offsets->nfrac_27_24_offset = IDT24x_REG_NFRAC_Q2_27_24;
++		offsets->nfrac_27_24_mask =
++			IDT24x_REG_NFRAC_Q2_27_24_MASK;
++		offsets->nfrac_23_16_offset = IDT24x_REG_NFRAC_Q2_23_16;
++		offsets->nfrac_15_8_offset = IDT24x_REG_NFRAC_Q2_15_8;
++		offsets->nfrac_7_0_offset = IDT24x_REG_NFRAC_Q2_7_0;
++		break;
++	case 3:
++		offsets->oe_offset = IDT24x_REG_OUTEN;
++		offsets->oe_mask = IDT24x_REG_OUTEN3_MASK;
++		offsets->dis_mask = IDT24x_REG_Q3_DIS_MASK;
++		offsets->n_17_16_offset = IDT24x_REG_N_Q3_17_16;
++		offsets->n_17_16_mask = IDT24x_REG_N_Q3_17_16_MASK;
++		offsets->n_15_8_offset = IDT24x_REG_N_Q3_15_8;
++		offsets->n_7_0_offset = IDT24x_REG_N_Q3_7_0;
++		offsets->nfrac_27_24_offset = IDT24x_REG_NFRAC_Q3_27_24;
++		offsets->nfrac_27_24_mask =
++			IDT24x_REG_NFRAC_Q3_27_24_MASK;
++		offsets->nfrac_23_16_offset = IDT24x_REG_NFRAC_Q3_23_16;
++		offsets->nfrac_15_8_offset = IDT24x_REG_NFRAC_Q3_15_8;
++		offsets->nfrac_7_0_offset = IDT24x_REG_NFRAC_Q3_7_0;
++		break;
++	default:
++		return -EINVAL;
++	}
++	return 0;
++}
++
++/**
++ * idt24x_calc_div_q0 - Calculate dividers and VCO freq to generate
++ *		the specified Q0 frequency.
++ * @chip:	Device data structure. contains all requested frequencies
++ *		for all outputs.
++ *
++ * The actual output divider is ns1 * ns2 * 2. fOutput = fVCO / (ns1 * ns2 * 2)
++ *
++ * The options for ns1 (when the source is the VCO) are 4,5,6. ns2 is a
++ * 16-bit value.
++ *
++ * chip->divs: structure for specifying ns1/ns2 values. If 0 after this
++ * function, Q0 is not requested
++ *
++ * Return: 0 on success, negative errno otherwise.
++ */
++static int idt24x_calc_div_q0(struct clk_idt24x_chip *chip)
++{
++	u8 x;
++	u32 min_div, max_div, best_vco = 0;
++	u16 min_ns2, max_ns2;
++	bool is_lower_vco = false;
++
++	chip->divs.ns1_q0 = 0;
++	chip->divs.ns2_q0 = 0;
++
++	if (chip->clk[0].requested == 0)
++		return 0;
++
++	min_div = div64_u64(
++		(u64)IDT24x_VCO_MIN, chip->clk[0].requested * 2) * 2;
++	max_div = div64_u64(
++		(u64)IDT24x_VCO_MAX, chip->clk[0].requested * 2) * 2;
++
++	dev_dbg(&chip->i2c_client->dev,
++		"%s. requested: %u, min_div: %u, max_div: %u",
++		__func__, chip->clk[0].requested, min_div, max_div);
++
++	min_ns2 = div64_u64((u64)min_div, IDT24x_MAX_NS1 * 2);
++	max_ns2 = div64_u64((u64)max_div, IDT24x_MIN_NS1 * 2);
++
++	dev_dbg(&chip->i2c_client->dev,
++		"%s. min_ns2: %u, max_ns2: %u", __func__, min_ns2, max_ns2);
++
++	for (x = 0; x < ARRAY_SIZE(q0_ns1_options); x++) {
++		u16 y = min_ns2;
++
++		while (y <= max_ns2) {
++			u32 actual_div = q0_ns1_options[x] * y * 2;
++			u32 current_vco = actual_div *
++				chip->clk[0].requested;
++
++			if (current_vco < IDT24x_VCO_MIN)
++				dev_dbg(&chip->i2c_client->dev,
++					"%s. ignore div: (ns1=%u * ns2=%u * 2 * %u) == %u < %u",
++					__func__, q0_ns1_options[x], y,
++					chip->clk[0].requested,
++					current_vco, IDT24x_VCO_MIN);
++			else if (current_vco > IDT24x_VCO_MAX) {
++				dev_dbg(&chip->i2c_client->dev,
++					"%s. ignore div: (ns1=%u * ns2=%u * 2 * %u) == %u > %u. EXIT LOOP.",
++					__func__, q0_ns1_options[x], y,
++					chip->clk[0].requested,
++					current_vco, IDT24x_VCO_MAX);
++				y = max_ns2;
++			} else {
++				bool use = false;
++
++				dev_dbg(&chip->i2c_client->dev,
++					"%s. contender: (ns1=%u * ns2=%u * 2 * %u) == %u [in range]",
++					__func__, q0_ns1_options[x], y,
++					chip->clk[0].requested,
++					current_vco);
++				if (current_vco <= IDT24x_VCO_OPT) {
++					if (current_vco > best_vco ||
++					    !is_lower_vco) {
++						is_lower_vco = true;
++						use = true;
++					}
++				} else if (!is_lower_vco &&
++					   current_vco > best_vco)
++					use = true;
++				if (use) {
++					chip->divs.ns1_q0 = x;
++					chip->divs.ns2_q0 = y;
++					best_vco = current_vco;
++				}
++			}
++			y++;
++		}
++	}
++
++	dev_dbg(&chip->i2c_client->dev,
++		"%s. best: (ns1=%u [/%u] * ns2=%u * 2 * %u) == %u",
++		__func__, chip->divs.ns1_q0, q0_ns1_options[chip->divs.ns1_q0],
++		chip->divs.ns2_q0, chip->clk[0].requested, best_vco);
++	return 0;
++}
++
++/**
++ * idt24x_calc_divs - Calculate dividers to generate the specified frequency.
++ * @chip:	Device data structure. contains all requested frequencies
++ *		for all outputs.
++ *
++ * Calculate the clock dividers (dsmint, dsmfrac for vco; ns1/ns2 for q0,
++ * n/nfrac for q1-3) for a given target frequency.
++ *
++ * Return: 0 on success, negative errno otherwise.
++ */
++static int idt24x_calc_divs(struct clk_idt24x_chip *chip)
++{
++	u32 vco = 0;
++	int result;
++
++	result = idt24x_calc_div_q0(chip);
++	if (result < 0)
++		return result;
++
++	dev_dbg(&chip->i2c_client->dev,
++		"%s: after idt24x_calc_div_q0. ns1: %u [/%u], ns2: %u",
++		__func__, chip->divs.ns1_q0, q0_ns1_options[chip->divs.ns1_q0],
++		chip->divs.ns2_q0);
++
++	chip->divs.dsmint = 0;
++	chip->divs.dsmfrac = 0;
++
++	if (chip->clk[0].requested > 0) {
++		/* Q0 is in use and is governing the actual VCO freq */
++		vco = q0_ns1_options[chip->divs.ns1_q0] * chip->divs.ns2_q0 *
++			2 * chip->clk[0].requested;
++	} else {
++		u32 freq = 0;
++		u32 walk;
++		u32 min_div, max_div;
++		bool is_lower_vco = false;
++
++		/*
++		 * Q0 is not in use. Use the first requested (fractional)
++		 * output frequency as the one controlling the VCO.
++		 */
++		for (walk = 1; walk < NUM_OUTPUTS; walk++) {
++			if (chip->clk[walk].requested != 0) {
++				freq = chip->clk[walk].requested;
++				break;
++			}
++		}
++
++		if (freq == 0) {
++			dev_err(&chip->i2c_client->dev,
++				"%s: NO FREQUENCIES SPECIFIED", __func__);
++			return -EINVAL;
++		}
++
++		/*
++		 * First, determine the min/max div for the output frequency.
++		 */
++		min_div = IDT24x_MIN_INT_DIVIDER;
++		max_div = div64_u64((u64)IDT24x_VCO_MAX, freq * 2) * 2;
++
++		dev_dbg(&chip->i2c_client->dev,
++			"%s: calc_divs for fractional output. freq: %u, min_div: %u, max_div: %u",
++			__func__, freq, min_div, max_div);
++
++		walk = min_div;
++
++		while (walk <= max_div) {
++			u32 current_vco = freq * walk;
++
++			dev_dbg(&chip->i2c_client->dev,
++				"%s: calc_divs for fractional output. walk: %u, freq: %u, vco: %u",
++				__func__, walk, freq, vco);
++			if (current_vco >= IDT24x_VCO_MIN &&
++			    vco <= IDT24x_VCO_MAX) {
++				if (current_vco <= IDT24x_VCO_OPT) {
++					if (current_vco > vco ||
++					    !is_lower_vco) {
++						is_lower_vco = true;
++						vco = current_vco;
++					}
++				} else if (!is_lower_vco && current_vco > vco) {
++					vco = current_vco;
++				}
++			}
++			/* Divider must be even. */
++			walk += 2;
++		}
++	}
++
++	if (vco != 0) {
++		u32 pfd;
++		u64 rem;
++		int x;
++
++		/* Setup dividers for outputs with fractional dividers. */
++		for (x = 1; x < NUM_OUTPUTS; x++) {
++			if (chip->clk[x].requested != 0) {
++				/*
++				 * The value written to the chip is half
++				 * the calculated divider.
++				 */
++				chip->divs.nint[x - 1] = div64_u64_rem(
++					(u64)vco,
++					chip->clk[x].requested * 2,
++					&rem);
++				chip->divs.nfrac[x - 1] = div64_u64(
++					rem * 1 << 28,
++					chip->clk[x].requested * 2);
++				dev_dbg(&chip->i2c_client->dev,
++					"%s: div to get Q%i freq %u from vco %u: int part: %u, rem: %llu, frac part: %u",
++					__func__, x,
++					chip->clk[x].requested,
++					vco, chip->divs.nint[x - 1], rem,
++					chip->divs.nfrac[x - 1]);
++			}
++		}
++
++		/* Calculate freq for pfd */
++		pfd = chip->input_clk_freq * (chip->doubler_disabled ? 1 : 2);
++
++		/*
++		 * Calculate dsmint & dsmfrac:
++		 * -----------------------------
++		 * dsm = float(vco)/float(pfd)
++		 * dsmfrac = dsm-floor(dsm) * 2^21
++		 * rem = vco % pfd
++		 * therefore:
++		 * dsmfrac = (rem * 2^21)/pfd
++		 */
++		chip->divs.dsmint = div64_u64_rem(vco, pfd, &rem);
++		chip->divs.dsmfrac = div64_u64(rem * 1 << 21, pfd);
++
++		dev_dbg(&chip->i2c_client->dev,
++			"%s: vco: %u, pfd: %u, dsmint: %u, dsmfrac: %u, rem: %llu",
++			__func__, vco, pfd, chip->divs.dsmint,
++			chip->divs.dsmfrac, rem);
++	} else {
++		dev_err(&chip->i2c_client->dev,
++			"%s: no integer divider in range found. NOT SUPPORTED.",
++			__func__);
++		return -EINVAL;
++	}
++	return 0;
++}
++
++/**
++ * idt24x_enable_output - Enable/disable a particular output
++ * @chip:	Device data structure
++ * @output:	Output to enable/disable
++ * @enable:	Enable (true/false)
++ *
++ * Return: passes on regmap_write return value.
++ */
++static int idt24x_enable_output(
++	struct clk_idt24x_chip *chip, u8 output, bool enable)
++{
++	struct clk_register_offsets offsets;
++	int err;
++	struct i2c_client *client = chip->i2c_client;
++
++	/*
++	 * When an output is enabled, enable it in the original
++	 * data read from the chip and cached. Otherwise it may be
++	 * accidentally	turned off when another output is enabled.
++	 *
++	 * E.g., the driver starts with all outputs off in reg_out_en_x.
++	 * Q1 is enabled with the appropriate mask. Q2 is then enabled,
++	 * which results in Q1 being turned back off (because Q1 was off
++	 * in reg_out_en_x).
++	 */
++
++	err = idt24x_get_offsets(output, &offsets);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error calling idt24x_get_offsets for %d: %i",
++			__func__, output, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: q%u enable? %d. reg_out_en_x before: 0x%x, reg_out_mode_0_1 before: 0x%x, reg_out_mode_2_3 before: 0x%x, reg_qx_dis before: 0x%x",
++		__func__, output, enable, chip->reg_out_en_x,
++		chip->reg_out_mode_0_1, chip->reg_out_mode_2_3,
++		chip->reg_qx_dis);
++
++	chip->reg_out_en_x = chip->reg_out_en_x & ~offsets.oe_mask;
++	if (enable)
++		chip->reg_out_en_x |= (1 << bits_to_shift(offsets.oe_mask));
++
++	chip->reg_qx_dis = chip->reg_qx_dis & ~offsets.dis_mask;
++	dev_dbg(&client->dev,
++		"%s: q%u enable? %d. reg_qx_dis mask: 0x%x, before checking enable: 0x%x",
++		__func__, output, enable, offsets.dis_mask,
++		chip->reg_qx_dis);
++	if (!enable)
++		chip->reg_qx_dis |= (1 << bits_to_shift(offsets.dis_mask));
++
++	dev_dbg(&client->dev,
++		"%s: q%u enable? %d. reg_out_en_x after: 0x%x, reg_qx_dis after: 0x%x",
++		__func__, output, enable, chip->reg_out_en_x,
++		chip->reg_qx_dis);
++
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_OUTEN, chip->reg_out_en_x);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_OUTEN: %i",
++			__func__, err);
++		return err;
++	}
++
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_OUTMODE0_1,
++		chip->reg_out_mode_0_1);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_OUTMODE0_1: %i",
++			__func__, err);
++		return err;
++	}
++
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_OUTMODE2_3,
++		chip->reg_out_mode_2_3);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_OUTMODE2_3: %i",
++			__func__, err);
++		return err;
++	}
++
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_Q_DIS, chip->reg_qx_dis);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_Q_DIS: %i",
++			__func__, err);
++		return err;
++	}
++
++	return 0;
++}
++
++/**
++ * idt24x_update_device - write registers to the chip
++ * @chip:	Device data structure
++ *
++ * Write all values to hardware that we	have calculated.
++ *
++ * Return: passes on regmap_bulk_write return value.
++ */
++static int idt24x_update_device(struct clk_idt24x_chip *chip)
++{
++	int err;
++	struct i2c_client *client = chip->i2c_client;
++	int x = -1;
++
++	dev_dbg(&client->dev,
++		"%s: setting DSM_INT_8 (val %u @ %u)",
++		__func__, chip->divs.dsmint >> 8,
++		IDT24x_REG_DSM_INT_8);
++	err = i2cwritewithmask(
++		client, chip->regmap, IDT24x_REG_DSM_INT_8,
++		(chip->divs.dsmint >> 8) & IDT24x_REG_DSM_INT_8_MASK,
++		chip->reg_dsm_int_8, IDT24x_REG_DSM_INT_8_MASK);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_DSM_INT_8: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting DSM_INT_7_0 (val %u @ 0x%x)",
++		__func__, chip->divs.dsmint & 0xFF,
++		IDT24x_REG_DSM_INT_7_0);
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_DSM_INT_7_0,
++		chip->divs.dsmint & 0xFF);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_DSM_INT_7_0: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting IDT24x_REG_DSMFRAC_20_16 (val %u @ 0x%x)",
++		__func__, chip->divs.dsmfrac >> 16,
++		IDT24x_REG_DSMFRAC_20_16);
++	err = i2cwritewithmask(
++		client, chip->regmap, IDT24x_REG_DSMFRAC_20_16,
++		(chip->divs.dsmfrac >> 16) & IDT24x_REG_DSMFRAC_20_16_MASK,
++		chip->reg_dsm_int_8, IDT24x_REG_DSMFRAC_20_16_MASK);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_DSMFRAC_20_16: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting IDT24x_REG_DSMFRAC_15_8 (val %u @ 0x%x)",
++		__func__, (chip->divs.dsmfrac >> 8) & 0xFF,
++		IDT24x_REG_DSMFRAC_15_8);
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_DSMFRAC_15_8,
++		(chip->divs.dsmfrac >> 8) & 0xFF);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_DSMFRAC_15_8: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting IDT24x_REG_DSMFRAC_7_0 (val %u @ 0x%x)",
++		__func__, chip->divs.dsmfrac & 0xFF,
++		IDT24x_REG_DSMFRAC_7_0);
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_DSMFRAC_7_0,
++		chip->divs.dsmfrac & 0xFF);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_DSMFRAC_7_0: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting IDT24x_REG_NS1_Q0 (val %u @ 0x%x)",
++		__func__, chip->divs.ns1_q0, IDT24x_REG_NS1_Q0);
++	err = i2cwritewithmask(
++		client, chip->regmap, IDT24x_REG_NS1_Q0,
++		chip->divs.ns1_q0 & IDT24x_REG_NS1_Q0_MASK,
++		chip->reg_ns1_q0, IDT24x_REG_NS1_Q0_MASK);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_NS1_Q0: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting IDT24x_REG_NS2_Q0_15_8 (val %u @ 0x%x)",
++		__func__, (chip->divs.ns2_q0 >> 8) & 0xFF,
++		IDT24x_REG_NS2_Q0_15_8);
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_NS2_Q0_15_8,
++		(chip->divs.ns2_q0 >> 8) & 0xFF);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_NS2_Q0_15_8: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: setting IDT24x_REG_NS2_Q0_7_0 (val %u @ 0x%x)",
++		__func__, chip->divs.ns2_q0 & 0xFF,
++		IDT24x_REG_NS2_Q0_7_0);
++	err = i2cwrite(
++		client, chip->regmap, IDT24x_REG_NS2_Q0_7_0,
++		chip->divs.ns2_q0 & 0xFF);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error setting IDT24x_REG_NS2_Q0_7_0: %i",
++			__func__, err);
++		return err;
++	}
++
++	dev_dbg(&client->dev,
++		"%s: calling idt24x_enable_output for Q0. requestedFreq: %u",
++		__func__, chip->clk[0].requested);
++	idt24x_enable_output(chip, 0, chip->clk[0].requested != 0);
++
++	dev_dbg(&client->dev,
++		"%s: writing values for q1-q3", __func__);
++	for (x = 1; x < NUM_OUTPUTS; x++) {
++		struct clk_register_offsets offsets;
++
++		if (chip->clk[x].requested != 0) {
++			dev_dbg(&client->dev,
++				"%s: calling idt24x_get_offsets for %u",
++				__func__, x);
++			err = idt24x_get_offsets(x, &offsets);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error calling idt24x_get_offsets: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: (q%u, nint: %u, nfrac: %u)",
++				__func__, x, chip->divs.nint[x - 1],
++				chip->divs.nfrac[x - 1]);
++
++			dev_dbg(&client->dev,
++				"%s: setting n_17_16_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				chip->divs.nint[x - 1] >> 16,
++				offsets.n_17_16_offset);
++			err = i2cwritewithmask(
++				client, chip->regmap, offsets.n_17_16_offset,
++				(chip->divs.nint[x - 1] >> 16) &
++					offsets.n_17_16_mask,
++				chip->reg_n_qx_17_16[x - 1],
++				offsets.n_17_16_mask);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting n_17_16_offset: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: setting n_15_8_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				(chip->divs.nint[x - 1] >> 8) & 0xFF,
++				offsets.n_15_8_offset);
++			err = i2cwrite(
++				client, chip->regmap, offsets.n_15_8_offset,
++				(chip->divs.nint[x - 1] >> 8) & 0xFF);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting n_15_8_offset: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: setting n_7_0_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				chip->divs.nint[x - 1] & 0xFF,
++				offsets.n_7_0_offset);
++			err = i2cwrite(
++				client, chip->regmap, offsets.n_7_0_offset,
++				chip->divs.nint[x - 1] & 0xFF);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting n_7_0_offset: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: setting nfrac_27_24_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				(chip->divs.nfrac[x - 1] >> 24),
++				offsets.nfrac_27_24_offset);
++			err = i2cwritewithmask(
++				client, chip->regmap,
++				offsets.nfrac_27_24_offset,
++				(chip->divs.nfrac[x - 1] >> 24) &
++					offsets.nfrac_27_24_mask,
++				chip->reg_nfrac_qx_27_24[x - 1],
++				offsets.nfrac_27_24_mask);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting nfrac_27_24_offset: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: setting nfrac_23_16_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				(chip->divs.nfrac[x - 1] >> 16) & 0xFF,
++				offsets.nfrac_23_16_offset);
++			err = i2cwrite(
++				client, chip->regmap,
++				offsets.nfrac_23_16_offset,
++				(chip->divs.nfrac[x - 1] >> 16) & 0xFF);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting nfrac_23_16_offset: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: setting nfrac_15_8_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				(chip->divs.nfrac[x - 1] >> 8) & 0xFF,
++				offsets.nfrac_15_8_offset);
++			err = i2cwrite(
++				client, chip->regmap,
++				offsets.nfrac_15_8_offset,
++				(chip->divs.nfrac[x - 1] >> 8) & 0xFF);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting nfrac_15_8_offset: %i",
++					__func__, err);
++				return err;
++			}
++
++			dev_dbg(&client->dev,
++				"%s: setting nfrac_7_0_offset (q%u, val %u @ 0x%x)",
++				__func__, x,
++				chip->divs.nfrac[x - 1] & 0xFF,
++				offsets.nfrac_7_0_offset);
++			err = i2cwrite(
++				client, chip->regmap, offsets.nfrac_7_0_offset,
++				chip->divs.nfrac[x - 1] & 0xFF);
++			if (err) {
++				dev_err(&client->dev,
++					"%s: error setting nfrac_7_0_offset: %i",
++					__func__, err);
++				return err;
++			}
++		}
++		idt24x_enable_output(chip, x,
++				     chip->clk[x].requested != 0);
++		chip->clk[x].actual = chip->clk[x].requested;
++	}
++	return 0;
++}
++
++/**
++ * idt24x_set_frequency - Adjust output frequency on the attached chip.
++ * @chip:	Device data structure, including all requested frequencies.
++ *
++ * Return: 0 on success.
++ */
++int idt24x_set_frequency(struct clk_idt24x_chip *chip)
++{
++	int err;
++	struct i2c_client *client = chip->i2c_client;
++	int x;
++	bool all_disabled = true;
++
++	for (x = 0; x < NUM_OUTPUTS; x++) {
++		if (chip->clk[x].requested == 0) {
++			idt24x_enable_output(chip, x, false);
++			chip->clk[x].actual = 0;
++		} else {
++			all_disabled = false;
++		}
++	}
++
++	if (all_disabled)
++		/*
++		 * no requested frequencies, so nothing else to calculate
++		 * or write to the chip. If the consumer wants to disable
++		 * all outputs, they can request 0 for all frequencies.
++		 */
++		return 0;
++
++	if (chip->input_clk_freq == 0) {
++		dev_err(&client->dev,
++			"%s: no input frequency; can't continue.", __func__);
++		return -EINVAL;
++	}
++
++	err = idt24x_calc_divs(chip);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error calling idt24x_calc_divs: %i",
++			__func__, err);
++		return err;
++	}
++
++	err = idt24x_update_device(chip);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error updating the device: %i",
++			__func__, err);
++		return err;
++	}
++
++	return 0;
++}
+diff --git a/drivers/clk/idt/clk-idt8t49n24x-core.h b/drivers/clk/idt/clk-idt8t49n24x-core.h
+new file mode 100644
+index 000000000000..247ec070c621
+--- /dev/null
++++ b/drivers/clk/idt/clk-idt8t49n24x-core.h
+@@ -0,0 +1,272 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* clk-idt8t49n24x-core.h - Program 8T49N24x settings via I2C (common code)
++ *
++ * Copyright (C) 2018, Integrated Device Technology, Inc. <david.cater@idt.com>
++ *
++ * See https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
++ * This program is distributed "AS IS" and  WITHOUT ANY WARRANTY;
++ * including the implied warranties of MERCHANTABILITY, FITNESS FOR
++ * A PARTICULAR PURPOSE, or NON-INFRINGEMENT.
++ */
++
++#ifndef __IDT_CLK_IDT8T49N24X_CORE_H_
++#define __IDT_CLK_IDT8T49N24X_CORE_H_
++
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/regmap.h>
++
++/*
++ * The configurations in the settings file have 0x317 registers (last offset
++ * is 0x316).
++ */
++#define NUM_CONFIG_REGISTERS	0x317
++#define NUM_INPUTS		2
++#define NUM_OUTPUTS		4
++#define DEBUGFS_BUFFER_LENGTH	200
++#define WRITE_BLOCK_SIZE	32
++
++/* Non output-specific registers */
++#define IDT24x_REG_DBL_DIS		0x6C
++#define IDT24x_REG_DBL_DIS_MASK		0x01
++#define IDT24x_REG_DSM_INT_8		0x25
++#define IDT24x_REG_DSM_INT_8_MASK	0x01
++#define IDT24x_REG_DSM_INT_7_0		0x26
++#define IDT24x_REG_DSMFRAC_20_16	0x28
++#define IDT24x_REG_DSMFRAC_20_16_MASK	0x1F
++#define IDT24x_REG_DSMFRAC_15_8		0x29
++#define IDT24x_REG_DSMFRAC_7_0		0x2A
++#define IDT24x_REG_OUTEN		0x39
++#define IDT24x_REG_OUTMODE0_1		0x3E
++#define IDT24x_REG_OUTMODE2_3		0x3D
++#define IDT24x_REG_Q_DIS		0x6F
++
++/* Q0 */
++#define IDT24x_REG_OUTEN0_MASK		0x01
++#define IDT24x_REG_OUTMODE0_MASK	0x0E
++#define IDT24x_REG_Q0_DIS_MASK		0x01
++#define IDT24x_REG_NS1_Q0		0x3F
++#define IDT24x_REG_NS1_Q0_MASK		0x03
++#define IDT24x_REG_NS2_Q0_15_8		0x40
++#define IDT24x_REG_NS2_Q0_7_0		0x41
++
++/* Q1 */
++#define IDT24x_REG_OUTEN1_MASK		0x02
++#define IDT24x_REG_OUTMODE1_MASK	0xE0
++#define IDT24x_REG_Q1_DIS_MASK		0x02
++#define IDT24x_REG_N_Q1_17_16		0x42
++#define IDT24x_REG_N_Q1_17_16_MASK	0x03
++#define IDT24x_REG_N_Q1_15_8		0x43
++#define IDT24x_REG_N_Q1_7_0		0x44
++#define IDT24x_REG_NFRAC_Q1_27_24	0x57
++#define IDT24x_REG_NFRAC_Q1_27_24_MASK	0x0F
++#define IDT24x_REG_NFRAC_Q1_23_16	0x58
++#define IDT24x_REG_NFRAC_Q1_15_8	0x59
++#define IDT24x_REG_NFRAC_Q1_7_0		0x5A
++
++/* Q2 */
++#define IDT24x_REG_OUTEN2_MASK		0x04
++#define IDT24x_REG_OUTMODE2_MASK	0x0E
++#define IDT24x_REG_Q2_DIS_MASK		0x04
++#define IDT24x_REG_N_Q2_17_16		0x45
++#define IDT24x_REG_N_Q2_17_16_MASK	0x03
++#define IDT24x_REG_N_Q2_15_8		0x46
++#define IDT24x_REG_N_Q2_7_0		0x47
++#define IDT24x_REG_NFRAC_Q2_27_24	0x5B
++#define IDT24x_REG_NFRAC_Q2_27_24_MASK	0x0F
++#define IDT24x_REG_NFRAC_Q2_23_16	0x5C
++#define IDT24x_REG_NFRAC_Q2_15_8	0x5D
++#define IDT24x_REG_NFRAC_Q2_7_0		0x5E
++
++/* Q3 */
++#define IDT24x_REG_OUTEN3_MASK		0x08
++#define IDT24x_REG_OUTMODE3_MASK	0xE0
++#define IDT24x_REG_Q3_DIS_MASK		0x08
++#define IDT24x_REG_N_Q3_17_16		0x48
++#define IDT24x_REG_N_Q3_17_16_MASK	0x03
++#define IDT24x_REG_N_Q3_15_8		0x49
++#define IDT24x_REG_N_Q3_7_0		0x4A
++#define IDT24x_REG_NFRAC_Q3_27_24	0x5F
++#define IDT24x_REG_NFRAC_Q3_27_24_MASK	0x0F
++#define IDT24x_REG_NFRAC_Q3_23_16	0x60
++#define IDT24x_REG_NFRAC_Q3_15_8	0x61
++#define IDT24x_REG_NFRAC_Q3_7_0		0x62
++
++/**
++ * struct idt24x_output - device output information
++ * @hw:		hw registration info for this specific output clcok. This gets
++ *		passed as an argument to CCF api calls (e.g., set_rate).
++ *		container_of can then be used to get the reference to this
++ *		struct.
++ * @chip:	store a reference to the parent device structure. container_of
++ *		cannot be used to get to the parent device structure from
++ *		idt24x_output, because clk_idt24x_chip contains an array of
++ *		output structs (for future enhancements to support devices
++ *		with different numbers of output clocks).
++ * @index:	identifies output on the chip; used in debug statements
++ * @requested:	requested output clock frequency (in Hz)
++ * @actual:	actual output clock frequency (in Hz). Will only be set after
++ *		successful update of the device.
++ * @debug_freq:	stores value for debugfs file. Use this instead of requested
++ *		struct var because debugfs expects u64, not u32.
++ */
++struct idt24x_output {
++	struct clk_hw hw;
++	struct clk_idt24x_chip *chip;
++	u8 index;
++	u32 requested;
++	u32 actual;
++	u64 debug_freq;
++};
++
++/**
++ * struct idt24x_dividers - output dividers
++ * @dsmint:	int component of feedback divider for VCO (2-stage divider)
++ * @dsmfrac:	fractional component of feedback divider for VCO
++ * @ns1_q0:	ns1 divider component for Q0
++ * @ns2_q0:	ns2 divider component for Q0
++ * @nint:	int divider component for Q1-3
++ * @nfrac:	fractional divider component for Q1-3
++ */
++struct idt24x_dividers {
++	u16 dsmint;
++	u32 dsmfrac;
++
++	u8 ns1_q0;
++	u16 ns2_q0;
++
++	u32 nint[3];
++	u32 nfrac[3];
++};
++
++/**
++ * struct clk_idt24x_chip - device info for chip
++ * @regmap:		register map used to perform i2c writes to the chip
++ * @i2c_client:		i2c_client struct passed to probe
++ * @min_freq:		min frequency for this chip
++ * @max_freq:		max frequency for this chip
++ * @settings:		filled in if full register map is specified in the DT
++ * @has_settings:	true if settings array is valid
++ * @input_clk:		ptr to input clock specified in DT
++ * @input_clk_num:	which input clock was specified. 0-based. A value of
++ *			NUM_INPUTS indicates that a XTAL is used as the input.
++ * @input_clk_nb:	notification support (if input clk changes)
++ * @input_clk_freq:	current freq of input_clk
++ * @doubler_disabled:	whether input doubler is enabled. This value is read
++ *			from the hw on probe (in case it is set in @settings).
++ * @clk:		array of outputs. One entry per output supported by the
++ *			chip. Frequencies requested via the ccf api will be
++ *			recorded in this array.
++ * @reg_dsm_int_8:	record current value from hw to avoid modifying
++ *			when writing register values
++ * @reg_dsm_frac_20_16:	record current value
++ * @reg_out_en_x:	record current value
++ * @reg_out_mode_0_1:	record current value
++ * @reg_out_mode_2_3:	record current value
++ * @reg_qx_dis:		record current value
++ * @reg_ns1_q0:		record current value
++ * @reg_n_qx_17_16:	record current value
++ * @reg_nfrac_qx_27_24:	record current value
++ * @divs:		output divider values for all outputs
++ * @debugfs_dirroot:	debugfs support
++ * @debugfs_fileaction:	debugfs support
++ * @debugfs_filei2c:	debugfs support
++ * @debugfs_map:	debugfs support
++ * @dbg_cache:		debugfs support
++ * @debugfs_fileqfreq:	debugfs support
++ */
++struct clk_idt24x_chip {
++	struct regmap *regmap;
++	struct i2c_client *i2c_client;
++
++	u32 min_freq;
++	u32 max_freq;
++
++	u8 settings[NUM_CONFIG_REGISTERS];
++
++	bool has_settings;
++
++	struct clk *input_clk;
++	int input_clk_num;
++	struct notifier_block input_clk_nb;
++	u32 input_clk_freq;
++
++	bool doubler_disabled;
++
++	struct idt24x_output clk[NUM_OUTPUTS];
++
++	unsigned int reg_dsm_int_8;
++	unsigned int reg_dsm_frac_20_16;
++	unsigned int reg_out_en_x;
++	unsigned int reg_out_mode_0_1;
++	unsigned int reg_out_mode_2_3;
++	unsigned int reg_qx_dis;
++	unsigned int reg_ns1_q0;
++	unsigned int reg_n_qx_17_16[3];
++	unsigned int reg_nfrac_qx_27_24[3];
++
++	struct idt24x_dividers divs;
++
++	struct dentry *debugfs_dirroot, *debugfs_fileaction, *debugfs_filei2c,
++		*debugfs_map;
++	char dbg_cache[DEBUGFS_BUFFER_LENGTH];
++	struct dentry *debugfs_fileqfreq[4];
++};
++
++#define to_idt24x_output(_hw) \
++	container_of(_hw, struct idt24x_output, hw)
++#define to_clk_idt24x_from_client(_client) \
++	container_of(_client, struct clk_idt24x_chip, i2c_client)
++#define to_clk_idt24x_from_nb(_nb) \
++	container_of(_nb, struct clk_idt24x_chip, input_clk_nb)
++
++/**
++ * struct clk_register_offsets - register offsets for current context
++ * @oe_offset:		offset for current output enable and mode
++ * @oe_mask:		mask for current output enable
++ * @dis_mask:		mask for current output disable
++ * @n_17_16_offset:	offset for current output int divider (bits 17:16)
++ * @n_17_16_mask:	mask for current output int divider (bits 17:16)
++ * @n_15_8_offset:	offset for current output int divider (bits 15:8)
++ * @n_7_0_offset:	offset for current output int divider (bits 7:0)
++ * @nfrac_27_24_offset:	offset for current output frac divider (bits 27:24)
++ * @nfrac_27_24_mask:	mask for current output frac divider (bits 27:24)
++ * @nfrac_23_16_offset:	offset for current output frac divider (bits 23:16)
++ * @nfrac_15_8_offset:	offset for current output frac divider (bits 15:8)
++ * @nfrac_7_0_offset:	offset for current output frac divider (bits 7:0)
++ * @ns1_offset:		offset for stage 1 div for output Q0
++ * @ns1_offset_mask:	mask for stage 1 div for output Q0
++ * @ns2_15_8_offset:	offset for stage 2 div for output Q0 (bits 15:8)
++ * @ns2_7_0_offset:	offset for stage 2 div for output Q0 (bits 7:0)
++ */
++struct clk_register_offsets {
++	u16 oe_offset;
++	u8 oe_mask;
++	u8 dis_mask;
++
++	u16 n_17_16_offset;
++	u8 n_17_16_mask;
++	u16 n_15_8_offset;
++	u16 n_7_0_offset;
++	u16 nfrac_27_24_offset;
++	u8 nfrac_27_24_mask;
++	u16 nfrac_23_16_offset;
++	u16 nfrac_15_8_offset;
++	u16 nfrac_7_0_offset;
++
++	u16 ns1_offset;
++	u8 ns1_offset_mask;
++	u16 ns2_15_8_offset;
++	u16 ns2_7_0_offset;
++};
++
++int bits_to_shift(unsigned int mask);
++int i2cwritebulk(
++	struct i2c_client *client, struct regmap *map,
++	unsigned int reg, u8 val[], size_t val_count);
++int idt24x_get_offsets(
++	u8 output_num,
++	struct clk_register_offsets *offsets);
++int idt24x_set_frequency(struct clk_idt24x_chip *chip);
++
++#endif /* __IDT_CLK_IDT8T49N24X_CORE_H_ */
+diff --git a/drivers/clk/idt/clk-idt8t49n24x-debugfs.c b/drivers/clk/idt/clk-idt8t49n24x-debugfs.c
+new file mode 100644
+index 000000000000..5767ffa12f63
+--- /dev/null
++++ b/drivers/clk/idt/clk-idt8t49n24x-debugfs.c
+@@ -0,0 +1,375 @@
++// SPDX-License-Identifier: GPL-2.0
++/* clk-idt8t49n24x-debugfs.c - Debugfs support for 8T49N24x
++ *
++ * Copyright (C) 2018, Integrated Device Technology, Inc. <david.cater@idt.com>
++ *
++ * See https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
++ * This program is distributed "AS IS" and  WITHOUT ANY WARRANTY;
++ * including the implied warranties of MERCHANTABILITY, FITNESS FOR
++ * A PARTICULAR PURPOSE, or NON-INFRINGEMENT.
++ */
++
++#include <linux/debugfs.h>
++#include <linux/i2c.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++
++#include "clk-idt8t49n24x-debugfs.h"
++
++static struct clk_idt24x_chip *idt24x_chip_fordebugfs;
++
++static int idt24x_read_all_settings(
++	struct clk_idt24x_chip *chip, char *output_buffer, int count)
++{
++	u8 settings[NUM_CONFIG_REGISTERS];
++	int err = 0;
++	int x;
++
++	err = regmap_bulk_read(
++		chip->regmap, 0x0, settings, NUM_CONFIG_REGISTERS);
++	if (!err) {
++		output_buffer[0] = '\0';
++		for (x = 0; x < ARRAY_SIZE(settings); x++) {
++			char dbg[4];
++
++			if ((strlen(output_buffer) + 4) > count)
++				return -EINVAL;
++			sprintf(dbg, "%02x ", settings[x]);
++			strcat(output_buffer, dbg);
++		}
++	}
++	return err;
++}
++
++/**
++ * idt24x_debugfs_writer_action - Write handler for the "action" debugfs file.
++ * @fp:			file pointer
++ * @user_buffer:	buffer of text written to file
++ * @count:		size of text in buffer
++ * @position:		pass in current position, return new position
++ *
++ * Return: result of call to simple_write_to_buffer
++ *
++ * Use the "action" file as a trigger for setting all requested
++ * rates. The driver doesn't get any notification when the files
++ * representing the Qx outputs are written to, so something else is
++ * needed to notify the driver that the device should be udpated.
++ *
++ * It doesn't matter what you write to the action debugs file. When the
++ * handler is called, the device will be updated.
++ */
++static ssize_t idt24x_debugfs_writer_action(
++	struct file *fp, const char __user *user_buffer,
++	size_t count, loff_t *position)
++{
++	int err = 0;
++	int x;
++	u32 freq;
++	bool needs_update = true;
++	struct i2c_client *client = idt24x_chip_fordebugfs->i2c_client;
++
++	if (count > DEBUGFS_BUFFER_LENGTH)
++		return -EINVAL;
++
++	for (x = 0; x < NUM_OUTPUTS; x++) {
++		freq = idt24x_chip_fordebugfs->clk[x].debug_freq;
++		if (freq) {
++			needs_update = false;
++			dev_dbg(&client->dev,
++				"%s: calling clk_set_rate with debug frequency for Q%i",
++				__func__, x);
++			err = clk_set_rate(
++				idt24x_chip_fordebugfs->clk[x].hw.clk, freq);
++			if (err) {
++				dev_err(&client->dev,
++					"error calling clk_set_rate for Q%i (%i)\n",
++					x, err);
++			}
++		} else {
++			needs_update = true;
++			idt24x_chip_fordebugfs->clk[x].requested = 0;
++			dev_dbg(&client->dev,
++				"%s: debug frequency for Q%i not set; make sure clock is disabled",
++				__func__, x);
++		}
++	}
++
++	if (needs_update) {
++		dev_dbg(&client->dev,
++			"%s: calling idt24x_set_frequency to ensure any clocks that should be disabled are turned off.",
++			__func__);
++		err = idt24x_set_frequency(idt24x_chip_fordebugfs);
++		if (err) {
++			dev_err(&idt24x_chip_fordebugfs->i2c_client->dev,
++				"%s: error calling idt24x_set_frequency (%i)\n",
++				__func__, err);
++			return err;
++		}
++	}
++
++	return simple_write_to_buffer(
++		idt24x_chip_fordebugfs->dbg_cache, DEBUGFS_BUFFER_LENGTH,
++		position, user_buffer, count);
++}
++
++/**
++ * idt24x_debugfs_reader_action - Read the "action" debugfs file.
++ * @fp:			file pointer
++ * @user_buffer:	buffer of text written to file
++ * @count:		size of text in buffer
++ * @position:		pass in current position, return new position
++ *
++ * Return: whatever was last written to the "action" debugfs file.
++ */
++static ssize_t idt24x_debugfs_reader_action(
++	struct file *fp, char __user *user_buffer, size_t count,
++	loff_t *position)
++{
++	return simple_read_from_buffer(
++		user_buffer, count, position, idt24x_chip_fordebugfs->dbg_cache,
++		DEBUGFS_BUFFER_LENGTH);
++}
++
++/**
++ * idt24x_debugfs_reader_map - display the current registers on the device
++ * @fp:			file pointer
++ * @user_buffer:	buffer of text written to file
++ * @count:		size of text in buffer
++ * @position:		pass in current position, return new position
++ *
++ * Reads the current register map from the attached chip via I2C and
++ * returns it.
++ *
++ * Return: result of call to simple_read_from_buffer
++ */
++static ssize_t idt24x_debugfs_reader_map(
++	struct file *fp, char __user *user_buffer, size_t count,
++	loff_t *position)
++{
++	int err = 0;
++	char *buf = kzalloc(5000, GFP_KERNEL);
++
++	dev_dbg(&idt24x_chip_fordebugfs->i2c_client->dev,
++		"calling idt24x_read_all_settings (count: %zu)\n", count);
++	err = idt24x_read_all_settings(idt24x_chip_fordebugfs, buf, 5000);
++	if (err) {
++		dev_err(&idt24x_chip_fordebugfs->i2c_client->dev,
++			"error calling idt24x_read_all_settings (%i)\n", err);
++		return 0;
++	}
++	/* TMGCDR-1456. We're returning 1 byte too few. */
++	err = simple_read_from_buffer(
++		user_buffer, count, position, buf, strlen(buf));
++	kfree(buf);
++	return err;
++}
++
++/**
++ * idt24x_handle_i2c_debug_token - process "token" written to the i2c file
++ * @dev:	pointer to device structure
++ * @token:	pointer to current char being examined
++ * @reg:	pass in current register, or return register from token.
++ * @val:	resulting array of bytes being parsed
++ * @nextbyte:	position in val array to store next byte
++ *
++ * Utility function to operate on the current "token" (from within a
++ * space-delimited string) written to the i2c debugfs file. It will
++ * either be a register offset or a byte to be added to the val array.
++ * If it is added to the val array, auto-increment nextbyte.
++ *
++ * Return:	0 for success
++ */
++static int idt24x_handle_i2c_debug_token(
++	const struct device *dev, char *token, unsigned int *reg,
++	u8 val[], u16 *nextbyte)
++{
++	int err = 0;
++
++	dev_dbg(dev, "got token (%s)\n", token);
++	if (*reg == -1) {
++		err = kstrtouint(token, 16, reg);
++		if (!err)
++			dev_dbg(dev, "hex register address == 0x%x\n", *reg);
++	} else {
++		u8 temp;
++
++		err = kstrtou8(token, 16, &temp);
++		if (!err) {
++			dev_dbg(dev, "data byte == 0x%x\n", temp);
++			val[*nextbyte] = temp;
++			*nextbyte += 1;
++		}
++	}
++	if (err == -ERANGE)
++		dev_err(dev, "ERANGE error when parsing data\n");
++	else if (err == -EINVAL)
++		dev_err(dev, "EINVAL error when parsing data\n");
++	else if (err)
++		dev_err(dev, "error when parsing data: %i\n", err);
++	return err;
++}
++
++/**
++ * idt24x_debugfs_writer_i2c - debugfs handler for i2c file
++ * @fp:			file pointer
++ * @user_buffer:	buffer of text written to file
++ * @count:		size of text in buffer
++ * @position:		pass in current position, return new position
++ *
++ * Handler for the "i2c" debugfs file. Write to this file to write bytes
++ * via I2C to a particular offset.
++ *
++ * Usage: echo 006c 01 02 0D FF > i2c
++ *
++ * First 4 chars are the 2-byte i2c register offset. Then follow that
++ * with a sequence of 2-char bytes in hex format that you want to write
++ * starting at that offset.
++ *
++ * Return: result of simple_write_to_buffer
++ */
++static ssize_t idt24x_debugfs_writer_i2c(struct file *fp,
++					 const char __user *user_buffer,
++					 size_t count, loff_t *position)
++{
++	int err = 0;
++	int x = 0;
++	int start = 0;
++	ssize_t written;
++	unsigned int reg = -1;
++	u8 val[WRITE_BLOCK_SIZE];
++	u16 nextbyte = 0;
++	char token[16];
++
++	if (count > DEBUGFS_BUFFER_LENGTH)
++		return -EINVAL;
++
++	written = simple_write_to_buffer(
++		idt24x_chip_fordebugfs->dbg_cache, DEBUGFS_BUFFER_LENGTH,
++		position, user_buffer, count);
++	if (written != count) {
++		dev_dbg(&idt24x_chip_fordebugfs->i2c_client->dev,
++			"write count != expected count");
++		return written;
++	}
++
++	for (x = 0; x < count; x++) {
++		token[x - start] = idt24x_chip_fordebugfs->dbg_cache[x];
++		if (idt24x_chip_fordebugfs->dbg_cache[x] == ' ') {
++			token[x - start] = '\0';
++			err = idt24x_handle_i2c_debug_token(
++				&idt24x_chip_fordebugfs->i2c_client->dev,
++				token, &reg, val, &nextbyte);
++			if (err)
++				break;
++			start = x + 1;
++		}
++	}
++
++	/* handle the last token */
++	if (!err) {
++		token[count - start] = '\0';
++		err = idt24x_handle_i2c_debug_token(
++			&idt24x_chip_fordebugfs->i2c_client->dev, token, &reg,
++			val, &nextbyte);
++	}
++
++	if (!err && reg != -1 && nextbyte > 0) {
++		err = i2cwritebulk(
++			idt24x_chip_fordebugfs->i2c_client,
++			idt24x_chip_fordebugfs->regmap,
++			reg, val, nextbyte);
++		if (err) {
++			dev_err(&idt24x_chip_fordebugfs->i2c_client->dev,
++				"error writing data chip (%i)\n", err);
++			return err;
++		}
++		dev_dbg(&idt24x_chip_fordebugfs->i2c_client->dev,
++			"successfully wrote i2c data to chip");
++	}
++
++	return written;
++}
++
++static const struct file_operations idt24x_fops_debug_action = {
++	.read = idt24x_debugfs_reader_action,
++	.write = idt24x_debugfs_writer_action,
++};
++
++static const struct file_operations idt24x_fops_debug_map = {
++	.read = idt24x_debugfs_reader_map
++};
++
++static const struct file_operations idt24x_fops_debug_i2c = {
++	.write = idt24x_debugfs_writer_i2c,
++};
++
++/**
++ * idt24x_expose_via_debugfs - Set up all debugfs files
++ * @client:	pointer to i2c_client structure
++ * @chip:	Device data structure
++ *
++ * Sets up all debugfs files to use for debugging the driver.
++ * Return: error code. 0 if success or debugfs doesn't appear to be enabled.
++ */
++int idt24x_expose_via_debugfs(struct i2c_client *client,
++			      struct clk_idt24x_chip *chip)
++{
++	int output_num;
++
++	/*
++	 * create root directory in /sys/kernel/debugfs
++	 */
++	chip->debugfs_dirroot = debugfs_create_dir("idt24x", NULL);
++	if (!chip->debugfs_dirroot) {
++		/* debugfs probably not enabled. Don't fail the probe. */
++		return 0;
++	}
++
++	/*
++	 * create files in the root directory. This requires read and
++	 * write file operations
++	 */
++	chip->debugfs_fileaction = debugfs_create_file(
++		"action", 0644, chip->debugfs_dirroot, NULL,
++		&idt24x_fops_debug_action);
++	if (!chip->debugfs_fileaction) {
++		dev_err(&client->dev,
++			"%s: error creating action file", __func__);
++		return (-ENODEV);
++	}
++
++	chip->debugfs_map = debugfs_create_file(
++		"map", 0444, chip->debugfs_dirroot, NULL,
++		&idt24x_fops_debug_map);
++	if (!chip->debugfs_map) {
++		dev_err(&client->dev,
++			"%s: error creating map file", __func__);
++		return (-ENODEV);
++	}
++
++	for (output_num = 0; output_num < NUM_OUTPUTS; output_num++) {
++		char name[5];
++
++		sprintf(name, "q%d", output_num);
++		debugfs_create_u64(name, 0644, chip->debugfs_dirroot,
++				   &chip->clk[output_num].debug_freq);
++	}
++
++	chip->debugfs_filei2c = debugfs_create_file(
++		"i2c", 0644, chip->debugfs_dirroot, NULL,
++		&idt24x_fops_debug_i2c);
++	if (!chip->debugfs_filei2c) {
++		dev_err(&client->dev,
++			"%s: error creating i2c file", __func__);
++		return (-ENODEV);
++	}
++
++	dev_dbg(&client->dev, "%s: success", __func__);
++	idt24x_chip_fordebugfs = chip;
++	return 0;
++}
++
++void idt24x_cleanup_debugfs(struct clk_idt24x_chip *chip)
++{
++	debugfs_remove_recursive(chip->debugfs_dirroot);
++}
+diff --git a/drivers/clk/idt/clk-idt8t49n24x-debugfs.h b/drivers/clk/idt/clk-idt8t49n24x-debugfs.h
+new file mode 100644
+index 000000000000..673016c8e747
+--- /dev/null
++++ b/drivers/clk/idt/clk-idt8t49n24x-debugfs.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* clk-idt8t49n24x-debugfs.h - Debugfs support for 8T49N24x
++ *
++ * Copyright (C) 2018, Integrated Device Technology, Inc. <david.cater@idt.com>
++ *
++ * See https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
++ * This program is distributed "AS IS" and  WITHOUT ANY WARRANTY;
++ * including the implied warranties of MERCHANTABILITY, FITNESS FOR
++ * A PARTICULAR PURPOSE, or NON-INFRINGEMENT.
++ */
++
++#ifndef __IDT_CLK_IDT8T49N24X_DEBUGFS_H_
++#define __IDT_CLK_IDT8T49N24X_DEBUGFS_H_
++
++#include "clk-idt8t49n24x-core.h"
++
++int idt24x_expose_via_debugfs(struct i2c_client *client,
++			      struct clk_idt24x_chip *chip);
++void idt24x_cleanup_debugfs(struct clk_idt24x_chip *chip);
++
++#endif /* __IDT_CLK_IDT8T49N24X_DEBUGFS_H_*/
+diff --git a/drivers/clk/idt/clk-idt8t49n24x.c b/drivers/clk/idt/clk-idt8t49n24x.c
+new file mode 100644
+index 000000000000..a0c7af30399d
+--- /dev/null
++++ b/drivers/clk/idt/clk-idt8t49n24x.c
+@@ -0,0 +1,640 @@
++// SPDX-License-Identifier: GPL-2.0
++/* clk-idt8t49n24x.c - Program 8T49N24x settings via I2C.
++ *
++ * Copyright (C) 2018, Integrated Device Technology, Inc. <david.cater@idt.com>
++ *
++ * See https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
++ * This program is distributed "AS IS" and  WITHOUT ANY WARRANTY;
++ * including the implied warranties of MERCHANTABILITY, FITNESS FOR
++ * A PARTICULAR PURPOSE, or NON-INFRINGEMENT.
++ */
++
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++
++#include "clk-idt8t49n24x-core.h"
++#include "clk-idt8t49n24x-debugfs.h"
++
++#define OUTPUTMODE_HIGHZ	0
++#define OUTPUTMODE_LVDS		2
++#define IDT24x_MIN_FREQ		1000000L
++#define IDT24x_MAX_FREQ		300000000L
++#define DRV_NAME		"idt8t49n24x"
++
++enum clk_idt24x_variant {
++	idt24x
++};
++
++static u32 mask_and_shift(u32 value, u8 mask)
++{
++	value &= mask;
++	return value >> bits_to_shift(mask);
++}
++
++/**
++ * idt24x_set_output_mode - Set the mode for a particular clock
++ * output in the register.
++ * @reg:	The current register value before setting the mode.
++ * @mask:	The bitmask identifying where in the register the
++ *		output mode is stored.
++ * @mode:	The mode to set.
++ *
++ * Return: the new register value with the specified mode bits set.
++ */
++static int idt24x_set_output_mode(u32 reg, u8 mask, u8 mode)
++{
++	if (((reg & mask) >> bits_to_shift(mask)) == OUTPUTMODE_HIGHZ) {
++		reg = reg & ~mask;
++		reg |= (OUTPUTMODE_LVDS << bits_to_shift(mask));
++	}
++	return reg;
++}
++
++/**
++ * idt24x_read_from_hw - Get the current values on the hw
++ * @chip:	Device data structure
++ *
++ * Return: 0 on success, negative errno otherwise.
++ */
++static int idt24x_read_from_hw(struct clk_idt24x_chip *chip)
++{
++	int err;
++	struct i2c_client *client = chip->i2c_client;
++	u32 tmp, tmp2;
++	u8 output;
++
++	err = regmap_read(chip->regmap, IDT24x_REG_DSM_INT_8,
++			  &chip->reg_dsm_int_8);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_DSM_INT_8: %i",
++			__func__, err);
++		return err;
++	}
++	dev_dbg(&client->dev, "%s: reg_dsm_int_8: 0x%x",
++		__func__, chip->reg_dsm_int_8);
++
++	err = regmap_read(chip->regmap, IDT24x_REG_DSMFRAC_20_16_MASK,
++			  &chip->reg_dsm_frac_20_16);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_DSMFRAC_20_16_MASK: %i",
++			__func__, err);
++		return err;
++	}
++	dev_dbg(&client->dev, "%s: reg_dsm_frac_20_16: 0x%x",
++		__func__, chip->reg_dsm_frac_20_16);
++
++	err = regmap_read(chip->regmap, IDT24x_REG_OUTEN, &chip->reg_out_en_x);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_OUTEN: %i",
++			__func__, err);
++		return err;
++	}
++	dev_dbg(&client->dev, "%s: reg_out_en_x: 0x%x",
++		__func__, chip->reg_out_en_x);
++
++	err = regmap_read(chip->regmap, IDT24x_REG_OUTMODE0_1, &tmp);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_OUTMODE0_1: %i",
++			__func__, err);
++		return err;
++	}
++
++	tmp2 = idt24x_set_output_mode(
++		tmp, IDT24x_REG_OUTMODE0_MASK, OUTPUTMODE_LVDS);
++	tmp2 = idt24x_set_output_mode(
++		tmp2, IDT24x_REG_OUTMODE1_MASK, OUTPUTMODE_LVDS);
++	dev_dbg(&client->dev,
++		"%s: reg_out_mode_0_1 original: 0x%x. After setting OUT0/1 to LVDS if necessary: 0x%x",
++		__func__, tmp, tmp2);
++	chip->reg_out_mode_0_1 = tmp2;
++
++	err = regmap_read(chip->regmap, IDT24x_REG_OUTMODE2_3, &tmp);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_OUTMODE2_3: %i",
++			__func__, err);
++		return err;
++	}
++
++	tmp2 = idt24x_set_output_mode(
++		tmp, IDT24x_REG_OUTMODE2_MASK, OUTPUTMODE_LVDS);
++	tmp2 = idt24x_set_output_mode(
++		tmp2, IDT24x_REG_OUTMODE3_MASK, OUTPUTMODE_LVDS);
++	dev_dbg(&client->dev,
++		"%s: reg_out_mode_2_3 original: 0x%x. After setting OUT2/3 to LVDS if necessary: 0x%x",
++		__func__, tmp, tmp2);
++	chip->reg_out_mode_2_3 = tmp2;
++
++	err = regmap_read(chip->regmap, IDT24x_REG_Q_DIS, &chip->reg_qx_dis);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_Q_DIS: %i",
++			__func__, err);
++		return err;
++	}
++	dev_dbg(&client->dev, "%s: reg_qx_dis: 0x%x",
++		__func__, chip->reg_qx_dis);
++
++	err = regmap_read(chip->regmap, IDT24x_REG_NS1_Q0, &chip->reg_ns1_q0);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_NS1_Q0: %i",
++			__func__, err);
++		return err;
++	}
++	dev_dbg(&client->dev, "%s: reg_ns1_q0: 0x%x",
++		__func__, chip->reg_ns1_q0);
++
++	for (output = 1; output <= 3; output++) {
++		struct clk_register_offsets offsets;
++
++		err = idt24x_get_offsets(output, &offsets);
++		if (err) {
++			dev_err(&client->dev,
++				"%s: error calling idt24x_get_offsets: %i",
++				__func__, err);
++			return err;
++		}
++
++		err = regmap_read(chip->regmap, offsets.n_17_16_offset,
++				  &chip->reg_n_qx_17_16[output - 1]);
++		if (err) {
++			dev_err(&client->dev,
++				"%s: error reading n_17_16_offset for output %d (offset: 0x%x): %i",
++				__func__, output, offsets.n_17_16_offset, err);
++			return err;
++		}
++		dev_dbg(&client->dev,
++			"%s: reg_n_qx_17_16[Q%u]: 0x%x",
++			__func__, output, chip->reg_n_qx_17_16[output - 1]);
++
++		err = regmap_read(chip->regmap, offsets.nfrac_27_24_offset,
++				  &chip->reg_nfrac_qx_27_24[output - 1]);
++		if (err) {
++			dev_err(&client->dev,
++				"%s: error reading nfrac_27_24_offset for output %d (offset: 0x%x): %i",
++				__func__, output,
++				offsets.nfrac_27_24_offset, err);
++			return err;
++		}
++		dev_dbg(&client->dev,
++			"%s: reg_nfrac_qx_27_24[Q%u]: 0x%x",
++			__func__, output,
++			chip->reg_nfrac_qx_27_24[output - 1]);
++	}
++
++	dev_info(&client->dev,
++		 "%s: initial values read from chip successfully",
++		 __func__);
++
++	/* Also read DBL_DIS to determine whether the doubler is disabled. */
++	err = regmap_read(chip->regmap, IDT24x_REG_DBL_DIS, &tmp);
++	if (err) {
++		dev_err(&client->dev,
++			"%s: error reading IDT24x_REG_DBL_DIS: %i",
++			__func__, err);
++		return err;
++	}
++	chip->doubler_disabled = mask_and_shift(tmp, IDT24x_REG_DBL_DIS_MASK);
++	dev_dbg(&client->dev, "%s: doubler_disabled: %d",
++		__func__, chip->doubler_disabled);
++
++	return 0;
++}
++
++/**
++ * idt24x_set_rate - Sets the specified output clock to the specified rate.
++ * @hw:		clk_hw struct that identifies the specific output clock.
++ * @rate:	the rate (in Hz) for the specified clock.
++ * @parent_rate:(not sure) the rate for a parent signal (e.g.,
++ *		the VCO feeding the output)
++ *
++ * This function will call idt24_set_frequency, which means it will
++ * calculate divider for all requested outputs and update the attached
++ * device (issue I2C commands to update the registers).
++ *
++ * Return: 0 on success.
++ */
++static int idt24x_set_rate(struct clk_hw *hw, unsigned long rate,
++			   unsigned long parent_rate)
++{
++	int err = 0;
++
++	/*
++	 * hw->clk is the pointer to the specific output clock the user is
++	 * requesting. We use hw to get back to the output structure for
++	 * the output clock. Set the requested rate in the output structure.
++	 * Note that container_of cannot be used to find the device structure
++	 * (clk_idt24x_chip) from clk_hw, because clk_idt24x_chip has an array
++	 * of idt24x_output structs. That is why it is necessary to use
++	 * output->chip to access the device structure.
++	 */
++	struct idt24x_output *output = to_idt24x_output(hw);
++	struct i2c_client *client = output->chip->i2c_client;
++
++	if (rate < output->chip->min_freq || rate > output->chip->max_freq) {
++		dev_err(&client->dev,
++			"requested frequency (%luHz) is out of range\n", rate);
++		return -EINVAL;
++	}
++
++	/*
++	 * Set the requested frequency in the output data structure, and then
++	 * call idt24x_set_frequency. idt24x_set_frequency considers all
++	 * requested frequencies when deciding on a vco frequency and
++	 * calculating dividers.
++	 */
++	output->requested = rate;
++
++	/*
++	 * Also set in the memory location used by the debugfs file
++	 * that exposes the output clock frequency. That allows querying
++	 * the current rate via debugfs.
++	 */
++	output->debug_freq = rate;
++
++	dev_info(&client->dev,
++		 "%s. calling idt24x_set_frequency for Q%u. rate: %lu",
++		 __func__, output->index, rate);
++	err = idt24x_set_frequency(output->chip);
++
++	if (err != 0)
++		dev_err(&client->dev, "error calling set_frequency: %d", err);
++
++	return err;
++}
++
++/**
++ * idt24x_round_rate - get valid rate that is closest to the requested rate
++ * @hw:		clk_hw struct that identifies the specific output clock.
++ * @rate:	the rate (in Hz) for the specified clock.
++ * @parent_rate:(not sure) the rate for a parent signal (e.g., the VCO
++ *		feeding the output). This is an i/o param.
++ *		If the driver supports a parent clock for the output (e.g.,
++ *		the VCO(?), then set this param to indicate what the rate of
++ *		the parent would be (e.g., the VCO frequency) if the rounded
++ *		rate is used.
++ *
++ * Returns the closest rate to the requested rate actually supported by the
++ * chip.
++ *
++ * Return: adjusted rate
++ */
++static long idt24x_round_rate(struct clk_hw *hw, unsigned long rate,
++			      unsigned long *parent_rate)
++{
++	/*
++	 * The chip has fractional output dividers, so assume it
++	 * can provide the requested rate.
++	 *
++	 * TODO: figure out the closest rate that chip can support
++	 * within a low error threshold and return that rate.
++	 */
++	return rate;
++}
++
++/**
++ * idt24x_recalc_rate - return the frequency being provided by the clock.
++ * @hw:			clk_hw struct that identifies the specific output clock.
++ * @parent_rate:	(not sure) the rate for a parent signal (e.g., the
++ *			VCO feeding the output)
++ *
++ * This API appears to be used to read the current values from the hardware
++ * and report the frequency being provided by the clock. Without this function,
++ * the clock will be initialized to 0 by default. The OS appears to be
++ * calling this to find out what the current value of the clock is at
++ * startup, so it can determine when .set_rate is actually changing the
++ * frequency.
++ *
++ * Return: the frequency of the specified clock.
++ */
++static unsigned long idt24x_recalc_rate(struct clk_hw *hw,
++					unsigned long parent_rate)
++{
++	struct idt24x_output *output = to_idt24x_output(hw);
++
++	return output->requested;
++}
++
++/*
++ * Note that .prepare and .unprepare appear to be used more in Gates.
++ * They do not appear to be necessary for this device.
++ * Instead, update the device when .set_rate is called.
++ */
++static const struct clk_ops idt24x_clk_ops = {
++	.recalc_rate = idt24x_recalc_rate,
++	.round_rate = idt24x_round_rate,
++	.set_rate = idt24x_set_rate,
++};
++
++static bool idt24x_regmap_is_volatile(struct device *dev, unsigned int reg)
++{
++	return false;
++}
++
++static bool idt24x_regmap_is_writeable(struct device *dev, unsigned int reg)
++{
++	return true;
++}
++
++static const struct regmap_config idt24x_regmap_config = {
++	.reg_bits = 16,
++	.val_bits = 8,
++	.cache_type = REGCACHE_RBTREE,
++	.max_register = 0xffff,
++	.writeable_reg = idt24x_regmap_is_writeable,
++	.volatile_reg = idt24x_regmap_is_volatile,
++};
++
++/**
++ * idt24x_clk_notifier_cb - Clock rate change callback
++ * @nb:		Pointer to notifier block
++ * @event:	Notification reason
++ * @data:	Pointer to notification data object
++ *
++ * This function is called when the input clock frequency changes.
++ * The callback checks whether a valid bus frequency can be generated after the
++ * change. If so, the change is acknowledged, otherwise the change is aborted.
++ * New dividers are written to the HW in the pre- or post change notification
++ * depending on the scaling direction.
++ *
++ * Return:	NOTIFY_STOP if the rate change should be aborted, NOTIFY_OK
++ *		to acknowledge the change, NOTIFY_DONE if the notification is
++ *		considered irrelevant.
++ */
++static int idt24x_clk_notifier_cb(struct notifier_block *nb,
++				  unsigned long event, void *data)
++{
++	struct clk_notifier_data *ndata = data;
++	struct clk_idt24x_chip *chip = to_clk_idt24x_from_nb(nb);
++	int err = 0;
++
++	dev_info(&chip->i2c_client->dev,
++		 "%s: input frequency changed: %lu Hz. event: %lu",
++		 __func__, ndata->new_rate, event);
++
++	switch (event) {
++	case PRE_RATE_CHANGE: {
++		dev_dbg(&chip->i2c_client->dev, "PRE_RATE_CHANGE\n");
++		return NOTIFY_OK;
++	}
++	case POST_RATE_CHANGE:
++		chip->input_clk_freq = ndata->new_rate;
++		/*
++		 * Can't call clock API clk_set_rate here; I believe
++		 * it will be ignored if the rate is the same as we
++		 * set previously. Need to call our internal function.
++		 */
++		dev_dbg(&chip->i2c_client->dev,
++			"POST_RATE_CHANGE. Calling idt24x_set_frequency\n");
++		err = idt24x_set_frequency(chip);
++		if (err)
++			dev_err(&chip->i2c_client->dev,
++				"error calling idt24x_set_frequency (%i)\n",
++				err);
++		return NOTIFY_OK;
++	case ABORT_RATE_CHANGE:
++		return NOTIFY_OK;
++	default:
++		return NOTIFY_DONE;
++	}
++}
++
++static struct clk_hw *of_clk_idt24x_get(
++	struct of_phandle_args *clkspec, void *_data)
++{
++	struct clk_idt24x_chip *chip = _data;
++	unsigned int idx = clkspec->args[0];
++
++	if (idx >= ARRAY_SIZE(chip->clk)) {
++		pr_err("%s: invalid index %u\n", __func__, idx);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return &chip->clk[idx].hw;
++}
++
++/**
++ * idt24x_probe - main entry point for ccf driver
++ * @client:	pointer to i2c_client structure
++ * @id:		pointer to i2c_device_id structure
++ *
++ * Main entry point function that gets called to initialize the driver.
++ *
++ * Return: 0 for success.
++ */
++static int idt24x_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
++{
++	struct clk_idt24x_chip *chip;
++	struct clk_init_data init;
++
++	int err = 0;
++	int x;
++	char buf[6];
++
++	dev_info(&client->dev, "%s", __func__);
++	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
++	if (!chip)
++		return -ENOMEM;
++
++	init.ops = &idt24x_clk_ops;
++	init.flags = 0;
++	init.num_parents = 0;
++	chip->i2c_client = client;
++
++	chip->min_freq = IDT24x_MIN_FREQ;
++	chip->max_freq = IDT24x_MAX_FREQ;
++
++	for (x = 0; x < NUM_INPUTS + 1; x++) {
++		char name[12];
++
++		sprintf(name, x == NUM_INPUTS ? "input-xtal" : "input-clk%i",
++			x);
++		dev_dbg(&client->dev, "attempting to get %s", name);
++		chip->input_clk = devm_clk_get(&client->dev, name);
++		if (IS_ERR(chip->input_clk)) {
++			err = PTR_ERR(chip->input_clk);
++			/*
++			 * TODO: Handle EPROBE_DEFER error, which indicates
++			 * that the input_clk isn't available now but may be
++			 * later when the appropriate module is loaded.
++			 */
++		} else {
++			err = 0;
++			chip->input_clk_num = x;
++			break;
++		}
++	}
++
++	if (err) {
++		dev_err(&client->dev, "Unable to get input clock (%u).", err);
++		chip->input_clk = NULL;
++		return err;
++	}
++
++	chip->input_clk_freq = clk_get_rate(chip->input_clk);
++	dev_dbg(&client->dev, "Got input-freq from input-clk in device tree: %uHz",
++		chip->input_clk_freq);
++
++	chip->input_clk_nb.notifier_call = idt24x_clk_notifier_cb;
++	if (clk_notifier_register(chip->input_clk, &chip->input_clk_nb))
++		dev_warn(&client->dev,
++			 "Unable to register clock notifier for input_clk.");
++
++	dev_dbg(&client->dev, "%s: about to read settings: %zu",
++		__func__, ARRAY_SIZE(chip->settings));
++
++	err = of_property_read_u8_array(
++		client->dev.of_node, "settings", chip->settings,
++		ARRAY_SIZE(chip->settings));
++	if (!err) {
++		dev_dbg(&client->dev, "settings property specified in DT");
++		chip->has_settings = true;
++	} else {
++		if (err == -EOVERFLOW) {
++			dev_alert(&client->dev,
++				  "EOVERFLOW error trying to read the settings. ARRAY_SIZE: %zu",
++				  ARRAY_SIZE(chip->settings));
++			return err;
++		}
++		dev_dbg(&client->dev,
++			"settings property not specified in DT (or there was an error that can be ignored: %i). The settings property is optional.",
++			err);
++	}
++
++	/*
++	 * Requested output frequencies cannot be specified in the DT.
++	 * Either a consumer needs to use the clock API to request the rate,
++	 * or use debugfs to set the rate from user space. Use clock-names in
++	 * DT to specify the output clock.
++	 */
++
++	chip->regmap = devm_regmap_init_i2c(client, &idt24x_regmap_config);
++	if (IS_ERR(chip->regmap)) {
++		dev_err(&client->dev, "failed to allocate register map\n");
++		return PTR_ERR(chip->regmap);
++	}
++
++	dev_dbg(&client->dev, "%s: call i2c_set_clientdata", __func__);
++	i2c_set_clientdata(client, chip);
++
++	if (chip->has_settings) {
++		/*
++		 * A raw settings array was specified in the DT. Write the
++		 * settings to the device immediately.
++		 */
++		err = i2cwritebulk(
++			chip->i2c_client, chip->regmap, 0, chip->settings,
++			ARRAY_SIZE(chip->settings));
++		if (err) {
++			dev_err(&client->dev,
++				"error writing all settings to chip (%i)\n",
++				err);
++			return err;
++		}
++		dev_dbg(&client->dev, "successfully wrote full settings array");
++	}
++
++	/*
++	 * Whether or not settings were written to the device, read all
++	 * current values from the hw.
++	 */
++	dev_dbg(&client->dev, "read from HW");
++	err = idt24x_read_from_hw(chip);
++	if (err) {
++		dev_err(&client->dev,
++			"failed calling idt24x_read_from_hw (%i)\n", err);
++		return err;
++	}
++
++	/* Create all 4 clocks */
++	for (x = 0; x < NUM_OUTPUTS; x++) {
++		init.name = kasprintf(
++			GFP_KERNEL, "%s.Q%i", client->dev.of_node->name, x);
++		chip->clk[x].chip = chip;
++		chip->clk[x].hw.init = &init;
++		chip->clk[x].index = x;
++		err = devm_clk_hw_register(&client->dev, &chip->clk[x].hw);
++		kfree(init.name); /* clock framework made a copy of the name */
++		if (err) {
++			dev_err(&client->dev, "clock registration failed\n");
++			return err;
++		}
++		dev_dbg(&client->dev, "successfully registered Q%i", x);
++	}
++
++	if (err) {
++		dev_err(&client->dev, "clock registration failed\n");
++		return err;
++	}
++
++	err = of_clk_add_hw_provider(
++		client->dev.of_node, of_clk_idt24x_get, chip);
++	if (err) {
++		dev_err(&client->dev, "unable to add clk provider\n");
++		return err;
++	}
++
++	err = idt24x_expose_via_debugfs(client, chip);
++	if (err) {
++		dev_err(&client->dev,
++			"error calling idt24x_expose_via_debugfs: %i\n", err);
++		return err;
++	}
++
++	if (chip->input_clk_num == NUM_INPUTS)
++		sprintf(buf, "XTAL");
++	else
++		sprintf(buf, "CLK%i", chip->input_clk_num);
++	dev_info(&client->dev, "probe success. input freq: %uHz (%s), settings string? %s\n",
++		 chip->input_clk_freq, buf,
++		 chip->has_settings ? "true" : "false");
++	return 0;
++}
++
++static void idt24x_remove(struct i2c_client *client)
++{
++	struct clk_idt24x_chip *chip = to_clk_idt24x_from_client(&client);
++
++	dev_info(&client->dev, "%s", __func__);
++	of_clk_del_provider(client->dev.of_node);
++	idt24x_cleanup_debugfs(chip);
++
++	if (!chip->input_clk)
++		clk_notifier_unregister(
++			chip->input_clk, &chip->input_clk_nb);
++}
++
++static const struct i2c_device_id idt24x_id[] = {
++	{ "idt8t49n24x", idt24x },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, idt24x_id);
++
++static const struct of_device_id idt24x_of_match[] = {
++	{ .compatible = "idt,idt8t49n241" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, idt24x_of_match);
++
++static struct i2c_driver idt24x_driver = {
++	.driver = {
++		.name = DRV_NAME,
++		.of_match_table = idt24x_of_match,
++	},
++	.probe = idt24x_probe,
++	.remove = idt24x_remove,
++	.id_table = idt24x_id,
++};
++
++module_i2c_driver(idt24x_driver);
++
++MODULE_DESCRIPTION("8T49N24x ccf driver");
++MODULE_AUTHOR("David Cater <david.cater@idt.com>");
++MODULE_LICENSE("GPL v2");
+-- 
+2.37.6
+
