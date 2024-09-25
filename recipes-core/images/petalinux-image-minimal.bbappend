@@ -199,6 +199,11 @@ IMAGE_INSTALL:remove:k24 = "\
 	pmic-prog \
 "
 
+IMAGE_INSTALL:append:k24-iocc-base = "\
+	oob-image \
+	blinky \
+"
+
 IMAGE_INSTALL:append:k24-iocc-factest = "\
 	factest \
 	factest-launcher \
