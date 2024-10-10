@@ -67,6 +67,13 @@
    disable-wp;
 };
 
+&sdhci1 {
+   no-1-8-v;
+   non-removable;
+   max-frequency = <25000000>;
+   sdhci-caps-mask = <0x0 0x00200000>;
+};
+
 &i2c1 {
    #address-cells = <1>;
    #size-cells = <0>;
