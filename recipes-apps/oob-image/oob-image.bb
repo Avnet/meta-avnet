@@ -28,11 +28,9 @@ SRC_URI:append:mz-iocc = " \
 "
 
 SRC_URI:append:k24-iocc = " \
-	https://github.com/Avnet/freertos-oob/releases/download/v1.5/BOOT.BIN;downloadfilename=BOOT.BIN;name=k24-boot \
+	https://github.com/Avnet/freertos-oob/releases/download/v1.6.1/BOOT.BIN;downloadfilename=BOOT.BIN;name=k24-boot \
 "
-SRC_URI[k24-boot.sha256sum] = "8e63947d994ad312becef81eb327db9ea65e06bef9bb201f857cb60fd95ffd56"
-
-
+SRC_URI[k24-boot.sha256sum] = "ad410fa4006e65380702fae011f5f355d7800b1764a5112aa8ff5d836edcb7c0"
 
 S = "${WORKDIR}"
 

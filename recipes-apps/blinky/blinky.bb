@@ -13,7 +13,7 @@ SRC_URI = "file://linux_ps_led_blink.c \
 	file://blinky.service \
 	"
 
-COMPATIBLE_MACHINE = "uz|pz|zub1cg-sbc"
+COMPATIBLE_MACHINE = "uz|pz|zub1cg-sbc|k24-iocc"
 
 S = "${WORKDIR}"
 
@@ -50,6 +50,9 @@ do_install:append:uz () {
 }
 do_install:append:zub1cg-sbc () {
 	sed -i -e 's,^BOARD=.*,BOARD="ZUBoard 1CG",; s,^LED_NAME=.*,LED_NAME="MIO_LED_1",;' ${D}${sysconfdir}/init.d/blinky
+}
+do_install:append:k24-iocc () {
+	sed -i -e 's,^BOARD=.*,BOARD="K24 IOCC",; s,^LED_NAME=.*,LED_NAME="PS_LED_0",;' ${D}${sysconfdir}/init.d/blinky
 }
 
 FILES:${PN} += " \
