@@ -31,11 +31,20 @@
    nvmem-cells = <&mac_address>;
    nvmem-cell-names = "mac-address";
    phy-handle = <&phy0>;
-   phy0: phy@7 {
-      reg = <0x7>;
-      ti,rx-internal-delay = <0x5>;
-      ti,tx-internal-delay = <0x5>;
-      ti,fifo-depth = <0x1>;
+   mdio {
+	 compatible = "snps,dwmac-mdio";
+	 #address-cells = <1>;
+	 #size-cells = <0>;
+	 phy0: phy@7 {
+		compatible = "ethernet-phy-id0022.1642",
+						 "ethernet-phy-ieee802.3-c22";
+		reg = <7>;
+		eee-broken-100tx;
+		eee-broken-1000t;
+		reset-assert-us = <1000>;
+		reset-deassert-us = <120000>;
+		reset-gpios = <&gpio 12 GPIO_ACTIVE_LOW>;
+	 };
    };
 };
 
