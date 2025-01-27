@@ -7,6 +7,7 @@ MACHINEOVERRIDES =. "mz:mz-som:"
 
 require conf/machine/include/soc-zynq.inc
 require conf/machine/include/machine-xilinx-default.inc
+require conf/machine/include/machine-xilinx-qemu.inc
 
 MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget"
 

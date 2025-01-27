@@ -9,6 +9,7 @@ MACHINEOVERRIDES =. "uz:uz3eg:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
+require conf/machine/include/machine-xilinx-qemu.inc
 
 MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost"
 
