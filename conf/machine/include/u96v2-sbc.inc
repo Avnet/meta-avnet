@@ -7,6 +7,7 @@ MACHINEOVERRIDES =. "ultra96:ultra96-zynqmp:u96v2-sbc:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
+require conf/machine/include/machine-xilinx-qemu.inc
 
 MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget wifi bluetooth"
 
