@@ -60,17 +60,6 @@ IMAGE_INSTALL:append:zynqmp = "\
 	openssh-scp \
 	openssh-sftp-server \
 	openssh-sshd \
-	packagegroup-core-ssh-dropbear \
-	packagegroup-petalinux-display-debug \
-	packagegroup-petalinux-gstreamer \
-	packagegroup-petalinux-lmsensors \
-	packagegroup-petalinux-matchbox \
-	packagegroup-petalinux-opencv \
-	packagegroup-petalinux-opencv-dev \
-	packagegroup-petalinux-python-modules \
-	packagegroup-petalinux-self-hosted \
-	packagegroup-petalinux-v4lutils \
-	packagegroup-petalinux-x11 \
 	parted \
 	pmic-prog \
 	python3 \
