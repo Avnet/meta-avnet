@@ -23,7 +23,7 @@ SPL_BINARY ?= ""
 SERIAL_CONSOLES ?= "115200;ttyPS0"
 
 EXTRA_IMAGEDEPENDS += " \
-		arm-trusted-firmware \
+		trusted-firmware-a \
 		virtual/bootloader \
 		u-boot-xlnx-scr \
 		virtual/fsbl \
@@ -40,13 +40,8 @@ IMAGE_BOOT_FILES = " \
 
 WKS_FILES = "petalinux-image-minimal.wks"
 
-PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
-PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
-
 # deploy avnet-boot-scr scripts in images/linux/ folder
 EXTRA_FILESLIST:append = " ${DEPLOY_DIR_IMAGE}/avnet-boot/:avnet-boot/ "
-
-EXTRA_IMAGEDEPENDS:remove = "qemu-devicetrees"
 
 PACKAGE_FEED_URIS = "http://petalinux.xilinx.com/sswreleases/sswboardfeeds/"
 PACKAGE_FEED_BASE_PATHS = "zzsoc"
