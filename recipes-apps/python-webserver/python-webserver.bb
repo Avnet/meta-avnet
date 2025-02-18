@@ -95,12 +95,15 @@ do_install() {
        install -m 0755 ${S}/images/board.jpg ${D}/home/root/webserver/images
        install -m 0755 ${S}/pdfs/Delkin_Devices_Product_Line.pdf ${D}/home/root/webserver/pdfs
 
-	install -d ${D}${sysconfdir}/init.d
-	install -m 0755 ${S}/python-webserver.init ${D}${sysconfdir}/init.d/python-webserver
-	if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
-		install -d ${D}${systemd_system_unitdir}
-		install -m 0644 ${WORKDIR}/python-webserver.service ${D}${systemd_system_unitdir}
-	fi
+       if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
+              install -d ${D}${bindir}
+              install -m 0755 ${S}/python-webserver.init ${D}${bindir}/python-webserver.init
+              install -d ${D}${systemd_system_unitdir}
+              install -m 0644 ${WORKDIR}/python-webserver.service ${D}${systemd_system_unitdir}
+       else
+              install -d ${D}${sysconfdir}/init.d
+              install -m 0755 ${S}/python-webserver.init ${D}${sysconfdir}/init.d/python-webserver
+       fi
 }
 
 do_install:append:uz () {
@@ -149,6 +152,7 @@ FILES:${PN} += "/home/root/webserver/cgi.py \
            /home/root/webserver/images/board.jpg \
            /home/root/webserver/pdfs/Delkin_Devices_Product_Line.pdf \
            ${sysconfdir}/* \
+           ${bindir}/* \
            ${systemd_system_unitdir}/* \
                "
 

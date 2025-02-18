@@ -5,8 +5,8 @@ After=network-online.target gpio-utils.service
 
 [Service]
 Type=forking
-ExecStart=/etc/init.d/python-webserver start
-ExecStop=/etc/init.d/python-webserver stop
+ExecStart=/usr/bin/python-webserver.init start
+ExecStop=/usr/bin/python-webserver.init stop
 Restart=on-failure
 
 [Install]
