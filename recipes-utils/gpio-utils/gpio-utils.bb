@@ -50,11 +50,12 @@ do_install() {
     install -d ${INC_DIR}
     install -m 0644 ${S}/gpio.h ${INC_DIR}
 
-    install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${S}/gpio-utils.init ${D}${sysconfdir}/init.d/gpio-utils
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
         install -d ${D}${systemd_system_unitdir}
         install -m 0644 ${WORKDIR}/gpio-utils.service ${D}${systemd_system_unitdir}
+    else
+        install -d ${D}${sysconfdir}/init.d
+        install -m 0755 ${S}/gpio-utils.init ${D}${sysconfdir}/init.d/gpio-utils
     fi
 }
 

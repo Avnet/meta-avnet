@@ -44,14 +44,16 @@ IMAGE_INSTALL:append:zynqmp = "\
 	e2fsprogs-e2fsck \
 	e2fsprogs-resize2fs \
 	ethtool \
+	ffmpeg \
 	gpio-utils \
 	hdparm \
 	i2c-tools \
 	i2c-tools-misc \
 	iperf3 \
 	json-c \
+	libdrm \
+	libdrm-tests \
 	libpython3 \
-	lmsensors-sensorsdetect \
 	mesa-megadriver \
 	nano \
 	opencl-clhpp-dev \
@@ -61,16 +63,12 @@ IMAGE_INSTALL:append:zynqmp = "\
 	openssh-sftp-server \
 	openssh-sshd \
 	packagegroup-core-ssh-dropbear \
-	packagegroup-petalinux-display-debug \
-	packagegroup-petalinux-gstreamer \
-	packagegroup-petalinux-lmsensors \
-	packagegroup-petalinux-matchbox \
-	packagegroup-petalinux-opencv \
-	packagegroup-petalinux-opencv-dev \
-	packagegroup-petalinux-python-modules \
-	packagegroup-petalinux-self-hosted \
-	packagegroup-petalinux-v4lutils \
-	packagegroup-petalinux-x11 \
+	packagegroup-core-x11 \
+	packagegroup-lmsensors \
+	packagegroup-opencv \
+	packagegroup-self-hosted \
+	packagegroup-xilinx-gstreamer \
+	packagegroup-xilinx-matchbox \
 	parted \
 	pmic-prog \
 	python3 \
@@ -82,8 +80,10 @@ IMAGE_INSTALL:append:zynqmp = "\
 	util-linux-fdisk \
 	util-linux-mkfs \
 	util-linux-mount \
+	v4l-utils \
 	xrt \
 	xrt-dev \
+	yavta \
 	zocl \
 "
 

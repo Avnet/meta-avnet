@@ -7,6 +7,7 @@ MACHINEOVERRIDES =. "zub1cg:zub1cg-sbc:"
 
 require conf/machine/include/soc-zynqmp.inc
 require conf/machine/include/machine-xilinx-default.inc
+require conf/machine/include/machine-xilinx-qemu.inc
 
 MACHINE_FEATURES += "rtc ext2 ext3 vfat usbhost usbgadget"
 
@@ -19,11 +20,8 @@ SPL_BINARY = ""
 
 SERIAL_CONSOLES ?= "115200;ttyPS0"
 
-PMU_FIRMWARE_IMAGE_NAME ?= "pmu-firmware-zynqmp-pmu"
-PMU_FIRMWARE_DEPLOY_DIR ?= "${TOPDIR}/pmutmp/deploy/images/zynqmp-pmu"
-
 EXTRA_IMAGEDEPENDS += " \
-		arm-trusted-firmware \
+		trusted-firmware-a \
 		virtual/bootloader \
 		u-boot-xlnx-scr \
 		virtual/fsbl \
@@ -42,8 +40,6 @@ WKS_FILES = "petalinux-image-minimal.wks"
 
 # deploy avnet-boot-scr scripts in images/linux/ folder
 EXTRA_FILESLIST:append = " ${DEPLOY_DIR_IMAGE}/avnet-boot/:avnet-boot/ "
-
-EXTRA_IMAGEDEPENDS:remove = "qemu-devicetrees"
 
 DISTRO_FEATURES:append = " dbus"
 
