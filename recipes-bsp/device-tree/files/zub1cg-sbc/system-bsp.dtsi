@@ -7,7 +7,7 @@
 / {
    chosen {
       bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait cma=512M";
-      nvmem = &mac_eeprom;
+      nvmem0 = &eui_eepromm;
    };
 
    xlnk {
@@ -33,6 +33,8 @@
 &gem2 {
    status = "okay";
    phy-mode = "rgmii-id";
+   
+   /delete-property/ local-mac-address;
    nvmem-cells = <&mac_address>;
    nvmem-cell-names = "mac-address";
 
@@ -89,13 +91,13 @@
    #address-cells = <1>;
    #size-cells = <0>;
    /* Ethernet MAC ID EEPROM */
-   mac_eeprom: mac_eeprom@58 { /* U7 */
+   eui_eeprom: eui_eeprom@58 { /* U7 */
       #address-cells = <1>;
       #size-cells = <1>;
       compatible = "atmel,24mac402";
       reg = <0x58>;
-      mac_address: mac-address@9A {
-         reg = <0x9A 0x06>;
+      mac_address: mac_address@9A {
+         reg = <0x9A 0x6>;
       };
    };
 };
